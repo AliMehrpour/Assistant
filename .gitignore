@@ -24,3 +24,14 @@ proguard/
 
 # Log Files
 *.log
+
+# Android Studio files
+.gradle
+local.properties
+**/.idea/workspace.xml
+**/.idea/libraries
+**/.idea/dictionaries
+**/.idea/codeStyleSettings.xml
+**/.idea/vcs.xml
+**/.idea/inspectionProfiles
+build/
