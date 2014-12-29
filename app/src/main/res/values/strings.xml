@@ -1,8 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!-- Copyright (c) 2015 Volcano. All rights reserved. -->
+
 <resources>
 
     <string name="app_name">Assistant</string>
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
 
+    <string name="label_navigation_app_accounts">Application Accounts</string>
+    <string name="label_navigation_card_accounts">Card Accounts</string>
+    <string name="label_navigation_website_accounts">Website Accounts</string>
+
+    <string name="hint_navigation_close">Closen</string>
+    <string name="hint_navigation_open">Open</string>
 </resources>
