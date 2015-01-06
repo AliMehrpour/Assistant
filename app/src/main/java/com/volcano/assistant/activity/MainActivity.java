@@ -14,11 +14,15 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.volcano.assistant.Intents;
+import com.volcano.assistant.Managers;
 import com.volcano.assistant.R;
+import com.volcano.assistant.backend.AccountManager;
 import com.volcano.assistant.fragment.NavigationFragment;
 
 
 public class MainActivity extends AbstractActivity {
+
+    private AccountManager.LoginResetReceiver mLoginResetReceiver;
 
     private NavigationFragment mNavigationFragment;
     private String mTitle;
@@ -47,12 +51,26 @@ public class MainActivity extends AbstractActivity {
             }
         });
 
+        mLoginResetReceiver = new AccountManager.LoginResetReceiver() {
+            @Override
+            public void onReset() {
+                invalidateOptionsMenu();
+            }
+        };
+        AccountManager.registerLoginResetReceiver(this, mLoginResetReceiver);
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        //getMenuInflater().inflate(R.menu.menu_main, menu);
+        getMenuInflater().inflate(R.menu.menu_main, menu);
+
+        final MenuItem signinItem = menu.findItem(R.id.action_signin);
+        signinItem.setVisible(!Managers.getAccountManager().isLoggedIn());
+
+        final MenuItem signoutItem = menu.findItem(R.id.action_signout);
+        signoutItem.setVisible(Managers.getAccountManager().isLoggedIn());
+
         return true;
     }
 
@@ -63,12 +81,25 @@ public class MainActivity extends AbstractActivity {
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
+        if (id == R.id.action_signin) {
+            startActivity(Intents.getSigninIntent());
+            return true;
+        }
+        else if (id == R.id.action_signout) {
+            Managers.getAccountManager().signout();
             return true;
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+
+        if (mLoginResetReceiver != null) {
+            unregisterReceiver(mLoginResetReceiver);
+        }
     }
 
     public void onSectionAttached(int number) {

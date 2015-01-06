@@ -3,11 +3,26 @@
 
 <resources>
 
+    <color name="background">#F0F4F5</color>
+
+    <color name="blue">#3F5799</color>
+    <color name="blue_1">#596699</color>
+    <color name="blue_2">#41C2FA</color>
+
+    <color name="grey_1">#858585</color>
+
     <color name="navigation_selector">#B6B6B6</color>
     <color name="navigation_statusbar_color">#000000</color>
+
+    <color name="red">#F44336</color>
+    <color name="red_1">#FFF47D70</color>
+
+    <color name="teal">#008EA3</color>
+    <color name="teal_1">#9D00AFC4</color>
 
     <color name="theme_accent">#FF5252</color>
     <color name="theme_primary">#F44336</color>
     <color name="theme_primary_dark">#D32F2F</color>
+
 
 </resources>

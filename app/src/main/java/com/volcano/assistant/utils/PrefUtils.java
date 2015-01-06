@@ -1,3 +1,5 @@
+// Copyright (c) 2015 Volcano. All rights reserved.
+
 package com.volcano.assistant.utils;
 
 import android.content.SharedPreferences;
@@ -11,8 +13,6 @@ import com.volcano.assistant.VlApplication;
 public final class PrefUtils {
 
     public static String PREF_USER_LEARNED_NAVIGATOR = "user_learned_navigator";
-
-
 
     public static void markUserLearnNavigator() {
         setPref(PREF_USER_LEARNED_NAVIGATOR, true);

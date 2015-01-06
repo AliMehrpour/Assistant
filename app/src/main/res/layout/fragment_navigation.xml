@@ -9,7 +9,7 @@
 
     <ImageView
         android:layout_width="@dimen/navigation_width"
-        android:layout_height="wrap_content"
+        android:layout_height="@dimen/navigation_profile_image_height"
         android:src="@drawable/image_cover"
         android:scaleType="fitXY" />
 

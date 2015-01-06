@@ -4,6 +4,8 @@ import android.app.Activity;
 import android.app.Application;
 import android.os.Bundle;
 
+import com.parse.Parse;
+
 public final class VlApplication extends Application {
 
     private static VlApplication sInstance;
@@ -25,6 +27,7 @@ public final class VlApplication extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
+        Managers.initalize();
 
         registerActivityLifecycleCallbacks(new ActivityLifecycleCallbacks() {
             @Override
