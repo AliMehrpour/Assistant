@@ -42,6 +42,13 @@ public class AssistantDatabase extends SQLiteOpenHelper {
                 + AssistantContract.CategoryColumns.CATEGORY_NAME + " TEXT NOT NULL,"
                 + AssistantContract.CategoryColumns.CATEGORY_DESCRIPTION + " TEXT,"
                 + " UNIQUE (" + AssistantContract.CategoryColumns.CATEGORY_ID + ") ON CONFLICT REPLACE)");
+
+        db.execSQL("INSERT INTO " + Tables.CATEGORY + "(" + AssistantContract.Category.CATEGORY_ID + "," + AssistantContract.Category.CATEGORY_NAME + "," + AssistantContract.Category.CATEGORY_DESCRIPTION + ") VALUES ("
+                    + "'1', 'Mobile Account', 'All accounts in mobile'" + ")");
+        db.execSQL("INSERT INTO " + Tables.CATEGORY + "(" + AssistantContract.Category.CATEGORY_ID + "," + AssistantContract.Category.CATEGORY_NAME + "," + AssistantContract.Category.CATEGORY_DESCRIPTION + ") VALUES ("
+                    + "'2', 'Desktop Account', 'All accounts in desktop'" + ")");
+        db.execSQL("INSERT INTO " + Tables.CATEGORY + "(" + AssistantContract.Category.CATEGORY_ID + "," + AssistantContract.Category.CATEGORY_NAME + "," + AssistantContract.Category.CATEGORY_DESCRIPTION + ") VALUES ("
+                    + "'3', 'Credit Account', 'All credit accounts'" + ")");
     }
 
     @Override

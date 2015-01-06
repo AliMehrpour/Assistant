@@ -4,6 +4,8 @@ package com.volcano.assistant.fragment;
 
 import android.app.Fragment;
 import android.content.res.Configuration;
+import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -16,14 +18,22 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
+import com.parse.FindCallback;
+import com.parse.ParseException;
+import com.parse.ParseObject;
+import com.parse.ParseQuery;
 import com.volcano.assistant.Intents;
 import com.volcano.assistant.R;
+import com.volcano.assistant.provider.AssistantContract;
+import com.volcano.assistant.utils.LogUtils;
 import com.volcano.assistant.utils.PrefUtils;
+
+import java.util.List;
 
 /**
  * Navigation layout shown in MainActivity
  */
-public final class NavigationFragment extends Fragment {
+public final class NavigationFragment extends AbstractFragment {
 
     private ListView mDrawerListView;
     private DrawerLayout mDrawerLayout;
@@ -70,16 +80,8 @@ public final class NavigationFragment extends Fragment {
                 selectItem(position);
             }
         });
-        mDrawerListView.setAdapter(new ArrayAdapter<>(
-                getActivity(),
-                android.R.layout.simple_list_item_activated_1,
-                android.R.id.text1,
-                new String[]{
-                        getString(R.string.label_navigation_app_accounts),
-                        getString(R.string.label_navigation_card_accounts),
-                        getString(R.string.label_navigation_website_accounts),
-                }));
-        mDrawerListView.setItemChecked(mCurrentSelectedPosition, true);
+
+        fillNavigationItems();
 
         return view;
     }
@@ -97,6 +99,12 @@ public final class NavigationFragment extends Fragment {
         mDrawerToggle.onConfigurationChanged(newConfig);
     }
 
+    /**
+     * Initialize navigation drawer
+     * @param fragmentId
+     * @param drawerLayout
+     * @param toolbar
+     */
     public void setup(int fragmentId, DrawerLayout drawerLayout, Toolbar toolbar) {
         mFragmentContainer = getActivity().findViewById(fragmentId);
         mDrawerLayout = drawerLayout;
@@ -144,6 +152,10 @@ public final class NavigationFragment extends Fragment {
         }
     }
 
+    /**
+     * Set {@link NavigationListener}
+     * @param l
+     */
     public void setNavigationListener(NavigationListener l) {
         mListener = l;
     }
@@ -161,4 +173,36 @@ public final class NavigationFragment extends Fragment {
         }
     }
 
+    private void fillNavigationItems() {
+        /*
+        final String[] projection = new String[] { AssistantContract.Category.CATEGORY_ID, AssistantContract.Category.CATEGORY_NAME};
+        final Cursor cursor = getActivity().getContentResolver().query(AssistantContract.Category.CONTENT_URI, projection, null, null, null);
+        cursor.moveToFirst();
+        while(!cursor.isAfterLast()) {
+            LogUtils.LogI("DATA", cursor.getString(1));
+            cursor.moveToNext();
+        }
+        */
+
+        final String[] accounts = new String[5];
+
+        ParseQuery<ParseObject> query = ParseQuery.getQuery("Category");
+        query.findInBackground(new FindCallback<ParseObject>() {
+            @Override
+            public void done(List<ParseObject> parseObjects, ParseException e) {
+                final int size = parseObjects.size();
+                for (int i = 0; i < size; i++) {
+                   accounts[i] = parseObjects.get(i).getString("category_name");
+                }
+
+                mDrawerListView.setAdapter(new ArrayAdapter<>(
+                        getActivity(),
+                        R.layout.list_item_navigation,
+                        R.id.text_category_name,
+                        accounts));
+
+                mDrawerListView.setItemChecked(mCurrentSelectedPosition, true);
+            }
+        });
+    }
 }
