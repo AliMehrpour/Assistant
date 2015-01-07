@@ -1,15 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- Copyright (c) 2015 Volcano. All rights reserved. -->
 
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                xmlns:tools="http://schemas.android.com/tools"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                tools:context=".MainActivity$PlaceholderFragment">
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity$PlaceholderFragment">
 
-    <TextView
-        android:id="@+id/section_label"
+    <com.volcano.assistant.widget.FloatingActionButton
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="@dimen/default_horizontal_margin"
+        android:layout_marginBottom="@dimen/default_vertical_margin"
+        android:src="@drawable/icon_action_add" />
 
 </RelativeLayout>

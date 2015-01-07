@@ -6,6 +6,11 @@
     <dimen name="default_horizontal_margin">16dp</dimen>
     <dimen name="default_vertical_margin">16dp</dimen>
 
+    <dimen name="fab_elevation">8dp</dimen>
+    <dimen name="fab_size_mini">40dp</dimen>
+    <dimen name="fab_size_normal">56dp</dimen>
+    <dimen name="fab_size_shadow">12dp</dimen>
+
     <dimen name="margin_10">10dp</dimen>
     <dimen name="margin_15">15dp</dimen>
     <dimen name="margin_20">20dp</dimen>

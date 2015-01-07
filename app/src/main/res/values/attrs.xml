@@ -4,11 +4,26 @@
 <resources>
 
     <declare-styleable name="RobotoTextView">
+
         <attr name="robotoTypeface" format="enum">
             <enum name="regular" value="0"/>
             <enum name="medium" value="1"/>
             <enum name="black_italic" value="2"/>
         </attr>
+
+    </declare-styleable>
+
+    <declare-styleable name="FloatingActionButton">
+
+        <attr name="colorNormal" format="color" />
+        <attr name="colorPressed" format="color" />
+        <attr name="colorRipple" format="color" />
+        <attr name="shadow" format="boolean" />
+        <attr name="type" format="enum">
+            <enum name="normal" value="0" />
+            <enum name="mini" value="1" />
+        </attr>
+
     </declare-styleable>
 
 </resources>
