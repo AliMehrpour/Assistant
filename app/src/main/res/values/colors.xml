@@ -9,6 +9,9 @@
     <color name="blue_1">#596699</color>
     <color name="blue_2">#41C2FA</color>
 
+    <color name="fab_normal">#FF5252</color>
+    <color name="fab_pressed">#FF9174</color>
+
     <color name="grey_1">#858585</color>
 
     <color name="navigation_selector">#B6B6B6</color>
