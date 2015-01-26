@@ -6,15 +6,17 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity$PlaceholderFragment">
+    tools:context=".MainActivity$PlaceholderFragment"
+    android:background="@color/background_default">
 
     <com.volcano.assistant.widget.FloatingActionButton
+        android:id="@+id/button_create_account"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"
-        android:layout_marginRight="@dimen/default_horizontal_margin"
-        android:layout_marginBottom="@dimen/default_vertical_margin"
+        android:layout_marginRight="@dimen/margin_16"
+        android:layout_marginBottom="@dimen/margin_16"
         android:src="@drawable/icon_action_add" />
 
 </RelativeLayout>

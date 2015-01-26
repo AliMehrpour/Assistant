@@ -6,7 +6,8 @@
               android:layout_width="match_parent"
               android:layout_height="match_parent"
               android:paddingLeft="@dimen/signup_horizontal_margin"
-              android:paddingRight="@dimen/signup_horizontal_margin">
+              android:paddingRight="@dimen/signup_horizontal_margin"
+              android:background="@color/background_default">
 
     <com.volcano.assistant.widget.RobotoTextView
         android:layout_width="match_parent"
@@ -21,7 +22,7 @@
         android:layout_width="match_parent"
         android:layout_height="@dimen/text_view_height"
         android:layout_marginTop="@dimen/margin_20"
-        android:paddingTop="@dimen/margin_15"
+        android:paddingTop="@dimen/margin_16"
         android:gravity="center_vertical"
         android:inputType="text|textNoSuggestions"
         android:imeOptions="actionNext"
@@ -35,7 +36,7 @@
         android:id="@+id/edit_name"
         android:layout_width="match_parent"
         android:layout_height="@dimen/text_view_height"
-        android:paddingTop="@dimen/margin_15"
+        android:paddingTop="@dimen/margin_16"
         android:gravity="center_vertical"
         android:inputType="text|textFilter"
         android:imeOptions="actionNext"
@@ -46,7 +47,7 @@
         android:id="@+id/edit_password"
         android:layout_width="match_parent"
         android:layout_height="@dimen/text_view_height"
-        android:paddingTop="@dimen/margin_15"
+        android:paddingTop="@dimen/margin_16"
         android:gravity="center_vertical"
         android:inputType="textPassword"
         android:imeOptions="actionDone"
@@ -57,7 +58,7 @@
         android:id="@+id/edit_email"
         android:layout_width="match_parent"
         android:layout_height="@dimen/text_view_height"
-        android:paddingTop="@dimen/margin_15"
+        android:paddingTop="@dimen/margin_16"
         android:gravity="center_vertical"
         android:inputType="textEmailAddress"
         android:imeOptions="actionDone"
@@ -74,4 +75,10 @@
         android:background="@drawable/button_full_width_red"
         style="@style/ButtonFullWidth" />
 
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="DONE"
+        style="?android:attr/borderlessButtonStyle" />
+        
 </LinearLayout>

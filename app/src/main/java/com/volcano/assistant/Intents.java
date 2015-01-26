@@ -1,7 +1,9 @@
 package com.volcano.assistant;
 
 import android.content.Intent;
+import android.content.IntentFilter;
 
+import com.volcano.assistant.activity.CreateAccountActivity;
 import com.volcano.assistant.activity.MainActivity;
 import com.volcano.assistant.activity.SigninActivity;
 import com.volcano.assistant.activity.SignupActivity;
@@ -29,16 +31,16 @@ public final class Intents {
         return intent;
     }
 
-    public static Intent getSigninIntent() {
-        final Intent intent = new Intent(VlApplication.getInstance(), SigninActivity.class);
+    public static Intent getCreateAccountIntent() {
+        return new Intent(VlApplication.getInstance(), CreateAccountActivity.class);
+    }
 
-        return intent;
+    public static Intent getSigninIntent() {
+        return new Intent(VlApplication.getInstance(), SigninActivity.class);
     }
 
     public static Intent getSignupIntent() {
-        final Intent intent = new Intent(VlApplication.getInstance(), SignupActivity.class);
-
-        return intent;
+        return new Intent(VlApplication.getInstance(), SignupActivity.class);
     }
 
 }

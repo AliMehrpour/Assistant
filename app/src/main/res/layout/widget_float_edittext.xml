@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/text_view_height">
+
+    <ImageView
+        android:id="@+id/image_indicator"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/margin_20"
+        android:layout_marginRight="@dimen/margin_25"
+        android:layout_centerVertical="true"
+        android:src="@drawable/ic_notification" />
+
+    <com.volcano.assistant.widget.RobotoTextView
+        android:id="@+id/text_hint"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/margin_10"
+        android:layout_toRightOf="@id/image_indicator"
+        android:layout_alignParentTop="true"
+        style="@style/Text.Grey12" />
+
+    <com.volcano.assistant.widget.RobotoEditText
+        android:id="@+id/edittext"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/margin_10"
+        android:layout_toRightOf="@id/image_indicator"
+        android:layout_alignParentBottom="true"
+        android:background="@null"
+        android:singleLine="true"
+        style="@style/Text.Dark16" />
+
+    <View
+        android:layout_alignParentBottom="true"
+        android:layout_toRightOf="@+id/image_indicator"
+        style="@style/Divider" />
+
+</RelativeLayout>

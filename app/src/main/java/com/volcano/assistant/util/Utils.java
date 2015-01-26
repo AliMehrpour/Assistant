@@ -1,8 +1,6 @@
-package com.volcano.assistant.utils;
+package com.volcano.assistant.util;
 
 import android.os.Build;
-
-import com.volcano.assistant.BuildConfig;
 
 /**
  * Created by alimehrpour on 1/6/15.

@@ -1,6 +1,6 @@
 // Copyright (c) 2015 Volcano. All rights reserved.
 
-package com.volcano.assistant.utils;
+package com.volcano.assistant.util;
 
 /**
  * Configuration

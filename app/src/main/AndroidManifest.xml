@@ -29,6 +29,9 @@
         <activity android:name=".activity.SignupActivity"
                   android:label="@string/label_signup" />
 
+        <activity android:name=".activity.CreateAccountActivity"
+            android:label="@string/hint_new_account"/>
+
         <provider
             android:authorities="com.volcano.assistant"
             android:name=".provider.AssistantProvider"

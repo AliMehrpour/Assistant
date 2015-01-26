@@ -4,7 +4,7 @@ import android.content.Context;
 import android.util.AttributeSet;
 import android.widget.EditText;
 
-import com.volcano.assistant.utils.RobotoUtils;
+import com.volcano.assistant.util.RobotoUtils;
 
 /**
  * Created by alimehrpour on 12/31/14.

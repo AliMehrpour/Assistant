@@ -4,7 +4,7 @@ import android.content.Context;
 import android.util.AttributeSet;
 import android.widget.TextView;
 
-import com.volcano.assistant.utils.RobotoUtils;
+import com.volcano.assistant.util.RobotoUtils;
 
 /**
  * Implementation of a {@link android.widget.TextView} with support for the Roboto fonts.
