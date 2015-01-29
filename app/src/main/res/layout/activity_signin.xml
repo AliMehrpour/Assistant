@@ -6,7 +6,8 @@
               android:layout_width="match_parent"
               android:layout_height="match_parent"
               android:paddingLeft="@dimen/signup_horizontal_margin"
-              android:paddingRight="@dimen/signup_horizontal_margin">
+              android:paddingRight="@dimen/signup_horizontal_margin"
+              android:background="@color/background_default">
 
     <com.volcano.assistant.widget.RobotoTextView
         android:layout_width="match_parent"
@@ -21,7 +22,7 @@
         android:layout_width="match_parent"
         android:layout_height="@dimen/text_view_height"
         android:layout_marginTop="@dimen/margin_20"
-        android:paddingTop="@dimen/margin_15"
+        android:paddingTop="@dimen/margin_16"
         android:layout_marginBottom="@dimen/margin_10"
         android:gravity="center_vertical"
         android:inputType="text|textFilter"
@@ -33,7 +34,7 @@
         android:id="@+id/edit_password"
         android:layout_width="match_parent"
         android:layout_height="@dimen/text_view_height"
-        android:paddingTop="@dimen/margin_15"
+        android:paddingTop="@dimen/margin_16"
         android:gravity="center_vertical"
         android:inputType="textPassword"
         android:imeOptions="actionDone"

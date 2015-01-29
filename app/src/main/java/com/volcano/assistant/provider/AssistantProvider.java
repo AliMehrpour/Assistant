@@ -10,7 +10,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteQueryBuilder;
 import android.net.Uri;
 
-import com.volcano.assistant.utils.LogUtils;
+import com.volcano.assistant.util.LogUtils;
 
 /**
  * Provider that stores {@link com.volcano.assistant.provider.AssistantContract} data

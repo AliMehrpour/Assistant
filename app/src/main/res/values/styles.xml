@@ -3,6 +3,12 @@
 
 <resources>
 
+    <style name="Divider">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">1dp</item>
+        <item name="android:background">@color/divider</item>
+    </style>
+
     <style name="FrameworkRoot.Theme" parent="Theme.AppCompat.Light" />
     <style name="FrameworkRoot.Widget" parent="Theme.AppCompat" />
 
@@ -42,6 +48,17 @@
         <item name="robotoTypeface">regular</item>
     </style>
 
+    <style name="Text.Grey12" parent="@android:style/TextAppearance.Holo">
+        <item name="android:textColor">@color/grey_1</item>
+        <item name="android:textSize">@dimen/text_size_12</item>
+        <item name="robotoTypeface">regular</item>
+    </style>
+
+    <style name="Toolbar.Title" parent="@android:style/TextAppearance">
+        <item name="android:textSize">@dimen/text_size_18</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
     <style name="NavigationItem">
         <item name="android:fontFamily">sans-serif</item>
         <item name="android:textColor">#DD000000</item>
@@ -52,7 +69,7 @@
     </style>
 
     <style name="ButtonFullWidth" parent="@android:style/TextAppearance.Holo">
-        <item name="android:padding">@dimen/margin_15</item>
+        <item name="android:padding">@dimen/margin_16</item>
         <item name="android:textSize">@dimen/text_size_18</item>
         <item name="android:textColor">@android:color/white</item>
         <item name="robotoTypeface">medium</item>

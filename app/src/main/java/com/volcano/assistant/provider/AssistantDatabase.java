@@ -7,7 +7,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.provider.BaseColumns;
 
-import com.volcano.assistant.utils.LogUtils;
+import com.volcano.assistant.util.LogUtils;
 
 /**
  * Created by alimehrpour on 12/29/14.

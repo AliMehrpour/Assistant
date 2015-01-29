@@ -1,6 +1,7 @@
 package com.volcano.assistant.fragment;
 
 import android.app.Fragment;
+import android.graphics.Color;
 import android.widget.Toast;
 
 /**

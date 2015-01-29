@@ -1,4 +1,4 @@
-package com.volcano.assistant.utils;
+package com.volcano.assistant.util;
 
 import android.content.Context;
 import android.content.res.TypedArray;

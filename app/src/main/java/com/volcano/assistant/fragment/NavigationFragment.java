@@ -2,10 +2,7 @@
 
 package com.volcano.assistant.fragment;
 
-import android.app.Fragment;
 import android.content.res.Configuration;
-import android.database.Cursor;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -15,20 +12,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
-import com.parse.FindCallback;
-import com.parse.ParseException;
-import com.parse.ParseObject;
-import com.parse.ParseQuery;
 import com.volcano.assistant.Intents;
 import com.volcano.assistant.R;
-import com.volcano.assistant.provider.AssistantContract;
-import com.volcano.assistant.utils.LogUtils;
-import com.volcano.assistant.utils.PrefUtils;
-
-import java.util.List;
+import com.volcano.assistant.util.PrefUtils;
 
 /**
  * Navigation layout shown in MainActivity
@@ -53,7 +41,7 @@ public final class NavigationFragment extends AbstractFragment {
          * Called when a navigation item selected
          * @param position
          */
-        public void onNavigationItemSelected(int position);
+        public void onCategorySelected(String categoryId, String title);
     }
 
     @Override
@@ -78,6 +66,10 @@ public final class NavigationFragment extends AbstractFragment {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 selectItem(position);
+
+                // TODO
+                final String title = (String) mDrawerListView.getItemAtPosition(position);
+                mListener.onCategorySelected(null, title);
             }
         });
 
@@ -168,9 +160,6 @@ public final class NavigationFragment extends AbstractFragment {
         if (mDrawerLayout != null) {
             mDrawerLayout.closeDrawer(mFragmentContainer);
         }
-        if (mListener != null) {
-            mListener.onNavigationItemSelected(position);
-        }
     }
 
     private void fillNavigationItems() {
@@ -184,6 +173,7 @@ public final class NavigationFragment extends AbstractFragment {
         }
         */
 
+        /*
         final String[] accounts = new String[5];
 
         ParseQuery<ParseObject> query = ParseQuery.getQuery("Category");
@@ -192,7 +182,7 @@ public final class NavigationFragment extends AbstractFragment {
             public void done(List<ParseObject> parseObjects, ParseException e) {
                 final int size = parseObjects.size();
                 for (int i = 0; i < size; i++) {
-                   accounts[i] = parseObjects.get(i).getString("category_name");
+                   accounts[i] = parseObjects.get(i).getString("name");
                 }
 
                 mDrawerListView.setAdapter(new ArrayAdapter<>(
@@ -204,5 +194,6 @@ public final class NavigationFragment extends AbstractFragment {
                 mDrawerListView.setItemChecked(mCurrentSelectedPosition, true);
             }
         });
+        */
     }
 }

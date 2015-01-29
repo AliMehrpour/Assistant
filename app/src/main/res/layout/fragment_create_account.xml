@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Copyright (c) 2015 Volcano. All rights reserved. -->
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:tools="http://schemas.android.com/tools"
+              xmlns:volcano="http://schemas.android.com/apk/res-auto"
+              android:orientation="vertical"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:background="@android:color/white">
+
+    <com.volcano.assistant.widget.IconedEditText
+        android:id="@+id/text_account_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        volcano:hint="@string/hint_account_name"
+        android:singleLine="true"
+        volcano:showIcon="false"
+        android:visibility="gone"/>
+
+    <RelativeLayout
+        android:id="@+id/layout_category"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/height_56">
+
+        <ImageView
+            android:id="@+id/image_category"
+            android:layout_width="@dimen/circle_drawable_size"
+            android:layout_height="@dimen/circle_drawable_size"
+            android:layout_marginLeft="@dimen/margin_20"
+            android:layout_marginRight="@dimen/margin_25"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true" />
+
+        <com.volcano.assistant.widget.RobotoTextView
+            android:id="@+id/text_category"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="@dimen/margin_16"
+            android:layout_centerVertical="true"
+            android:layout_toRightOf="@id/image_category"
+            android:hint="@string/hint_select_category"
+            style="@style/Text.Dark16" />
+
+        <View
+            android:layout_alignParentBottom="true"
+            android:layout_toRightOf="@+id/image_category"
+            android:layout_toEndOf="@+id/image_category"
+            style="@style/Divider" />
+
+    </RelativeLayout>
+
+    <FrameLayout
+        android:id="@+id/layout_category_list"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <fragment
+            android:id="@+id/fargment_category_list"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:name="com.volcano.assistant.fragment.CategoryListFragment"
+            tools:layout="@layout/fragment_category_list"/>
+
+    </FrameLayout>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:id="@+id/layout_fields"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:scrollbars="vertical" />
+
+    </ScrollView>
+
+</LinearLayout>

@@ -11,19 +11,20 @@
     <string name="button_signup_facebook">SIGN UP WITH FACEBOOK</string>
     <string name="button_signup_twitter">SIGN UP WITH TWITTER</string>
 
+    <string name="hint_account_name">Enter account title</string>
     <string name="hint_navigation_close">Close</string>
     <string name="hint_navigation_open">Open</string>
+    <string name="hint_new_account">New Account</string>
     <string name="hint_email">Email</string>
     <string name="hint_name">Name</string>
     <string name="hint_password">Password</string>
+    <string name="hint_select_category">Select Category</string>
     <string name="hint_username">Username</string>
 
-    <string name="label_navigation_app_accounts">Application Accounts</string>
-    <string name="label_navigation_card_accounts">Card Accounts</string>
-    <string name="label_navigation_website_accounts">Website Accounts</string>
     <string name="label_signin">Sign In</string>
     <string name="label_signup">Sign Up</string>
-    
+
+    <string name="menu_save">Save</string>
     <string name="menu_signin">Sign In</string>
     <string name="menu_signout">Sign Out</string>
 

@@ -20,7 +20,7 @@ import android.view.ViewOutlineProvider;
 import android.widget.ImageButton;
 
 import com.volcano.assistant.R;
-import com.volcano.assistant.utils.Utils;
+import com.volcano.assistant.util.Utils;
 
 /**
  * A Floating Action Button

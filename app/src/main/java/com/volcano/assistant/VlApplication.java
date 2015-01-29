@@ -5,6 +5,11 @@ import android.app.Application;
 import android.os.Bundle;
 
 import com.parse.Parse;
+import com.parse.ParseObject;
+import com.volcano.assistant.model.Category;
+import com.volcano.assistant.model.Field;
+
+import java.io.File;
 
 public final class VlApplication extends Application {
 
@@ -29,6 +34,8 @@ public final class VlApplication extends Application {
         super.onCreate();
         Managers.initalize();
 
+        ParseObject.registerSubclass(Category.class);
+        ParseObject.registerSubclass(Field.class);
         registerActivityLifecycleCallbacks(new ActivityLifecycleCallbacks() {
             @Override
             public void onActivityStopped(Activity activity) {

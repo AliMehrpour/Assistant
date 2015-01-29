@@ -6,11 +6,10 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.parse.ParseException;
-import com.volcano.assistant.Intents;
 import com.volcano.assistant.Managers;
 import com.volcano.assistant.R;
 import com.volcano.assistant.backend.ParseManager;
-import com.volcano.assistant.utils.LogUtils;
+import com.volcano.assistant.util.LogUtils;
 
 /**
  * Created by alimehrpour on 1/5/15.
