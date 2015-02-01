@@ -1,3 +1,4 @@
+// Copyright (c) 2015 Volcano. All rights reserved.
 package com.volcano.assistant.widget;
 
 import android.content.Context;
@@ -7,7 +8,7 @@ import android.widget.EditText;
 import com.volcano.assistant.util.RobotoUtils;
 
 /**
- * Created by alimehrpour on 12/31/14.
+ * A edittext that supports roboto font
  */
 public class RobotoEditText extends EditText {
 

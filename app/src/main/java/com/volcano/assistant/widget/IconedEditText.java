@@ -1,3 +1,4 @@
+// Copyright (c) 2015 Volcano. All rights reserved.
 package com.volcano.assistant.widget;
 
 import android.content.Context;
@@ -9,16 +10,19 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import com.volcano.assistant.R;
 
 /**
- * Created by alimehrpour on 1/19/15.
+ * A Layout used for enter data and include an primary EditText
+ * for enter usage and a image indicator or text indicator
  */
 public class IconedEditText extends RelativeLayout {
 
     private EditText mEditText;
     private ImageView mIcon;
+    private TextView mIndicatorText;
 
     public IconedEditText(Context context) {
         this(context, null);
@@ -35,10 +39,11 @@ public class IconedEditText extends RelativeLayout {
 
     private void init(Context context, AttributeSet attrs) {
         final LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        inflater.inflate(R.layout.widget_edittext_image, this, true);
+        inflater.inflate(R.layout.widget_iconed_edittext, this, true);
 
         mEditText = (EditText) findViewById(R.id.edittext);
         mIcon = (ImageView) findViewById(R.id.image_indicator);
+        mIndicatorText = (TextView) findViewById(R.id.text_indicator);
 
         final TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.IconedEditText);
         try {
@@ -57,15 +62,19 @@ public class IconedEditText extends RelativeLayout {
 
     }
 
-    public EditText getEditText() {
-        return mEditText;
-    }
-
     public void setHint(CharSequence hint) {
         mEditText.setHint(hint);
     }
 
-    public void setmIcon(Drawable drawable) {
+    public void setIcon(Drawable drawable) {
+        mIcon.setVisibility(View.VISIBLE);
+        mIndicatorText.setVisibility(View.INVISIBLE);
         mIcon.setImageDrawable(drawable);
+    }
+
+    public void setmIndicatorText(String text) {
+        mIcon.setVisibility(View.INVISIBLE);
+        mIndicatorText.setVisibility(View.VISIBLE);
+        mIndicatorText.setText(text);
     }
 }

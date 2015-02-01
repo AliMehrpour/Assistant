@@ -1,15 +1,12 @@
+// Copyright (c) 2015 Volcano. All rights reserved.
 package com.volcano.assistant.activity;
 
-import android.app.Fragment;
 import android.app.FragmentManager;
 import android.support.v4.widget.DrawerLayout;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.view.ViewGroup;
 
 import com.volcano.assistant.Intents;
 import com.volcano.assistant.Managers;
@@ -18,12 +15,13 @@ import com.volcano.assistant.backend.AccountManager;
 import com.volcano.assistant.fragment.AccountListFragment;
 import com.volcano.assistant.fragment.NavigationFragment;
 
-
 public class MainActivity extends AbstractActivity {
 
     private AccountManager.LoginResetReceiver mLoginResetReceiver;
 
+    @SuppressWarnings("FieldCanBeLocal")
     private NavigationFragment mNavigationFragment;
+    @SuppressWarnings({ "FieldCanBeLocal", "UnusedDeclaration" })
     private AccountListFragment mAccountListFragment;
 
     @Override
@@ -99,27 +97,5 @@ public class MainActivity extends AbstractActivity {
         if (mLoginResetReceiver != null) {
             unregisterReceiver(mLoginResetReceiver);
         }
-    }
-
-    /**
-     * Placeholder fragment
-     */
-    public static class PlaceHolderFragment extends Fragment {
-
-        public static PlaceHolderFragment newInstance(int position) {
-            final PlaceHolderFragment fragment = new PlaceHolderFragment();
-            final Bundle args = new Bundle();
-            args.putInt(Intents.KEY_SECTION, position);
-            fragment.setArguments(args);
-            return fragment;
-        }
-
-        @Override
-        public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-            final View rootView = inflater.inflate(R.layout.fragment_account_list, container, false);
-            return rootView;
-        }
-
-
     }
 }

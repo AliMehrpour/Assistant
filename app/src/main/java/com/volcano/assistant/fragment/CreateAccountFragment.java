@@ -1,3 +1,4 @@
+// Copyright (c) 2015 Volcano. All rights reserved.
 package com.volcano.assistant.fragment;
 
 import android.os.Build;
@@ -10,20 +11,18 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.parse.FindCallback;
-import com.parse.ParseException;
-import com.parse.ParseQuery;
 import com.volcano.assistant.R;
 import com.volcano.assistant.activity.AbstractActivity;
 import com.volcano.assistant.model.Category;
 import com.volcano.assistant.model.Field;
+import com.volcano.assistant.util.BitmapUtils;
 import com.volcano.assistant.widget.CircleDrawable;
 import com.volcano.assistant.widget.IconedEditText;
 
 import java.util.List;
 
 /**
- * Created by alimehrpour on 1/9/15.
+ * Create account fragment
  */
 public class CreateAccountFragment extends AbstractFragment {
 
@@ -63,51 +62,56 @@ public class CreateAccountFragment extends AbstractFragment {
         mCategoryText.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                mFieldLayout.setVisibility(View.INVISIBLE);
                 mCategoryListLayout.setVisibility(View.VISIBLE);
                 mCategoryListFragment.setSelectedCategory(mSelectedCategory);
+
             }
         });
 
         mCategoryListFragment.setCategorySelectedListener(new CategoryListFragment.OnCategorySelectedListener() {
             @Override
             public void onCategorySelected(Category category) {
-                mSelectedCategory = category;
-
-                mCategoryImage.setBackground(new CircleDrawable(mSelectedCategory.getColor(), CircleDrawable.FILL));
-                mCategoryText.setText(mSelectedCategory.getName());
                 mCategoryListLayout.setVisibility(View.GONE);
+                mFieldLayout.setVisibility(View.VISIBLE);
+                if (mSelectedCategory == null || mSelectedCategory != category) {
+                    emptyFields();
 
-                ((AbstractActivity) getActivity()).setToolbarColor(mSelectedCategory.getColor());
-                mAccountName.setVisibility(View.VISIBLE);
-                mAccountName.requestFocus();
-                loadFields();
+                    mSelectedCategory = category;
+
+                    mCategoryImage.setBackground(new CircleDrawable(mSelectedCategory.getColor(), CircleDrawable.FILL));
+                    mCategoryText.setText(mSelectedCategory.getName());
+
+                    ((AbstractActivity) getActivity()).setToolbarColor(mSelectedCategory.getColor());
+                    mAccountName.setVisibility(View.VISIBLE);
+                    mAccountName.requestFocus();
+                    loadFields();
+                }
             }
         });
-
     }
 
     private void loadFields() {
-        final ParseQuery<Field> query = Field.getQuery();
-        query.findInBackground(new FindCallback<Field>() {
-            @Override
-            public void done(List<Field> fields, ParseException e) {
-                if (e == null) {
-                    mFields = fields;
-                }
+        mFields = mSelectedCategory.getFields();
 
-                populateFields();
-            }
-        });
-    }
-
-    private void populateFields() {
+        // PopulateFields
         final int size = mFields.size();
         for (int i = 0; i < size; i++) {
             final Field field = mFields.get(i);
             final IconedEditText fieldEditText = new IconedEditText(getActivity());
+            final String iconName = field.getIconName();
+            if (iconName != null) {
+                fieldEditText.setIcon(getResources().getDrawable(BitmapUtils.getDrawableIdentifier(getActivity(), iconName)));
+            }
+            else {
+                fieldEditText.setmIndicatorText(field.getName().substring(0, 1));
+            }
             fieldEditText.setHint(field.getName());
-            fieldEditText.setmIcon(getResources().getDrawable(R.drawable.icon_check_blue));
             mFieldLayout.addView(fieldEditText);
         }
+    }
+
+    private void emptyFields() {
+        mFieldLayout.removeAllViews();
     }
 }

@@ -28,4 +28,5 @@
     <string name="menu_signin">Sign In</string>
     <string name="menu_signout">Sign Out</string>
 
+    <string name="toast_load_category_failed">Load Category Falied</string>
 </resources>

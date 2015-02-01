@@ -1,3 +1,4 @@
+// Copyright (c) 2015 Volcano. All rights reserved.
 package com.volcano.assistant.fragment;
 
 import android.content.Context;
@@ -8,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
@@ -18,17 +20,19 @@ import com.parse.ParseException;
 import com.parse.ParseQuery;
 import com.volcano.assistant.model.Category;
 import com.volcano.assistant.R;
+import com.volcano.assistant.util.Utils;
 import com.volcano.assistant.widget.CircleDrawable;
 
 import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by alimehrpour on 1/12/15.
+ * Category list fragment
  */
 public class CategoryListFragment extends AbstractFragment {
 
-    private ListView mCategoryList;
+    private ListView mListView;
+    private FrameLayout mEmptyView;
 
     private CategoryAdapter mAdapter = new CategoryAdapter();
     private ArrayList<Category> mCategories = new ArrayList<>();
@@ -42,16 +46,21 @@ public class CategoryListFragment extends AbstractFragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        mCategoryList = (ListView) inflater.inflate(R.layout.fragment_category_list, container, false);
-        return  mCategoryList;
+        final View view = inflater.inflate(R.layout.fragment_category_list, container, false);
+
+        mListView = (ListView) view.findViewById(R.id.list_category);
+        mEmptyView = (FrameLayout) view.findViewById(android.R.id.empty);
+
+        return  view;
     }
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        mCategoryList.setAdapter(mAdapter);
-        mCategoryList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        mListView.setAdapter(mAdapter);
+        mListView.setEmptyView(mEmptyView);
+        mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 if (mListener != null) {
@@ -77,8 +86,13 @@ public class CategoryListFragment extends AbstractFragment {
         query.findInBackground(new FindCallback<Category>() {
             @Override
             public void done(List<Category> parseObjects, ParseException e) {
-                mCategories.addAll(parseObjects);
-                mAdapter.notifyDataSetChanged();
+                if (e == null) {
+                    mCategories.addAll(parseObjects);
+                    mAdapter.notifyDataSetChanged();
+                }
+                else {
+                    Utils.showToast(R.string.toast_load_category_failed);
+                }
             }
         });
     }

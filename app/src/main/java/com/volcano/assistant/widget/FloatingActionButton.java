@@ -28,6 +28,7 @@ import com.volcano.assistant.util.Utils;
 public class FloatingActionButton extends ImageButton {
 
     public static final int TYPE_NORMAL = 0;
+    @SuppressWarnings("UnusedDeclaration")
     public static final int TYPE_MINI   = 1;
 
     private int mColorNormal;

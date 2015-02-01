@@ -1,3 +1,4 @@
+// Copyright (c) 2015 Volcano. All rights reserved.
 package com.volcano.assistant.widget;
 
 import android.graphics.Canvas;
@@ -9,14 +10,12 @@ import android.graphics.Rect;
 import android.graphics.drawable.ShapeDrawable;
 
 import com.volcano.assistant.util.BitmapUtils;
-import com.volcano.assistant.util.Utils;
 
 /**
- * Created by alimehrpour on 1/19/15.
+ * A circle drawable with two styles: Filled or Stroked
  */
 public class CircleDrawable extends ShapeDrawable {
 
-    private static final int RADIUS         = 25;
     private static final int STROKE_WIDTH   = 12;
 
     public static final int STROKE  = 1;
@@ -75,14 +74,22 @@ public class CircleDrawable extends ShapeDrawable {
         mPaint.setColorFilter(cf);
     }
 
+    /**
+     * Set style for filling drawable
+     * @param style One of {@link com.volcano.assistant.widget.CircleDrawable#FILL} or
+     *              {@link com.volcano.assistant.widget.CircleDrawable#STROKE}
+     */
     public void setStyle(int style) {
         mStyle = style;
         mPaint.setStyle(Paint.Style.values()[mStyle]);
     }
 
+    /**
+     * Set the paint's color to fill drawable
+     * @param color The new color
+     */
     public void setColor(String color) {
         mColor = BitmapUtils.getColor(color);
         mPaint.setColor(mColor);
     }
-
 }
