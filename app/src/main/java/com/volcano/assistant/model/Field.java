@@ -1,3 +1,4 @@
+// Copyright (c) 2015 Volcano. All rights reserved.
 package com.volcano.assistant.model;
 
 import com.parse.ParseClassName;
@@ -8,9 +9,10 @@ import java.net.MalformedURLException;
 import java.net.URL;
 
 /**
- * Created by alimehrpour on 1/13/15.
+ * A Field in a {@link Category}
  */
 @ParseClassName("Field")
+@SuppressWarnings("UnusedDeclaration")
 public class Field extends ParseObject {
     public final static int TYPE_STRING     = 1;
     public final static int TYPE_DATE       = 2;
@@ -18,9 +20,10 @@ public class Field extends ParseObject {
     public final static int TYPE_PASSWORD   = 4;
     public final static int TYPE_URL        = 5;
     public final static int TYPE_PHONE      = 6;
-    public final static int TYPE_ENUM       = 7; // TODO future feature
+    public final static int TYPE_ENUM       = 7;
 
     private final static String DESCRIPTION = "description";
+    private final static String ICON_NAME   = "iconName";
     private final static String ICON_URL    = "iconUrl";
     private final static String NAME        = "name";
     private final static String TYPE        = "type";
@@ -58,12 +61,24 @@ public class Field extends ParseObject {
         return (User) getParseObject(USER);
     }
 
-    public URL getIconUrl() throws MalformedURLException {
-        return new URL(getString(ICON_URL));
+    public URL getIconUrl() {
+        try {
+            return new URL(getString(ICON_URL));
+        }
+        catch (MalformedURLException ex) {
+            return null;
+        }
     }
 
     public void setIconUrl(URL iconUrl) {
         put(ICON_URL, iconUrl);
     }
 
+    public String getIconName() {
+        return getString(ICON_NAME);
+    }
+
+    public void setIconUrl(String iconName) {
+        put(ICON_NAME, iconName);
+    }
 }

@@ -1,11 +1,14 @@
+// Copyright (c) 2015 Volcano. All rights reserved.
 package com.volcano.assistant.model;
 
 import com.parse.ParseClassName;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
 
+import java.util.List;
+
 /**
- * Created by alimehrpour on 1/12/15.
+ * A Category
  */
 @ParseClassName("Category")
 public class Category extends ParseObject {
@@ -14,9 +17,12 @@ public class Category extends ParseObject {
     private static final String DESCRIPTION     = "description";
     private static final String IS_PRIMARY      = "isPrimary";
     private static final String NAME            = "name";
+    private static final String FIELDS          = "fields";
 
     public static ParseQuery<Category> getQuery() {
-        return ParseQuery.getQuery(Category.class);
+        final ParseQuery<Category> query = ParseQuery.getQuery(Category.class);
+        query.include(FIELDS);
+        return query;
     }
 
     public String getName() {
@@ -27,10 +33,12 @@ public class Category extends ParseObject {
         put(NAME, name);
     }
 
+    @SuppressWarnings("UnusedDeclaration")
     public String getDescription() {
         return getString(DESCRIPTION);
     }
 
+    @SuppressWarnings("UnusedDeclaration")
     public void setDescription(String description) {
         put(DESCRIPTION, description);
     }
@@ -43,7 +51,12 @@ public class Category extends ParseObject {
         put(COLOR, color);
     }
 
+    @SuppressWarnings("UnusedDeclaration")
     public boolean isPrimary() {
         return getBoolean(IS_PRIMARY);
+    }
+
+    public List<Field> getFields() {
+        return getList(FIELDS);
     }
 }

@@ -1,3 +1,4 @@
+// Copyright (c) 2015 Volcano. All rights reserved.
 package com.volcano.assistant.activity;
 
 import android.app.Activity;
@@ -12,16 +13,15 @@ import com.volcano.assistant.Intents;
 import com.volcano.assistant.Managers;
 import com.volcano.assistant.R;
 import com.volcano.assistant.backend.ParseManager;
+import com.volcano.assistant.util.Utils;
 
 /**
- * Created by alimehrpour on 12/31/14.
+ * Signin activity
  */
 public class SigninActivity extends AbstractActivity {
 
     private EditText mUsernameEdit;
     private EditText mPasswordEdit;
-    private TextView mSigninText;
-    private TextView mSignupText;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,10 +30,10 @@ public class SigninActivity extends AbstractActivity {
 
         mUsernameEdit = (EditText) findViewById(R.id.edit_username);
         mPasswordEdit = (EditText) findViewById(R.id.edit_password);
-        mSigninText = (TextView) findViewById(R.id.text_signin);
-        mSignupText = (TextView) findViewById(R.id.text_signup_email);
+        final TextView signinText = (TextView) findViewById(R.id.text_signin);
+        final TextView signupText = (TextView) findViewById(R.id.text_signup_email);
 
-        mSigninText.setOnClickListener(new View.OnClickListener() {
+        signinText.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Managers.getAccountManager().signin(mUsernameEdit.getText().toString(), mPasswordEdit.getText().toString(), new ParseManager.Listener() {
@@ -45,13 +45,13 @@ public class SigninActivity extends AbstractActivity {
 
                     @Override
                     public void onErrorResponse(ParseException e) {
-                        showToast(e.getMessage());
+                        Utils.showToast(e.getMessage());
                     }
                 });
             }
         });
 
-        mSignupText.setOnClickListener(new View.OnClickListener() {
+        signupText.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 startActivityForResult(Intents.getSignupIntent(), Intents.REQUEST_CODE_SIGNUP_LOGIN);

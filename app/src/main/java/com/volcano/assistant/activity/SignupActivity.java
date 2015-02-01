@@ -10,6 +10,7 @@ import com.volcano.assistant.Managers;
 import com.volcano.assistant.R;
 import com.volcano.assistant.backend.ParseManager;
 import com.volcano.assistant.util.LogUtils;
+import com.volcano.assistant.util.Utils;
 
 /**
  * Created by alimehrpour on 1/5/15.
@@ -58,7 +59,7 @@ public class SignupActivity extends AbstractActivity {
             @Override
             public void onErrorResponse(ParseException e) {
                 LogUtils.LogE(TAG, "Signup failed, e = " + e.toString());
-                showToast(e.getMessage());
+                Utils.showToast(e.getMessage());
             }
         });
     }

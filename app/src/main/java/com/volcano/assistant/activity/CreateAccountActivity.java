@@ -1,3 +1,4 @@
+// Copyright (c) 2015 Volcano. All rights reserved.
 package com.volcano.assistant.activity;
 
 import android.os.Bundle;
@@ -11,7 +12,7 @@ import com.volcano.assistant.R;
 import com.volcano.assistant.fragment.CategoryListFragment;
 
 /**
- * Created by alimehrpour on 1/9/15.
+ * Create account activity
  */
 public class CreateAccountActivity extends AbstractActivity {
 
@@ -33,7 +34,6 @@ public class CreateAccountActivity extends AbstractActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu items for use in the action bar
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.menu_create_account, menu);
         mSaveMenu = menu.findItem(R.id.action_save);

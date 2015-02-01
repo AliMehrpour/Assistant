@@ -10,8 +10,19 @@
         android:layout_height="@dimen/iconed_edittext_size"
         android:layout_marginLeft="@dimen/margin_20"
         android:layout_marginRight="@dimen/margin_25"
+        android:layout_centerVertical="true" />
+
+    <com.volcano.assistant.widget.RobotoTextView
+        android:id="@+id/text_indicator"
+        android:layout_width="@dimen/iconed_edittext_size"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/margin_20"
+        android:layout_marginRight="@dimen/margin_25"
+        android:gravity="center_vertical|center_horizontal"
+        android:includeFontPadding="false"
         android:layout_centerVertical="true"
-        android:src="@drawable/ic_notification" />
+        style="@style/Text.Indicator25"
+        android:visibility="invisible" />
 
     <com.volcano.assistant.widget.RobotoEditText
         android:id="@+id/edittext"

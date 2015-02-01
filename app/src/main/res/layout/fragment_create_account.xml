@@ -30,7 +30,8 @@
             android:layout_marginLeft="@dimen/margin_20"
             android:layout_marginRight="@dimen/margin_25"
             android:layout_alignParentLeft="true"
-            android:layout_centerVertical="true" />
+            android:layout_centerVertical="true"
+            tools:ignore="contentDescription" />
 
         <com.volcano.assistant.widget.RobotoTextView
             android:id="@+id/text_category"

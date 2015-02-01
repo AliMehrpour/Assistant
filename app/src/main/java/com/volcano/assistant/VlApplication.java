@@ -1,16 +1,17 @@
+// Copyright (c) 2015 Volcano. All rights reserved.
 package com.volcano.assistant;
 
 import android.app.Activity;
 import android.app.Application;
 import android.os.Bundle;
 
-import com.parse.Parse;
 import com.parse.ParseObject;
 import com.volcano.assistant.model.Category;
 import com.volcano.assistant.model.Field;
 
-import java.io.File;
-
+/**
+ * A Custom application class
+ */
 public final class VlApplication extends Application {
 
     private static VlApplication sInstance;
@@ -25,6 +26,7 @@ public final class VlApplication extends Application {
         return sInstance;
     }
 
+    @SuppressWarnings("UnusedDeclaration")
     public static boolean isCurrentApp() {
         return sResumeCount > 0;
     }

@@ -1,6 +1,6 @@
+// Copyright (c) 2015 Volcano. All rights reserved.
 package com.volcano.assistant.fragment;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,7 +11,7 @@ import com.volcano.assistant.R;
 import com.volcano.assistant.widget.FloatingActionButton;
 
 /**
- * Created by alimehrpour on 1/9/15.
+ * Account list
  */
 public class AccountListFragment extends AbstractFragment {
 
