@@ -6,6 +6,8 @@ import android.app.Application;
 import android.os.Bundle;
 
 import com.parse.ParseObject;
+import com.volcano.assistant.model.Account;
+import com.volcano.assistant.model.AccountFieldValue;
 import com.volcano.assistant.model.Category;
 import com.volcano.assistant.model.Field;
 
@@ -38,6 +40,8 @@ public final class VlApplication extends Application {
 
         ParseObject.registerSubclass(Category.class);
         ParseObject.registerSubclass(Field.class);
+        ParseObject.registerSubclass(Account.class);
+        ParseObject.registerSubclass(AccountFieldValue.class);
         registerActivityLifecycleCallbacks(new ActivityLifecycleCallbacks() {
             @Override
             public void onActivityStopped(Activity activity) {

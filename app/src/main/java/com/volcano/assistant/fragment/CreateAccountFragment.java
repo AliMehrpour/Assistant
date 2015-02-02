@@ -11,11 +11,16 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.parse.ParseException;
+import com.parse.SaveCallback;
 import com.volcano.assistant.R;
 import com.volcano.assistant.activity.AbstractActivity;
+import com.volcano.assistant.model.Account;
+import com.volcano.assistant.model.AccountFieldValue;
 import com.volcano.assistant.model.Category;
 import com.volcano.assistant.model.Field;
 import com.volcano.assistant.util.BitmapUtils;
+import com.volcano.assistant.util.LogUtils;
 import com.volcano.assistant.widget.CircleDrawable;
 import com.volcano.assistant.widget.IconedEditText;
 
@@ -29,7 +34,7 @@ public class CreateAccountFragment extends AbstractFragment {
     private Category mSelectedCategory;
     private List<Field> mFields;
 
-    private IconedEditText mAccountName;
+    private IconedEditText mAccountTitle;
     private TextView mCategoryText;
     private ImageView mCategoryImage;
     private CategoryListFragment mCategoryListFragment;
@@ -40,7 +45,7 @@ public class CreateAccountFragment extends AbstractFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         final View view = inflater.inflate(R.layout.fragment_create_account, container, false);
 
-        mAccountName = (IconedEditText) view.findViewById(R.id.text_account_name);
+        mAccountTitle = (IconedEditText) view.findViewById(R.id.text_account_title);
         mFieldLayout = (LinearLayout) view.findViewById(R.id.layout_fields);
         mCategoryText = (TextView) view.findViewById(R.id.text_category);
         mCategoryImage = (ImageView) view.findViewById(R.id.image_category);
@@ -83,12 +88,40 @@ public class CreateAccountFragment extends AbstractFragment {
                     mCategoryText.setText(mSelectedCategory.getName());
 
                     ((AbstractActivity) getActivity()).setToolbarColor(mSelectedCategory.getColor());
-                    mAccountName.setVisibility(View.VISIBLE);
-                    mAccountName.requestFocus();
+                    mAccountTitle.setVisibility(View.VISIBLE);
+                    mAccountTitle.requestFocus();
                     loadFields();
                 }
             }
         });
+    }
+
+    public void save() {
+        if (valid()) {
+            final Account account = new Account();
+            account.setTitle(mAccountTitle.getText().toString());
+            account.setCategory(mSelectedCategory);
+            account.saveInBackground();
+            final int size = mFields.size();
+            for (int i = 0; i < size; i++) {
+                final IconedEditText fieldEditText = (IconedEditText) mFieldLayout.getChildAt(i);
+
+                AccountFieldValue value = new AccountFieldValue();
+                value.setAccount(account);
+                value.setField(mFields.get(i));
+                value.setValue(fieldEditText.getText().toString());
+                value.saveInBackground(new SaveCallback() {
+                    @Override
+                    public void done(ParseException e) {
+                        LogUtils.LogI(TAG, "new account successfully saved.");
+                    }
+                });
+            }
+        }
+    }
+
+    private boolean valid() {
+        return true;
     }
 
     private void loadFields() {

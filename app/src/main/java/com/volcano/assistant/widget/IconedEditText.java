@@ -4,6 +4,7 @@ package com.volcano.assistant.widget;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.drawable.Drawable;
+import android.text.Editable;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -76,5 +77,9 @@ public class IconedEditText extends RelativeLayout {
         mIcon.setVisibility(View.INVISIBLE);
         mIndicatorText.setVisibility(View.VISIBLE);
         mIndicatorText.setText(text);
+    }
+
+    public Editable getText() {
+        return mEditText.getText();
     }
 }
