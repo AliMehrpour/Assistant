@@ -29,6 +29,12 @@ public class AbstractActivity extends ActionBarActivity {
         }
     }
 
+    protected void setActionbar(Toolbar toolbar) {
+        toolbar.setTitleTextAppearance(this, R.style.Toolbar_Title);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+    }
+
     public void setToolbarColor(String color) {
         final Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         final int realColor = Color.parseColor(String.format("#%s", color));

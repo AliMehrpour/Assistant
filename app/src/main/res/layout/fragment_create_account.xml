@@ -10,7 +10,7 @@
               android:background="@android:color/white">
 
     <com.volcano.assistant.widget.IconedEditText
-        android:id="@+id/text_account_name"
+        android:id="@+id/text_account_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         volcano:hint="@string/hint_account_name"
