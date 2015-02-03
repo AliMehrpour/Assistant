@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent" android:layout_height="match_parent">
+
+    <PreferenceCategory android:title="CONFIGURE PASSCODE" android:key="first_category">
+
+        <CheckBoxPreference
+        android:key="@string/preference_passcode_key"
+        android:summary="@string/preference_passcode_summary"
+        android:title="@string/preference_passcode_title"
+        android:defaultValue="false" />
+
+    </PreferenceCategory>
+
+</PreferenceScreen>

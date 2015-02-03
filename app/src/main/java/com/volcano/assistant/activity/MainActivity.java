@@ -2,6 +2,7 @@ package com.volcano.assistant.activity;
 
 import android.app.Fragment;
 import android.app.FragmentManager;
+import android.content.Intent;
 import android.support.v4.widget.DrawerLayout;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -79,8 +80,11 @@ public class MainActivity extends AbstractActivity {
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
-
-        if (id == R.id.action_signin) {
+        if (id == R.id.action_setting){
+            Intent intent = new Intent(this , SettingActivity.class);
+            startActivity(intent);
+        }
+        else if (id == R.id.action_signin) {
             startActivity(Intents.getSigninIntent());
             return true;
         }

@@ -29,13 +29,13 @@ public final class LogUtils {
         return makeLogTag(cls.getSimpleName());
     }
 
-    public static void logD(final String tag, String message) {
+    public static void LogD(final String tag, String message) {
         if (BuildConfig.DEBUG || Config.IS_DOGFOOD_BUILD || Log.isLoggable(tag, Log.DEBUG)) {
             Log.d(tag, message);
         }
     }
 
-    public static void logD(final String tag, String message, Throwable cause) {
+    public static void LogD(final String tag, String message, Throwable cause) {
         if (BuildConfig.DEBUG || Config.IS_DOGFOOD_BUILD || Log.isLoggable(tag, Log.DEBUG)) {
             Log.d(tag, message, cause);
         }

@@ -5,11 +5,24 @@
 
     <string name="app_name">Assistant</string>
 
+    <string name="button_0">0</string>
+    <string name="button_1">1</string>
+    <string name="button_2">2</string>
+    <string name="button_3">3</string>
+    <string name="button_4">4</string>
+    <string name="button_5">5</string>
+    <string name="button_6">6</string>
+    <string name="button_7">7</string>
+    <string name="button_8">8</string>
+    <string name="button_9">9</string>
+    <string name="button_delete">DEL</string>
     <string name="button_signin">SIGN IN</string>
     <string name="button_signup">SIGN UP</string>
     <string name="button_signup_email">SIGN UP</string>
     <string name="button_signup_facebook">SIGN UP WITH FACEBOOK</string>
     <string name="button_signup_twitter">SIGN UP WITH TWITTER</string>
+
+    <string name="description_imageView_icon_launcher">Application Icon</string>
 
     <string name="hint_account_name">Enter account title</string>
     <string name="hint_navigation_close">Close</string>
@@ -21,11 +34,16 @@
     <string name="hint_select_category">Select Category</string>
     <string name="hint_username">Username</string>
 
+    <string name="lable_enteryourpasscode">Enter your passcode</string>
+    <string name="label_passcode">Passcode</string>
     <string name="label_signin">Sign In</string>
     <string name="label_signup">Sign Up</string>
 
     <string name="menu_save">Save</string>
+    <string name="menu_setting">Setting</string>
     <string name="menu_signin">Sign In</string>
     <string name="menu_signout">Sign Out</string>
 
+    <string name="preference_passcode_summary">Enable or disable passcode</string>
+    <string name="preference_passcode_title">Enable passcode</string>
 </resources>

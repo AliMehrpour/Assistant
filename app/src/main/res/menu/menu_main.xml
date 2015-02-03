@@ -16,4 +16,9 @@
           android:orderInCategory="100"
           app:showAsAction="never"/>
 
+    <item android:id="@+id/action_setting"
+        android:title="@string/menu_setting"
+        android:orderInCategory="100"
+        app:showAsAction="never"/>
+
 </menu>

@@ -14,6 +14,42 @@ public final class PrefUtils {
 
     public static String PREF_USER_LEARNED_NAVIGATOR = "user_learned_navigator";
 
+    public static boolean exists(String key) {
+        return getPrefs().contains(key);
+    }
+
+    public static boolean getPref(String key, boolean defaultValue) {
+        return getPrefs().getBoolean(key, defaultValue);
+    }
+
+    public static String getPref(String key, String defaultValue) {
+        return getPrefs().getString(key, defaultValue);
+    }
+
+    private static SharedPreferences getPrefs() {
+        return PreferenceManager.getDefaultSharedPreferences(VlApplication.getInstance());
+    }
+
+    public static void remove(String key) {
+        final SharedPreferences.Editor editor = getPrefs().edit();
+        editor.remove(key);
+        editor.commit();
+    }
+
+    public static void setPref(String key, boolean value) {
+        final SharedPreferences.Editor editor = getPrefs().edit();
+        editor.putBoolean(key, value);
+        editor.apply();
+        //editor.commit();
+    }
+
+    public static void setPref(String key, String value) {
+        final SharedPreferences.Editor editor = getPrefs().edit();
+        editor.putString(key, value);
+        editor.apply();
+        //editor.commit();
+    }
+
     public static void markUserLearnNavigator() {
         setPref(PREF_USER_LEARNED_NAVIGATOR, true);
     }
@@ -22,57 +58,23 @@ public final class PrefUtils {
         return getPref(PREF_USER_LEARNED_NAVIGATOR, false);
     }
 
-    private static SharedPreferences getPrefs() {
-        return PreferenceManager.getDefaultSharedPreferences(VlApplication.getInstance());
-    }
-
-    private static boolean exists(String key) {
-        return getPrefs().contains(key);
-    }
-
-    private static void remove(String key) {
-        final SharedPreferences.Editor editor = getPrefs().edit();
-        editor.remove(key);
-        editor.commit();
-    }
-
-    private static String getPref(String key, String defaultValue) {
-        return getPrefs().getString(key, defaultValue);
-    }
-
-    private static void setPref(String key, String value) {
-        final SharedPreferences.Editor editor = getPrefs().edit();
-        editor.putString(key, value);
-        editor.commit();
-    }
-
-    private static boolean getPref(String key, boolean defaultValue) {
-        return getPrefs().getBoolean(key, defaultValue);
-    }
-
-    private static void setPref(String key, boolean value) {
-        final SharedPreferences.Editor editor = getPrefs().edit();
-        editor.putBoolean(key, value);
-        editor.commit();
-    }
-
-    private static int getPref(String key, int defaultValue) {
+    /* public static int getPref(String key, int defaultValue) {
         return getPrefs().getInt(key, defaultValue);
     }
 
-    private static void setPref(String key, int value) {
+    public static void setPref(String key, int value) {
         final SharedPreferences.Editor editor = getPrefs().edit();
         editor.putInt(key, value);
         editor.commit();
     }
 
-    private static long getPref(String key, long defaultValue) {
+    public static long getPref(String key, long defaultValue) {
         return getPrefs().getLong(key, defaultValue);
     }
 
-    private static void setPref(String key, long value) {
+    public static void setPref(String key, long value) {
         final SharedPreferences.Editor editor = getPrefs().edit();
         editor.putLong(key, value);
         editor.commit();
-    }
+    } */
 }

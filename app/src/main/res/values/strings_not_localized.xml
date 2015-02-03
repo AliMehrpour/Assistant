@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="preference_passcode">preference_passcode</string>
+    <string name="preference_passcode_key">preference_passcode_key</string>
+
+</resources>

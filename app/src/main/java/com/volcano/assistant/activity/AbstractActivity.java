@@ -1,21 +1,28 @@
 package com.volcano.assistant.activity;
 
+import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Build;
+import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.Toolbar;
 import android.widget.Toast;
 
+import com.volcano.assistant.Intents;
+import com.volcano.assistant.Managers;
 import com.volcano.assistant.R;
+import com.volcano.assistant.VlApplication;
+import com.volcano.assistant.fragment.PasscodeFragment;
 import com.volcano.assistant.util.BitmapUtils;
 import com.volcano.assistant.util.LogUtils;
+import com.volcano.assistant.util.PrefUtils;
 
 /**
  * Each activity should extends this class
  */
 public class AbstractActivity extends ActionBarActivity {
-
     protected final String TAG = LogUtils.makeLogTag(getClass().getName());
 
     protected void showToast(int resId) {
