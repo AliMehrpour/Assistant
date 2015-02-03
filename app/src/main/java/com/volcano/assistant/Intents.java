@@ -5,6 +5,7 @@ import android.content.Intent;
 import com.volcano.assistant.activity.CreateAccountActivity;
 import com.volcano.assistant.activity.EditAccountActivity;
 import com.volcano.assistant.activity.MainActivity;
+import com.volcano.assistant.activity.PasscodeActivity;
 import com.volcano.assistant.activity.SigninActivity;
 import com.volcano.assistant.activity.SignupActivity;
 
@@ -20,9 +21,11 @@ public final class Intents {
     public static final String EXTRA_ACCOUNT_TITLE      = INTENT_NAMESPACE + "account_title";
     public static final String EXTRA_CATEGORY_COLOR     = INTENT_NAMESPACE + "category_color";
     public static final String EXTRA_CATEGORY_ID        = INTENT_NAMESPACE + "category_id";
+    public static final String EXTRA_PASSCODE_USECASE   = "passcode_usecase";
 
     public static final String KEY_CATEGORY_ID      = "category_id";
     public static final String KEY_INITIALIZED      = "initialized";
+    public static final String KEY_PASSCODE_MODE    = "passcode_mode";
     public static final String KEY_POSITION         = "position";
     public static final String KEY_SUB_CATEGORY_ID  = "sub_category_id";
 
@@ -30,9 +33,8 @@ public final class Intents {
     public static final int REQUEST_CODE_SIGNUP   = 2;
 
     public static Intent getMainIntent() {
-        final Intent intent = new Intent(VlApplication.getInstance(), MainActivity.class)
+        return new Intent(VlApplication.getInstance(), MainActivity.class)
                 .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        return intent;
     }
 
     public static Intent getCreateAccountIntent(String categoryId, String color) {
@@ -48,6 +50,12 @@ public final class Intents {
                 .putExtra(EXTRA_ACCOUNT_TITLE, title);
     }
 
+    public static Intent getPasscodeIntent(int passcodeMode) {
+        return new Intent(VlApplication.getInstance(), PasscodeActivity.class)
+               .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+               .putExtra(Intents.EXTRA_PASSCODE_USECASE, passcodeMode);
+    }
+
     public static Intent getSigninIntent() {
         return new Intent(VlApplication.getInstance(), SigninActivity.class);
     }
@@ -55,5 +63,4 @@ public final class Intents {
     public static Intent getSignupIntent() {
         return new Intent(VlApplication.getInstance(), SignupActivity.class);
     }
-
 }

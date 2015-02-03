@@ -18,6 +18,7 @@
         android:icon="@drawable/icon_launcher"
         android:label="@string/app_name"
         android:theme="@style/Theme.Assistant" >
+
         <activity
             android:name=".activity.MainActivity"
             android:launchMode="singleTop"
@@ -40,6 +41,18 @@
         <activity android:name=".activity.SignupActivity"
                   android:label="@string/label_signup"
                   android:windowSoftInputMode="stateAlwaysHidden" />
+
+        <activity
+            android:name=".activity.PasscodeActivity"
+            android:label="@string/label_passcode"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden">
+        </activity>
+
+        <activity
+            android:name=".activity.SettingActivity"
+            android:screenOrientation="portrait"
+            android:label="@string/label_passcode" />
 
         <provider
             android:authorities="com.volcano.assistant"

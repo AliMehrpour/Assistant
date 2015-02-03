@@ -10,7 +10,6 @@ import com.volcano.assistant.VlApplication;
 /**
  * Utility class for default shared preferences
  */
-@SuppressWarnings("UnusedDeclaration")
 public final class PrefUtils {
 
     public static String PREF_NAVIGATOR_LAST_CATEGORY   = "navigator_last_category";
@@ -32,57 +31,37 @@ public final class PrefUtils {
         return getPref(PREF_NAVIGATOR_LAST_CATEGORY, "");
     }
 
+    public static boolean exists(String key) {
+        return getPrefs().contains(key);
+    }
+
+    public static boolean getPref(String key, boolean defaultValue) {
+        return getPrefs().getBoolean(key, defaultValue);
+    }
+
+    public static String getPref(String key, String defaultValue) {
+        return getPrefs().getString(key, defaultValue);
+    }
+
     private static SharedPreferences getPrefs() {
         return PreferenceManager.getDefaultSharedPreferences(VlApplication.getInstance());
     }
 
-    private static boolean exists(String key) {
-        return getPrefs().contains(key);
-    }
-
-    private static void remove(String key) {
+    public static void remove(String key) {
         final SharedPreferences.Editor editor = getPrefs().edit();
         editor.remove(key);
         editor.apply();
     }
 
-    private static String getPref(String key, String defaultValue) {
-        return getPrefs().getString(key, defaultValue);
-    }
-
-    private static void setPref(String key, String value) {
-        final SharedPreferences.Editor editor = getPrefs().edit();
-        editor.putString(key, value);
-        editor.apply();
-    }
-
-    private static boolean getPref(String key, boolean defaultValue) {
-        return getPrefs().getBoolean(key, defaultValue);
-    }
-
-    private static void setPref(String key, boolean value) {
+    public static void setPref(String key, boolean value) {
         final SharedPreferences.Editor editor = getPrefs().edit();
         editor.putBoolean(key, value);
         editor.apply();
     }
 
-    private static int getPref(String key, int defaultValue) {
-        return getPrefs().getInt(key, defaultValue);
-    }
-
-    private static void setPref(String key, int value) {
+    public static void setPref(String key, String value) {
         final SharedPreferences.Editor editor = getPrefs().edit();
-        editor.putInt(key, value);
-        editor.apply();
-    }
-
-    private static long getPref(String key, long defaultValue) {
-        return getPrefs().getLong(key, defaultValue);
-    }
-
-    private static void setPref(String key, long value) {
-        final SharedPreferences.Editor editor = getPrefs().edit();
-        editor.putLong(key, value);
+        editor.putString(key, value);
         editor.apply();
     }
 }

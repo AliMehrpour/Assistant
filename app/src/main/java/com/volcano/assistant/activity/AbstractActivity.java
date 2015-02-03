@@ -18,7 +18,6 @@ import com.volcano.assistant.util.Utils;
  * Each activity should extends this class
  */
 public class AbstractActivity extends ActionBarActivity {
-
     protected final String TAG = LogUtils.makeLogTag(getClass().getName());
 
     @Override

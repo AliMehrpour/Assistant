@@ -37,12 +37,18 @@
     <dimen name="margin_30">30dp</dimen>
     <dimen name="margin_40">40dp</dimen>
     <dimen name="margin_56">56dp</dimen>
+    <dimen name="margin_60">60dp</dimen>
+    <dimen name="margin_80">80dp</dimen>
 
     <dimen name="navigation_item_counter_width">40dp</dimen>
     <dimen name="navigation_item_height">48dp</dimen>
     <dimen name="navigation_item_icon_size">24dp</dimen>
     <dimen name="navigation_profile_image_height">164dp</dimen>
     <dimen name="navigation_width">-.5dp</dimen>
+
+    <dimen name="passcode_button_height">65dp</dimen>
+    <dimen name="passcode_pin_height">40dp</dimen>
+    <dimen name="passcode_pin_width">70dp</dimen>
 
     <dimen name="signup_horizontal_margin">40dp</dimen>
 

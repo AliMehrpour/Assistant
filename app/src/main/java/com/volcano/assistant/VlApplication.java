@@ -11,7 +11,6 @@ import android.os.Bundle;
 public final class VlApplication extends Application {
 
     private static VlApplication sInstance;
-    private static int sResumeCount = 0;
 
     public VlApplication() {
         super();
@@ -64,6 +63,5 @@ public final class VlApplication extends Application {
             }
         });
     }
-
 }
 
