@@ -19,7 +19,7 @@ import com.volcano.assistant.util.PrefUtils;
  * Passcode fragment. used for unlock application or enable, disable or
  * change passcode
  */
-public class PasscodeFragment extends AbstractFragment {
+public final class PasscodeFragment extends AbstractFragment {
 
     public static final int MODE_PASSCODE_CHANGE    = 1;
     public static final int MODE_PASSCODE_DISABLE   = 2;
@@ -27,6 +27,7 @@ public class PasscodeFragment extends AbstractFragment {
     public static final int MODE_PASSCODE_UNLOCK    = 4;
 
     private int mMode = MODE_PASSCODE_UNLOCK;
+    private boolean mPassApproved = false;
 
     EditText mPin_1, mPin_2, mPin_3, mPin_4, mEditText_selected;
     Button mButton_0, mButton_1, mButton_2, mButton_3, mButton_4,
@@ -36,8 +37,8 @@ public class PasscodeFragment extends AbstractFragment {
 
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+            Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_passcode, container, false);
 
         mPin_1 = (EditText) view.findViewById(R.id.edit_pin_1);
@@ -182,11 +183,21 @@ public class PasscodeFragment extends AbstractFragment {
     }
 
     /**
+     * Set use case mode
+     * @param mode One of {@link PasscodeFragment#MODE_PASSCODE_ENABLE},
+     *                    {@link PasscodeFragment#MODE_PASSCODE_UNLOCK},
+     *                    {@link PasscodeFragment#MODE_PASSCODE_CHANGE} or
+     *                    {@link PasscodeFragment#MODE_PASSCODE_DISABLE} values
+     */
+    public void setPasscodeMode(int mode){
+        mMode = mode;
+    }
+
+    /**
      * Set selected EditText to String text and select next EditText. in 4th EditText, passcode is enabled, unlocked, changed or disabled.
      * @param text is string must be set to selected to EditText
      */
-
-    public void setEditText_selected( String text ){
+    private void setEditText_selected(String text) {
         mEditText_selected.setText(text);
         String tag = mEditText_selected.getTag().toString();
         switch (tag){
@@ -197,54 +208,89 @@ public class PasscodeFragment extends AbstractFragment {
             case "3" : mEditText_selected = mPin_4;
                 break;
             case "4":
-                // enter to app in case passcode is right! Or make passcode on!
-                // TODO
+                // enter to app in case passcode to unlock. Or make passcode on. Or make passcode disable! Or change passcode.
                 String pin1 = mPin_1.getText().toString();
                 String pin2 = mPin_2.getText().toString();
                 String pin3 = mPin_3.getText().toString();
                 String pin4 = mPin_4.getText().toString();
-                if(!pin1.equals("")&& !pin2.equals("") && !pin3.equals("") && !pin4.equals("")){
-                    if(mMode == MODE_PASSCODE_ENABLE){
-                        if(mFirstPasscodeEntry.equals("")){
-                            mDescription.setText("Re-enter your passcode");
+                if (!pin1.equals("")&& !pin2.equals("") && !pin3.equals("") && !pin4.equals("")) {
+                    if (mMode == MODE_PASSCODE_ENABLE) {
+                        if (mFirstPasscodeEntry.equals("")) {
+                            mDescription.setText(getString(R.string.label_reEnter_passcode));
                             mFirstPasscodeEntry = pin1 + pin2 + pin3 + pin4;
-                            mPin_1.setText("");
-                            mPin_2.setText("");
-                            mPin_3.setText("");
-                            mPin_4.setText("");
-                            mEditText_selected = mPin_1;
+                            clearPinsText();
                         }
-                        else{
+                        else {
                             String secondPasscodeEntry;
                             secondPasscodeEntry = pin1 + pin2 + pin3 + pin4;
                             if (mFirstPasscodeEntry.equals(secondPasscodeEntry)) {
                                 getActivity().finish();
                                 Managers.getAccountManager().enablePasscode(secondPasscodeEntry);
-                                showToast("Passcode is enabled.");
+                                showToast(getString(R.string.toast_passcode_enabled));
                             }
                         }
                     }
-                    else if(mMode == MODE_PASSCODE_UNLOCK) {
+                    else if (mMode == MODE_PASSCODE_UNLOCK) {
                         final String passcode = pin1 + pin2 + pin3 + pin4;
-                        if(Managers.getAccountManager().isPasscodeValid(passcode)){
+                        if (Managers.getAccountManager().isPasscodeValid(passcode)) {
                             getActivity().finish();
                         }
                         else {
-                           showToast("Passcode is invalid!");
+                            clearPinsText();
+                           showToast(getString(R.string.toast_passcode_invalid));
                        }
                     }
-                    else if(mMode == MODE_PASSCODE_DISABLE){
+                    else if (mMode == MODE_PASSCODE_DISABLE) {
                         String enteredPasscode = pin1 + pin2 + pin3 + pin4;
                         final Context context = VlApplication.getInstance();
                         String passcode = PrefUtils.getPref(context.getString(R.string.preference_passcode), "");
-                        if(enteredPasscode.equals(passcode)){
-                            PrefUtils.remove(getString(R.string.preference_passcode_key));
-                            showToast("Passcode is disabled!");
+                        if (enteredPasscode.equals(passcode)) {
+                            PrefUtils.remove(getString(R.string.preference_passcode));
+                            showToast(getString(R.string.toast_passcode_disabled));
                             getActivity().finish();
+                        }
+                        else {
+                            getActivity().finish();
+                            showToast(getString(R.string.toast_passcode_invalid));
+                        }
+                    }
+                    else if (mMode == MODE_PASSCODE_CHANGE) {
+                        if (!mPassApproved) {
+                            String enteredPasscode = pin1 + pin2 + pin3 + pin4;
+                            final Context context = VlApplication.getInstance();
+                            String passcode = PrefUtils.getPref(context.getString(R.string.preference_passcode), "");
+                            if (enteredPasscode.equals(passcode)) {
+                                mPassApproved = true;
+                                clearPinsText();
+                                mDescription.setText(getString(R.string.label_Enter_newPasscode));
+                            }
+                            else {
+                                getActivity().finish();
+                                showToast(getString(R.string.toast_passcode_invalid));
+                            }
+                        }
+                        else {
+                            if (mFirstPasscodeEntry.equals("")) {
+                                mFirstPasscodeEntry = pin1 + pin2 + pin3 + pin4;
+                                clearPinsText();
+                                mDescription.setText(getString(R.string.label_reEnter_newPasscode));
+                            }
+                            else {
+                                String secondPasscodeEntry;
+                                secondPasscodeEntry = pin1 + pin2 + pin3 + pin4;
+                                if (mFirstPasscodeEntry.equals(secondPasscodeEntry)) {
+                                    getActivity().finish();
+                                    Managers.getAccountManager().enablePasscode(secondPasscodeEntry);
+                                    showToast(getString(R.string.toast_passcode_changed));
+                                }
+                                else {
+                                    getActivity().finish();
+                                    showToast(getString(R.string.toast_passcode_matched));
+                                }
+                            }
                         }
                     }
                 }
-
                 break;
             default: mEditText_selected = mPin_1;
                 break;
@@ -255,7 +301,7 @@ public class PasscodeFragment extends AbstractFragment {
     /**
      * Delete Selected EditText and then Select next EditText
      */
-    public void deleteEditText() {
+    private void deleteEditText() {
         if(mEditText_selected.getText().toString().equals("")){
             String tag = mEditText_selected.getTag().toString();
             switch (tag) {
@@ -283,20 +329,20 @@ public class PasscodeFragment extends AbstractFragment {
      * Delete data from passcode EditText and then set the listener of EditText to avoid android keyboard to open.
      * @param editText is EditText in layout for passcode
      */
-    public void delete_pin(EditText editText){
+    private void delete_pin(EditText editText) {
         editText.setText("");
         editText.setKeyListener(null);
     }
 
     /**
-     * Set use case mode
-     * @param mode One of {@link PasscodeFragment#MODE_PASSCODE_ENABLE},
-     *                    {@link PasscodeFragment#MODE_PASSCODE_UNLOCK},
-     *                    {@link PasscodeFragment#MODE_PASSCODE_CHANGE} or
-     *                    {@link PasscodeFragment#MODE_PASSCODE_DISABLE} values
+     * Initial pin EditTexts to data entry
      */
-    public void setPasscodeMode(int mode){
-        mMode = mode;
+    private void clearPinsText() {
+        mPin_1.setText("");
+        mPin_2.setText("");
+        mPin_3.setText("");
+        mPin_4.setText("");
+        mEditText_selected = mPin_1;
     }
 
 }

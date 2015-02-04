@@ -43,7 +43,7 @@ public class ApplicationLock implements Application.ActivityLifecycleCallbacks {
 
     @Override
     public void onActivityResumed(Activity activity) {
-        LogUtils.LogI("Application", "Activity " + activity.getClass().getName() + " resumed.");
+       /* LogUtils.LogI("Application", "Activity " + activity.getClass().getName() + " resumed.");
         if (!Managers.getAccountManager().isPasscodeEnable()) {
             return;
         }
@@ -61,7 +61,7 @@ public class ApplicationLock implements Application.ActivityLifecycleCallbacks {
             mLockEnabled = false;
             VlApplication.getInstance().startActivity(Intents.getPasscodeIntent(PasscodeFragment.MODE_PASSCODE_UNLOCK));
             //return;
-        }
+        }*/
     }
 
     @Override

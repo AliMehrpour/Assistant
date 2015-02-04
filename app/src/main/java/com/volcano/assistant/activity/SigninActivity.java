@@ -16,7 +16,7 @@ import com.volcano.assistant.backend.ParseManager;
 /**
  * Created by alimehrpour on 12/31/14.
  */
-public class SigninActivity extends AbstractActivity {
+public class SignInActivity extends AbstractActivity {
 
     private EditText mUsernameEdit;
     private EditText mPasswordEdit;
@@ -26,12 +26,12 @@ public class SigninActivity extends AbstractActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_signin);
+        setContentView(R.layout.activity_sign_in);
 
         mUsernameEdit = (EditText) findViewById(R.id.edit_username);
         mPasswordEdit = (EditText) findViewById(R.id.edit_password);
-        mSigninText = (TextView) findViewById(R.id.text_signin);
-        mSignupText = (TextView) findViewById(R.id.text_signup_email);
+        mSigninText = (TextView) findViewById(R.id.text_signIn);
+        mSignupText = (TextView) findViewById(R.id.text_signUp_email);
 
         mSigninText.setOnClickListener(new View.OnClickListener() {
             @Override

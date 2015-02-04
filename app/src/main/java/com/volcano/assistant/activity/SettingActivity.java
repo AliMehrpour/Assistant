@@ -15,7 +15,6 @@ public class SettingActivity extends AbstractActivity {
 
         getFragmentManager().beginTransaction().replace(android.R.id.content,
                 new SettingFragment()).commit();
-
-
     }
+
 }

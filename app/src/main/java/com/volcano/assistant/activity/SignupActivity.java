@@ -14,7 +14,7 @@ import com.volcano.assistant.util.LogUtils;
 /**
  * Created by alimehrpour on 1/5/15.
  */
-public class SignupActivity extends AbstractActivity {
+public class SignUpActivity extends AbstractActivity {
 
     private TextView mSignupButton;
     private EditText mUsernameEdit;
@@ -25,9 +25,9 @@ public class SignupActivity extends AbstractActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_signup);
+        setContentView(R.layout.activity_sign_up);
 
-        mSignupButton = (TextView) findViewById(R.id.button_signup);
+        mSignupButton = (TextView) findViewById(R.id.button_signUp);
         mUsernameEdit = (EditText) findViewById(R.id.edit_username);
         mNameEdit = (EditText) findViewById(R.id.edit_name);
         mPasswordEdit = (EditText) findViewById(R.id.edit_password);
@@ -50,14 +50,14 @@ public class SignupActivity extends AbstractActivity {
         Managers.getAccountManager().signup(username, name, password, email, new ParseManager.Listener() {
             @Override
             public void onResponse() {
-                LogUtils.LogI(TAG, "Signup successful");
+                LogUtils.LogI(TAG, "SignUp successful");
                 setResult(RESULT_OK);
                 finish();
             }
 
             @Override
             public void onErrorResponse(ParseException e) {
-                LogUtils.LogE(TAG, "Signup failed, e = " + e.toString());
+                LogUtils.LogE(TAG, "SignUp failed, e = " + e.toString());
                 showToast(e.getMessage());
             }
         });

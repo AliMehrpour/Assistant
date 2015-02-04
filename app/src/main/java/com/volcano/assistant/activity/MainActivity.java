@@ -65,10 +65,10 @@ public class MainActivity extends AbstractActivity {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_main, menu);
 
-        final MenuItem signinItem = menu.findItem(R.id.action_signin);
+        final MenuItem signinItem = menu.findItem(R.id.action_signIn);
         signinItem.setVisible(!Managers.getAccountManager().isLoggedIn());
 
-        final MenuItem signoutItem = menu.findItem(R.id.action_signout);
+        final MenuItem signoutItem = menu.findItem(R.id.action_signOut);
         signoutItem.setVisible(Managers.getAccountManager().isLoggedIn());
 
         return true;
@@ -84,11 +84,11 @@ public class MainActivity extends AbstractActivity {
             Intent intent = new Intent(this , SettingActivity.class);
             startActivity(intent);
         }
-        else if (id == R.id.action_signin) {
+        else if (id == R.id.action_signIn) {
             startActivity(Intents.getSigninIntent());
             return true;
         }
-        else if (id == R.id.action_signout) {
+        else if (id == R.id.action_signOut) {
             Managers.getAccountManager().signout();
             return true;
         }
