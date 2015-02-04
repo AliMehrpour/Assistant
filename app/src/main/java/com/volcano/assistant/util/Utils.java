@@ -6,10 +6,38 @@ import android.widget.Toast;
 
 import com.volcano.assistant.VlApplication;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 /**
  * Application-wide utilities
  */
 public class Utils {
+    /**
+     * Return suitable format of Date
+     * @param date The date
+     * @return Formatted Date
+     */
+    public static String getTimeSpan(Date date) {
+        final Date now = new Date();
+        SimpleDateFormat sdfDate;
+        final String dateFormatted;
+        sdfDate = new SimpleDateFormat("dd/MM/yyyy");
+        if (sdfDate.format(date).equals(sdfDate.format(now))) {
+            dateFormatted = new SimpleDateFormat("HH:mm").format(date);
+        }
+        else {
+            sdfDate = new SimpleDateFormat("yyyy");
+            if (sdfDate.format(date).equals(sdfDate.format(now))) {
+                dateFormatted = new SimpleDateFormat("MMM dd").format(date);
+            }
+            else {
+                dateFormatted = new SimpleDateFormat("MM/dd/yyyy").format(date);
+            }
+        }
+
+        return dateFormatted;
+    }
 
     /**
      * @return True if SDK is greater than JellyBean
@@ -40,5 +68,4 @@ public class Utils {
     public static void showToast(CharSequence text) {
         Toast.makeText(VlApplication.getInstance(), text, Toast.LENGTH_SHORT).show();
     }
-
 }
