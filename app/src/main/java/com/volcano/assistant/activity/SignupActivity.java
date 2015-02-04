@@ -33,7 +33,7 @@ public class SignupActivity extends AbstractActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_signup);
+        setContentView(R.layout.activity_sign_up);
 
         mUsernameEdit = (EditText) findViewById(R.id.edit_username);
         mUsernameErrorText = (TextView) findViewById(R.id.text_username);

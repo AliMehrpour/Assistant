@@ -1,21 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" android:orientation="vertical"
-        android:layout_alignParentTop="true">
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:orientation="vertical">
 
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/icon_launcher"
-            android:contentDescription="@string/description_imageView_icon_launcher"
-            android:layout_gravity="center"
             android:layout_marginTop="@dimen/margin_60"
-            android:layout_marginBottom="@dimen/margin_25"/>
+            android:layout_marginBottom="@dimen/margin_25"
+            android:layout_gravity="center"
+            android:src="@drawable/icon_launcher"
+            tools:ignore="ContentDescription" />
 
         <TextView
             android:id="@+id/text_description"
@@ -23,15 +25,15 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_marginBottom="@dimen/margin_25"
-            android:text="@string/lable_enteryourpasscode"
+            android:text="@string/label_enter_passcode"
             style="@style/Text.Dark20"/>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/margin_8"
             android:orientation="horizontal"
-            android:gravity="center"
-            android:layout_marginTop="@dimen/margin_8">
+            android:gravity="center">
 
             <EditText
                 android:id="@+id/edit_pin_1"
@@ -60,8 +62,8 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:layout_alignParentBottom="true">
+        android:layout_alignParentBottom="true"
+        android:orientation="vertical">
 
         <LinearLayout
             android:layout_width="match_parent"

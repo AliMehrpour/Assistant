@@ -47,6 +47,10 @@
             android:label="@string/label_passcode"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden">
+            <intent-filter>
+                <action android:name="com.volcano.assistant.action.PASSCODE"/>
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
         </activity>
 
         <activity

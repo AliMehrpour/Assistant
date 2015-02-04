@@ -4,9 +4,9 @@ import android.content.Intent;
 import android.os.Bundle;
 
 import com.volcano.assistant.ApplicationLock;
+import com.volcano.assistant.fragment.PasscodeFragment;
 import com.volcano.assistant.Intents;
 import com.volcano.assistant.R;
-import com.volcano.assistant.fragment.PasscodeFragment;
 
 /**
  * Created by Sherry on 1/30/2015 to support application passcode Setting
@@ -28,7 +28,6 @@ public class PasscodeActivity extends AbstractActivity {
         else {
             mPasscodeMode = savedInstanceState.getInt(Intents.KEY_PASSCODE_MODE);
         }
-
         passcodeFragment.setPasscodeMode(mPasscodeMode);
     }
 

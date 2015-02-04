@@ -45,14 +45,31 @@
     <string name="label_new_account">New Account</string>
     <string name="label_ninety_nine_plus">99+</string>
     <string name="lable_enteryourpasscode">Enter your passcode</string>
+    <string name="label_enter_passcode">Enter your passcode</string>
+    <string name="label_Enter_newPasscode">Enter New passcode</string>
+    <string name="label_reEnter_passcode">Re-enter passcode</string>
+    <string name="label_reEnter_newPasscode">Re-enter new passcode</string>
     <string name="label_passcode">Passcode</string>
-    <string name="label_signin">Sign In</string>
-    <string name="label_signup">Sign Up</string>
+    <string name="label_sign_in">Sign In</string>
+    <string name="label_sign_up">Sign Up</string>
 
     <string name="menu_save">Save</string>
-    <string name="menu_setting">Setting</string>
-    <string name="menu_signin">Sign In</string>
-    <string name="menu_signout">Sign Out</string>
+    <string name="menu_setting">Settings</string>
+    <string name="menu_sign_in">Sign In</string>
+    <string name="menu_sign_out">Sign Out</string>
+
+    <string name="preference_category_title_passcode">CONFIGURE PASSCODE</string>
+    <string name="preference_summary_checkbox_passcode">Enable or disable passcode</string>
+    <string name="preference_summary_passcode_change">Change passcode</string>
+    <string name="preference_title_checkbox">Enable passcode</string>
+    <string name="preference_title_passcode">Passcode settings</string>
+    <string name="preference_title_passcode_change">Change passcode</string>
+
+    <string name="toast_passcode_enabled">Passcode is enabled</string>
+    <string name="toast_passcode_invalid">Passcode is invalid!</string>
+    <string name="toast_passcode_disabled">Passcode is disabled!</string>
+    <string name="toast_passcode_changed">Passcode is changed</string>
+    <string name="toast_passcode_matched">Passcode dose not matched!</string>
 
     <string name="toast_device_offline_message">Your device appears to be offline</string>
     <string name="toast_initialize_failed">Initialization failed</string>
