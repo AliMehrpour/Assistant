@@ -13,15 +13,13 @@ import java.util.List;
 @ParseClassName("Category")
 public class Category extends ParseObject {
 
-    private static final String COLOR           = "color";
-    private static final String DESCRIPTION     = "description";
-    private static final String IS_PRIMARY      = "isPrimary";
     private static final String NAME            = "name";
-    private static final String FIELDS          = "fields";
+    private static final String COLOR           = "color";
+    private static final String SUB_CATEGORIES  = "subCategories";
 
     public static ParseQuery<Category> getQuery() {
         final ParseQuery<Category> query = ParseQuery.getQuery(Category.class);
-        query.include(FIELDS);
+        query.include(SUB_CATEGORIES);
         return query;
     }
 
@@ -33,16 +31,6 @@ public class Category extends ParseObject {
         put(NAME, name);
     }
 
-    @SuppressWarnings("UnusedDeclaration")
-    public String getDescription() {
-        return getString(DESCRIPTION);
-    }
-
-    @SuppressWarnings("UnusedDeclaration")
-    public void setDescription(String description) {
-        put(DESCRIPTION, description);
-    }
-
     public String getColor() {
         return getString(COLOR);
     }
@@ -52,11 +40,7 @@ public class Category extends ParseObject {
     }
 
     @SuppressWarnings("UnusedDeclaration")
-    public boolean isPrimary() {
-        return getBoolean(IS_PRIMARY);
-    }
-
-    public List<Field> getFields() {
-        return getList(FIELDS);
+    public List<SubCategory> getSubCategories() {
+        return getList(SUB_CATEGORIES);
     }
 }

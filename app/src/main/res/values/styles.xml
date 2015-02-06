@@ -38,17 +38,23 @@
         <item name="contentInsetStart">0dp</item>
     </style>
 
-    <style name="Text.Dark16" parent="@android:style/TextAppearance.Holo">
+    <style name="Text.MediumG13" parent="@android:style/TextAppearance.Holo">
+        <item name="android:textSize">@dimen/text_size_13</item>
+        <item name="android:textColor">@color/grey_2</item>
+        <item name="robotoTypeface">medium</item>
+    </style>
+
+    <style name="Text.RegularDark16" parent="@android:style/TextAppearance.Holo">
         <item name="android:textSize">@dimen/text_size_16</item>
         <item name="robotoTypeface">regular</item>
     </style>
 
-    <style name="Text.Dark36" parent="@android:style/TextAppearance.Holo">
+    <style name="Text.RegularDark36" parent="@android:style/TextAppearance.Holo">
         <item name="android:textSize">@dimen/text_size_36</item>
         <item name="robotoTypeface">regular</item>
     </style>
 
-    <style name="Text.Grey12" parent="@android:style/TextAppearance.Holo">
+    <style name="Text.RegularGrey12" parent="@android:style/TextAppearance.Holo">
         <item name="android:textColor">@color/grey_1</item>
         <item name="android:textSize">@dimen/text_size_12</item>
         <item name="robotoTypeface">regular</item>

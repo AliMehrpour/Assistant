@@ -19,7 +19,7 @@
         android:layout_marginTop="@dimen/margin_10"
         android:layout_toRightOf="@id/image_indicator"
         android:layout_alignParentTop="true"
-        style="@style/Text.Grey12" />
+        style="@style/Text.RegularGrey12" />
 
     <com.volcano.assistant.widget.RobotoEditText
         android:id="@+id/edittext"
@@ -30,7 +30,7 @@
         android:layout_alignParentBottom="true"
         android:background="@null"
         android:singleLine="true"
-        style="@style/Text.Dark16" />
+        style="@style/Text.RegularDark16" />
 
     <View
         android:layout_alignParentBottom="true"

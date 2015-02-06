@@ -41,7 +41,7 @@
             android:layout_centerVertical="true"
             android:layout_toRightOf="@id/image_category"
             android:hint="@string/hint_select_category"
-            style="@style/Text.Dark16" />
+            style="@style/Text.RegularDark16" />
 
         <View
             android:layout_alignParentBottom="true"

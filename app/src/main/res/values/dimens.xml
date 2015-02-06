@@ -3,6 +3,9 @@
 
 <resources>
 
+    <dimen name="account_avatar_size">40dp</dimen>
+    <dimen name="account_list_item_height">72dp</dimen>
+
     <dimen name="circle_drawable_size">24dp</dimen>
 
     <dimen name="divider">1dp</dimen>
@@ -34,6 +37,7 @@
 
     <dimen name="text_size_11">11sp</dimen>
     <dimen name="text_size_12">12sp</dimen>
+    <dimen name="text_size_13">13sp</dimen>
     <dimen name="text_size_14">14sp</dimen>
     <dimen name="text_size_16">16sp</dimen>
     <dimen name="text_size_18">18sp</dimen>
