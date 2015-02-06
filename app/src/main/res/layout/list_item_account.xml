@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Copyright (c) 2015 Volcano. All rights reserved. -->
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:tools="http://schemas.android.com/tools"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_margin="@dimen/margin_16">
+
+    <ImageView
+        android:id="@+id/image_icon"
+        android:layout_width="@dimen/account_avatar_size"
+        android:layout_height="@dimen/account_avatar_size"
+        android:layout_alignParentLeft="true"
+        android:layout_centerVertical="true"
+        android:layout_marginRight="@dimen/margin_16"
+        android:src="@drawable/button_float"
+        tools:ignore="ContentDescription" />
+
+    <com.volcano.assistant.widget.RobotoTextView
+        android:id="@+id/text_account_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@id/image_icon"
+        android:layout_centerVertical="true"
+        android:singleLine="true"
+        android:ellipsize="end"
+        style="@style/Text.RegularDark16"
+        tools:ignore="RelativeOverlap"/>
+
+    <com.volcano.assistant.widget.RobotoTextView
+        android:id="@+id/text_date"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
+        style="@style/Text.MediumG13"
+        tools:ignore="RelativeOverlap"/>
+
+    <ImageView
+        android:id="@+id/image_favorite"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentBottom="true"
+        android:src="@drawable/icon_star_outline"
+        tools:ignore="ContentDescription"/>
+
+</RelativeLayout>

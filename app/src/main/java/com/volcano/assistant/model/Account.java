@@ -3,14 +3,22 @@ package com.volcano.assistant.model;
 
 import com.parse.ParseClassName;
 import com.parse.ParseObject;
+import com.parse.ParseQuery;
 
 /**
  * Account
  */
 @ParseClassName("Account")
 public class Account extends ParseObject {
-    private static final String TITLE       = "title";
-    private static final String CATEGORY    = "category";
+    private static final String TITLE           = "title";
+    private static final String SUB_CATEGORY    = "subCategory";
+
+    public static ParseQuery<Account> getQuery() {
+        final ParseQuery<Account> query = ParseQuery.getQuery(Account.class);
+        query.include(SUB_CATEGORY);
+        query.orderByAscending("title");
+        return query;
+    }
 
     public String getTitle() {
         return getString(TITLE);
@@ -20,12 +28,13 @@ public class Account extends ParseObject {
         put(TITLE, title);
     }
 
-    public Category getCategory() {
-        return (Category) getParseObject(CATEGORY);
+    @SuppressWarnings("UnusedDeclaration")
+    public SubCategory getSubCategory() {
+        return (SubCategory) getParseObject(SUB_CATEGORY);
     }
 
-    public void setCategory(Category category) {
-        put(CATEGORY, category);
+    public void setCategory(SubCategory subCategory) {
+        put(SUB_CATEGORY, subCategory);
     }
 
 }

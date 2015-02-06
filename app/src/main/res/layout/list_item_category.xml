@@ -20,7 +20,7 @@
         android:paddingBottom="@dimen/margin_16"
         android:layout_centerVertical="true"
         android:layout_toRightOf="@id/image_category"
-        style="@style/Text.Dark16" />
+        style="@style/Text.RegularDark16" />
 
     <ImageView
         android:id="@+id/image_check"

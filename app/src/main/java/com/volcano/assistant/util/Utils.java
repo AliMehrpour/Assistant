@@ -47,6 +47,13 @@ public class Utils {
     }
 
     /**
+     * @return True if SDK is greater than Kitkat
+     */
+    public static boolean hashKitkatApi() {
+        return Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT;
+    }
+
+    /**
      * @return True if SDK is greater than Lollipop
      */
     public static boolean hasLollipopApi() {

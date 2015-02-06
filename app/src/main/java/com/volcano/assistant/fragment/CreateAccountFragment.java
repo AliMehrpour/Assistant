@@ -19,6 +19,7 @@ import com.volcano.assistant.model.Account;
 import com.volcano.assistant.model.AccountFieldValue;
 import com.volcano.assistant.model.Category;
 import com.volcano.assistant.model.Field;
+import com.volcano.assistant.model.SubCategory;
 import com.volcano.assistant.util.BitmapUtils;
 import com.volcano.assistant.util.LogUtils;
 import com.volcano.assistant.widget.CircleDrawable;
@@ -31,7 +32,7 @@ import java.util.List;
  */
 public class CreateAccountFragment extends AbstractFragment {
 
-    private Category mSelectedCategory;
+    private SubCategory mSelectedSubCategory;
     private List<Field> mFields;
 
     private IconedEditText mAccountTitle;
@@ -63,6 +64,7 @@ public class CreateAccountFragment extends AbstractFragment {
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
+        /*
         mCategoryImage.setBackground(new CircleDrawable());
         mCategoryText.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -94,9 +96,11 @@ public class CreateAccountFragment extends AbstractFragment {
                 }
             }
         });
+        */
     }
 
     public void save() {
+        /*
         if (valid()) {
             final Account account = new Account();
             account.setTitle(mAccountTitle.getText().toString());
@@ -118,6 +122,7 @@ public class CreateAccountFragment extends AbstractFragment {
                 });
             }
         }
+        */
     }
 
     private boolean valid() {
@@ -125,6 +130,7 @@ public class CreateAccountFragment extends AbstractFragment {
     }
 
     private void loadFields() {
+        /*
         mFields = mSelectedCategory.getFields();
 
         // PopulateFields
@@ -142,6 +148,7 @@ public class CreateAccountFragment extends AbstractFragment {
             fieldEditText.setHint(field.getName());
             mFieldLayout.addView(fieldEditText);
         }
+        */
     }
 
     private void emptyFields() {
