@@ -17,7 +17,9 @@ import com.parse.ParseException;
 import com.volcano.assistant.R;
 import com.volcano.assistant.model.Account;
 import com.volcano.assistant.model.Category;
+import com.volcano.assistant.util.BitmapUtils;
 import com.volcano.assistant.util.Utils;
+import com.volcano.assistant.widget.CircleDrawable;
 import com.volcano.assistant.widget.RobotoTextView;
 import com.volcano.assistant.widget.recyclerview.DividerItemDecoration;
 import com.volcano.assistant.widget.recyclerview.ItemClickSupport;
@@ -61,7 +63,21 @@ public class AccountListFragment extends AbstractFragment {
         mRecyclerView.setEmptyView(mEmptyLayout);
         mRecyclerView.setAdapter(mAdapter);
         mRecyclerView.addItemDecoration(new DividerItemDecoration(getResources().getDrawable(R.drawable.divider_line)));
-        ItemClickSupport.addTo(mRecyclerView);
+
+        final ItemClickSupport itemClick = ItemClickSupport.addTo(mRecyclerView);
+        itemClick.setOnItemClickListener(new ItemClickSupport.OnItemClickListener() {
+            @Override
+            public void onItemClick(RecyclerView parent, View view, int position, long id) {
+                Utils.showToast(mAccounts.get(position).getTitle());
+            }
+        });
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+
+        ItemClickSupport.removeFrom(mRecyclerView);
     }
 
     /**
@@ -109,6 +125,13 @@ public class AccountListFragment extends AbstractFragment {
             final Account account = mAccounts.get(position);
             holder.mTitleText.setText(account.getTitle());
             holder.mDateText.setText(Utils.getTimeSpan(account.getCreateDate()));
+            if (account.getSubCategory().hasIcon()) {
+                holder.mIconImage.setImageDrawable(getResources().getDrawable(BitmapUtils.getDrawableIdentifier(getActivity(), account.getSubCategory().getIconName())));
+            }
+            else {
+                final String text = account.getTitle().substring(0, 1);
+                holder.mIconImage.setImageDrawable(new CircleDrawable(account.getSubCategory().getCategory().getColor(), CircleDrawable.FILL, text));
+            }
         }
 
         @Override
@@ -121,6 +144,7 @@ public class AccountListFragment extends AbstractFragment {
         private final ImageView mIconImage;
         private final RobotoTextView mTitleText;
         private final RobotoTextView mDateText;
+        @SuppressWarnings("UnusedDeclaration")
         private final ImageView mFavoriteImage;
 
         public AccountViewHolder(View view) {

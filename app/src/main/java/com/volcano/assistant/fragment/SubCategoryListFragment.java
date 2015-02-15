@@ -41,7 +41,7 @@ public class SubCategoryListFragment extends AbstractFragment {
     private OnSubCategorySelectedListener mListener;
     private SubCategory mSelectedSubCategory;
     private String mCategoryId;
-    private Category mCategory;
+    private int mDefaultColorStyle = CircleDrawable.FILL;
 
     public interface OnSubCategorySelectedListener {
         public void onSubCategorySelected(SubCategory subCategory);
@@ -89,7 +89,16 @@ public class SubCategoryListFragment extends AbstractFragment {
         mAdapter.notifyDataSetChanged();
     }
 
-    public void loadSubCategories() {
+    /**
+     * Set default style for sub category color
+     * @param style One of {@link com.volcano.assistant.widget.CircleDrawable#FILL} or
+     *              {@link com.volcano.assistant.widget.CircleDrawable#STROKE} values
+     */
+    public void setDefaultColorStyle(int style) {
+        mDefaultColorStyle = style;
+    }
+
+    private void loadSubCategories() {
         Category.getInBackground(mCategoryId, new GetCallback<Category>() {
             @Override
             public void done(Category category, ParseException e) {
@@ -167,13 +176,13 @@ public class SubCategoryListFragment extends AbstractFragment {
 
             mNameText.setText(subCategory.getName());
             if (subCategory.hasIcon()) {
-                mCategoryImage.setBackground(getResources().getDrawable(BitmapUtils.getDrawableIdentifier(getActivity(), subCategory.getIconName())));
+                mCategoryImage.setImageDrawable(getResources().getDrawable(BitmapUtils.getDrawableIdentifier(getActivity(), subCategory.getIconName())));
             }
             else {
                 final CircleDrawable drawable = new CircleDrawable();
-                drawable.setColor(mCategory.getColor());
-                drawable.setStyle(selected ? CircleDrawable.FILL : CircleDrawable.STROKE);
-                mCategoryImage.setBackground(drawable);
+                drawable.setColor(subCategory.getCategory().getColor());
+                drawable.setStyle(selected || mDefaultColorStyle == CircleDrawable.FILL ? CircleDrawable.FILL : CircleDrawable.STROKE);
+                mCategoryImage.setImageDrawable(drawable);
             }
         }
     }

@@ -86,4 +86,8 @@ public class IconizedEditText extends RelativeLayout {
     public Editable getText() {
         return mEditText.getText();
     }
+
+    public EditText getEditText() {
+        return mEditText;
+    }
 }
