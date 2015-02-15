@@ -3,6 +3,11 @@
 
 <resources>
 
+    <item name="category" type="id" />
+
+    <item name="fab_expand_menu_button" type="id" />
+    <item name="fab_label" type="id" />
+
     <item name="recyclerview_item_click_support" type="id" />
     <item name="recyclerview_item_selection_support" type="id" />
 

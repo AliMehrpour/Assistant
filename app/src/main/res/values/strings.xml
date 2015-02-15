@@ -3,7 +3,9 @@
 
 <resources>
 
-    <string name="app_name">Assistant</string>
+    <string name="app_name">eSecureBox</string>
+
+    <string name="alert_refresh_accounts">No account!\nUse + button to create new one.</string>
 
     <string name="button_signin">SIGN IN</string>
     <string name="button_signup">SIGN UP</string>
@@ -18,15 +20,23 @@
     <string name="hint_email">Email</string>
     <string name="hint_name">Name</string>
     <string name="hint_password">Password</string>
-    <string name="hint_select_category">Select Category</string>
+    <string name="hint_select_sub_category">Select Account Type</string>
     <string name="hint_username">Username</string>
 
+    <string name="label_initialize_data">Initializing for first time\n Be patient! It takes less than a minute...</string>
     <string name="label_signin">Sign In</string>
     <string name="label_signup">Sign Up</string>
+    <string name="label_ninety_nine_plus">99+</string>
 
     <string name="menu_save">Save</string>
     <string name="menu_signin">Sign In</string>
     <string name="menu_signout">Sign Out</string>
 
-    <string name="toast_load_category_failed">Load Category Falied</string>
+    <string name="toast_device_offline_message">Your device appears to be offline</string>
+    <string name="toast_initialize_failed">Initialization failed</string>
+    <string name="toast_load_category_failed">Load Category Failed</string>
+    <string name="toast_save_account_failed">Save account failed</string>
+    <string name="toast_save_account_validation">Please fill required information</string>
+    <string name="toast_signup_failed">Signup failed</string>
+
 </resources>

@@ -3,6 +3,7 @@
 
 <android.support.v4.widget.DrawerLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:volcano="http://schemas.android.com/apk/res-auto"
     android:id="@+id/drawer_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
@@ -22,22 +23,39 @@
 
         <!-- As the main content view, the view below consumes the entire
          space available using match_parent in both dimensions. -->
-        <fragment
-            android:id="@+id/fragment_account_list"
+        <FrameLayout
+            android:id="@+id/layout_acount_list"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@id/toolbar">
+
+            <fragment
+                android:id="@+id/fragment_account_list"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_below="@id/toolbar"
+                android:name="com.volcano.assistant.fragment.AccountListFragment" />
+
+        </FrameLayout>
+
+        <View
+            android:id="@+id/background_transparent"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_below="@id/toolbar"
-            android:name="com.volcano.assistant.fragment.AccountListFragment" />
+            android:background="@color/fab_transparent_background"
+            android:visibility="gone" />
 
-        <com.volcano.assistant.widget.FloatingActionButton
-            android:id="@+id/button_create_account"
+       <com.volcano.assistant.widget.FloatingActionMenu
+            android:id="@+id/menu_create_account"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
             android:layout_alignParentRight="true"
-            android:layout_marginRight="@dimen/margin_16"
-            android:layout_marginBottom="@dimen/margin_16"
-            android:src="@drawable/icon_action_add" />
+            android:layout_marginRight="16dp"
+            android:layout_marginBottom="16dp"
+            volcano:famLabelStyle="@style/FloatingActionMenu"
+            android:focusableInTouchMode="true" />
 
     </RelativeLayout>
 

@@ -10,10 +10,16 @@
 
     <dimen name="divider">1dp</dimen>
 
+    <dimen name="fab_action_spacing">9dp</dimen>
     <dimen name="fab_elevation">8dp</dimen>
+    <dimen name="fab_icon_size">24dp</dimen>
+    <dimen name="fab_plus_icon_size">14dp</dimen>
+    <dimen name="fab_plus_icon_stroke">2dp</dimen>
     <dimen name="fab_size_mini">40dp</dimen>
     <dimen name="fab_size_normal">56dp</dimen>
-    <dimen name="fab_size_shadow">12dp</dimen>
+    <dimen name="fab_shadow_offset">2dp</dimen>
+    <dimen name="fab_shadow_radius">9dp</dimen>
+    <dimen name="fab_stroke_width">1dp</dimen>
 
     <dimen name="height_56">56dp</dimen>
     <dimen name="height_72">72dp</dimen>
@@ -29,9 +35,11 @@
     <dimen name="margin_25">25dp</dimen>
     <dimen name="margin_40">40dp</dimen>
 
+    <dimen name="navigation_item_counter_width">40dp</dimen>
     <dimen name="navigation_item_height">48dp</dimen>
-    <dimen name="navigation_profile_image_height">150dp</dimen>
-    <dimen name="navigation_width">300dp</dimen>
+    <dimen name="navigation_item_icon_size">24dp</dimen>
+    <dimen name="navigation_profile_image_height">164dp</dimen>
+    <dimen name="navigation_width">-.5dp</dimen>
 
     <dimen name="signup_horizontal_margin">40dp</dimen>
 

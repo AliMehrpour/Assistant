@@ -1,7 +1,9 @@
 // Copyright (c) 2015 Volcano. All rights reserved.
 package com.volcano.assistant.util;
 
+import android.app.Activity;
 import android.os.Build;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Toast;
 
 import com.volcano.assistant.VlApplication;
@@ -43,7 +45,7 @@ public class Utils {
      * @return True if SDK is greater than JellyBean
      */
     public static boolean hasJellyBeanApi() {
-        return Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN;
+        return Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1;
     }
 
     /**
@@ -59,6 +61,17 @@ public class Utils {
     public static boolean hasLollipopApi() {
         return Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP;
     }
+
+    /**
+     * Hide soft keyboard
+     * @param activity The activity
+     */
+    public static void hideKeyboard(Activity activity) {
+        final InputMethodManager inputMethodManager = (InputMethodManager) activity.getSystemService(Activity.INPUT_METHOD_SERVICE);
+        //noinspection ConstantConditions
+        inputMethodManager.hideSoftInputFromWindow(activity.getCurrentFocus().getWindowToken(), 0);
+    }
+
 
     /**
      * Show toast message

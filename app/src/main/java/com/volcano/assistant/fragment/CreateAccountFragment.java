@@ -1,8 +1,9 @@
 // Copyright (c) 2015 Volcano. All rights reserved.
 package com.volcano.assistant.fragment;
 
-import android.os.Build;
+import android.app.Activity;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,20 +12,24 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.parse.FindCallback;
+import com.parse.GetCallback;
 import com.parse.ParseException;
 import com.parse.SaveCallback;
+import com.volcano.assistant.Intents;
 import com.volcano.assistant.R;
-import com.volcano.assistant.activity.AbstractActivity;
 import com.volcano.assistant.model.Account;
 import com.volcano.assistant.model.AccountFieldValue;
-import com.volcano.assistant.model.Category;
-import com.volcano.assistant.model.Field;
 import com.volcano.assistant.model.SubCategory;
+import com.volcano.assistant.model.SubCategoryField;
 import com.volcano.assistant.util.BitmapUtils;
 import com.volcano.assistant.util.LogUtils;
+import com.volcano.assistant.util.Utils;
 import com.volcano.assistant.widget.CircleDrawable;
-import com.volcano.assistant.widget.IconedEditText;
+import com.volcano.assistant.widget.IconizedEditText;
 
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -33,28 +38,30 @@ import java.util.List;
 public class CreateAccountFragment extends AbstractFragment {
 
     private SubCategory mSelectedSubCategory;
-    private List<Field> mFields;
+    private String mSelectedSubCategoryId;
+    private final ArrayList<SubCategoryField> mFields = new ArrayList<>();
+    private boolean mInitialized = false;
 
-    private IconedEditText mAccountTitle;
+    private IconizedEditText mAccountTitle;
     private TextView mCategoryText;
     private ImageView mCategoryImage;
-    private CategoryListFragment mCategoryListFragment;
-    private FrameLayout mCategoryListLayout;
+    private SubCategoryListFragment mSubCategoryListFragment;
+    private FrameLayout mSubCategoryListLayout;
     private LinearLayout mFieldLayout;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         final View view = inflater.inflate(R.layout.fragment_create_account, container, false);
 
-        mAccountTitle = (IconedEditText) view.findViewById(R.id.text_account_title);
+        mAccountTitle = (IconizedEditText) view.findViewById(R.id.text_account_title);
         mFieldLayout = (LinearLayout) view.findViewById(R.id.layout_fields);
         mCategoryText = (TextView) view.findViewById(R.id.text_category);
         mCategoryImage = (ImageView) view.findViewById(R.id.image_category);
-        mCategoryListLayout = (FrameLayout) view.findViewById(R.id.layout_category_list);
-        mCategoryListFragment = (CategoryListFragment) getFragmentManager().findFragmentById(R.id.fragment_account_list);
-        if (mCategoryListFragment == null && Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
-            mCategoryListFragment = new CategoryListFragment();
-            getFragmentManager().beginTransaction().add(R.id.layout_category_list, mCategoryListFragment).commit();
+        mSubCategoryListLayout = (FrameLayout) view.findViewById(R.id.layout_sub_category_list);
+        mSubCategoryListFragment = (SubCategoryListFragment) getFragmentManager().findFragmentById(R.id.fragment_sub_category_list);
+        if (mSubCategoryListFragment == null && Utils.hasJellyBeanApi()) {
+            mSubCategoryListFragment = new SubCategoryListFragment();
+            getFragmentManager().beginTransaction().add(R.id.layout_sub_category_list, mSubCategoryListFragment).commit();
         }
 
         return view;
@@ -64,91 +71,154 @@ public class CreateAccountFragment extends AbstractFragment {
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        /*
-        mCategoryImage.setBackground(new CircleDrawable());
-        mCategoryText.setOnClickListener(new View.OnClickListener() {
+        mSubCategoryListFragment.setCategorySelectedListener(new SubCategoryListFragment.OnSubCategorySelectedListener() {
             @Override
-            public void onClick(View v) {
-                mFieldLayout.setVisibility(View.INVISIBLE);
-                mCategoryListLayout.setVisibility(View.VISIBLE);
-                mCategoryListFragment.setSelectedCategory(mSelectedCategory);
-
-            }
-        });
-
-        mCategoryListFragment.setCategorySelectedListener(new CategoryListFragment.OnCategorySelectedListener() {
-            @Override
-            public void onCategorySelected(Category category) {
-                mCategoryListLayout.setVisibility(View.GONE);
+            public void onSubCategorySelected(SubCategory subCategory) {
+                mInitialized = true;
+                mSubCategoryListLayout.setVisibility(View.GONE);
                 mFieldLayout.setVisibility(View.VISIBLE);
-                if (mSelectedCategory == null || mSelectedCategory != category) {
+                if (mSelectedSubCategory == null || mSelectedSubCategory != subCategory) {
                     emptyFields();
-
-                    mSelectedCategory = category;
-
-                    mCategoryImage.setBackground(new CircleDrawable(mSelectedCategory.getColor(), CircleDrawable.FILL));
-                    mCategoryText.setText(mSelectedCategory.getName());
-
-                    ((AbstractActivity) getActivity()).setToolbarColor(mSelectedCategory.getColor());
+                    setSubCategory(subCategory);
                     mAccountTitle.setVisibility(View.VISIBLE);
                     mAccountTitle.requestFocus();
                     loadFields();
                 }
             }
         });
-        */
+
+        if (savedInstanceState != null) {
+            mSelectedSubCategoryId = savedInstanceState.getString(Intents.KEY_SUB_CATEGORY_ID);
+            SubCategory.getInBackground(mSelectedSubCategoryId, new GetCallback<SubCategory>() {
+                @Override
+                public void done(SubCategory subCategory, ParseException e) {
+                    setSubCategory(subCategory);
+                    loadFields();
+                }
+            });
+
+            mAccountTitle.setVisibility(View.VISIBLE);
+        }
     }
 
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+
+        outState.putBoolean(Intents.KEY_INITIALIZED, mInitialized);
+        outState.putString(Intents.KEY_SUB_CATEGORY_ID, mSelectedSubCategoryId);
+    }
+
+    /**
+     * Set category of account
+     * @param categoryId The categoryId
+     * @param categoryColor The category color
+     */
+    public void setCategoryId(String categoryId, String categoryColor) {
+        mSubCategoryListLayout.setVisibility(View.VISIBLE);
+        mSubCategoryListFragment.setCategoryId(categoryId);
+        mCategoryImage.setBackground(new CircleDrawable(categoryColor, CircleDrawable.STROKE));
+    }
+
+    /**
+     * Save the account
+     */
     public void save() {
-        /*
         if (valid()) {
             final Account account = new Account();
             account.setTitle(mAccountTitle.getText().toString());
-            account.setCategory(mSelectedCategory);
-            account.saveInBackground();
-            final int size = mFields.size();
-            for (int i = 0; i < size; i++) {
-                final IconedEditText fieldEditText = (IconedEditText) mFieldLayout.getChildAt(i);
+            account.setCreateDate(new Date());
+            account.setSubCategory(mSelectedSubCategory);
+            account.pinInBackground(new SaveCallback() {
+                @Override
+                public void done(ParseException e) {
+                    if (e == null) {
+                        final int size = mFields.size();
+                        for (int i = 0; i < size; i++) {
+                            final IconizedEditText fieldEditText = (IconizedEditText) mFieldLayout.getChildAt(i);
 
-                AccountFieldValue value = new AccountFieldValue();
-                value.setAccount(account);
-                value.setField(mFields.get(i));
-                value.setValue(fieldEditText.getText().toString());
-                value.saveInBackground(new SaveCallback() {
-                    @Override
-                    public void done(ParseException e) {
-                        LogUtils.LogI(TAG, "new account successfully saved.");
+                            AccountFieldValue value = new AccountFieldValue();
+                            value.setAccount(account);
+                            value.setField(mFields.get(i).getField());
+                            value.setValue(fieldEditText.getText().toString());
+                            value.pinInBackground(new SaveCallback() {
+                                @Override
+                                public void done(ParseException e) {
+                                    if (e == null) {
+                                        LogUtils.LogI(TAG, "New account successfully saved");
+                                        final Activity activity = getActivity();
+                                        if (activity != null) {
+                                            startActivity(Intents.getMainIntent(true));
+                                        }
+                                    }
+                                    else {
+                                        LogUtils.LogI(TAG, "Save account failed", e);
+                                        Utils.showToast(R.string.toast_save_account_failed);
+                                    }
+                                }
+                            });
+                        }
                     }
-                });
-            }
+                    else {
+                        LogUtils.LogI(TAG, "Save account failed", e);
+                        Utils.showToast(R.string.toast_save_account_failed);
+                    }
+                }
+            });
         }
-        */
+        else {
+            Utils.showToast(R.string.toast_save_account_validation);
+        }
+    }
+
+    private void setSubCategory(SubCategory subCategory) {
+        mSelectedSubCategory = subCategory;
+        mSelectedSubCategoryId = subCategory.getObjectId();
+        mCategoryText.setText(mSelectedSubCategory.getName());
+
+        if (mSelectedSubCategory.hasIcon()) {
+            mCategoryImage.setBackground(getResources().getDrawable(BitmapUtils.getDrawableIdentifier(getActivity(), subCategory.getIconName())));
+        }
+        else {
+            mCategoryImage.setBackground(new CircleDrawable(subCategory.getCategory().getColor(), CircleDrawable.FILL));
+        }
     }
 
     private boolean valid() {
-        return true;
+        return !TextUtils.isEmpty(mAccountTitle.getText()) && mFields.size() > 0;
     }
 
     private void loadFields() {
-        /*
-        mFields = mSelectedCategory.getFields();
-
-        // PopulateFields
-        final int size = mFields.size();
-        for (int i = 0; i < size; i++) {
-            final Field field = mFields.get(i);
-            final IconedEditText fieldEditText = new IconedEditText(getActivity());
-            final String iconName = field.getIconName();
-            if (iconName != null) {
-                fieldEditText.setIcon(getResources().getDrawable(BitmapUtils.getDrawableIdentifier(getActivity(), iconName)));
-            }
-            else {
-                fieldEditText.setmIndicatorText(field.getName().substring(0, 1));
-            }
-            fieldEditText.setHint(field.getName());
-            mFieldLayout.addView(fieldEditText);
-        }
-        */
+        SubCategoryField.getFieldBySubCategory(mSelectedSubCategory).findInBackground(
+                new FindCallback<SubCategoryField>() {
+                    @Override
+                    public void done(List<SubCategoryField> subCategoryFields, ParseException e) {
+                        if (e == null) {
+                            // PopulateFields
+                            mFields.clear();
+                            mFields.addAll(subCategoryFields);
+                            final int size = mFields.size();
+                            for (int i = 0; i < size; i++) {
+                                final SubCategoryField field = mFields.get(i);
+                                final IconizedEditText fieldEditText = new IconizedEditText(getActivity());
+                                fieldEditText.setId(field.hashCode());
+                                final String iconName = field.getField().getIconName();
+                                if (iconName != null) {
+                                    fieldEditText.setIcon(getResources().getDrawable(BitmapUtils.getDrawableIdentifier(getActivity(), iconName)));
+                                }
+                                else {
+                                    fieldEditText.setIndicatorText(field.getField().getName().substring(0, 1));
+                                }
+                                if (!TextUtils.isEmpty(field.getDefaultValue())) {
+                                    fieldEditText.setText(field.getDefaultValue());
+                                }
+                                fieldEditText.setHint(field.getField().getName());
+                                mFieldLayout.addView(fieldEditText);
+                            }
+                        }
+                    }
+                });
     }
 
     private void emptyFields() {

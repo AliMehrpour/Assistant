@@ -7,11 +7,32 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <ImageView
-        android:layout_width="@dimen/navigation_width"
+    <RelativeLayout
+        android:layout_width="match_parent"
         android:layout_height="@dimen/navigation_profile_image_height"
-        android:src="@drawable/image_cover"
-        android:scaleType="fitXY" />
+        android:background="@drawable/image_cover">
+
+        <com.volcano.assistant.widget.RobotoTextView
+            android:id="@+id/text_email"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/margin_10"
+            android:layout_marginBottom="@dimen/margin_8"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentLeft="true"
+            style="@style/Text.RegularWhite14" />
+
+        <com.volcano.assistant.widget.RobotoTextView
+            android:id="@+id/text_username"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/margin_10"
+            android:layout_above="@id/text_email"
+            android:textStyle="bold"
+            style="@style/Text.MediumWhite14" />
+
+    </RelativeLayout>
 
     <ListView
         android:id="@+id/list_navigation"
@@ -20,6 +41,8 @@
         android:choiceMode="singleChoice"
         android:divider="@android:color/transparent"
         android:dividerHeight="0dp"
-        android:background="@android:color/white" />
+        android:background="@android:color/white"
+        android:cacheColorHint="@android:color/transparent"
+        android:fitsSystemWindows="true" />
 
 </LinearLayout>

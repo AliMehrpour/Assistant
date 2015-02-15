@@ -2,23 +2,26 @@
 package com.volcano.assistant.fragment;
 
 import android.os.Bundle;
-import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.parse.FindCallback;
+import com.parse.GetCallback;
 import com.parse.ParseException;
-import com.parse.ParseQuery;
 import com.volcano.assistant.R;
 import com.volcano.assistant.model.Account;
+import com.volcano.assistant.model.Category;
 import com.volcano.assistant.util.Utils;
 import com.volcano.assistant.widget.RobotoTextView;
 import com.volcano.assistant.widget.recyclerview.DividerItemDecoration;
 import com.volcano.assistant.widget.recyclerview.ItemClickSupport;
+import com.volcano.assistant.widget.recyclerview.RefreshingRecyclerView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,18 +31,20 @@ import java.util.List;
  */
 public class AccountListFragment extends AbstractFragment {
 
-    private SwipeRefreshLayout mSwipeRefreshLayout;
-    private RecyclerView mRecyclerView;
+    private RefreshingRecyclerView mRecyclerView;
+    private TextView mEmptyLayout;
+    private FrameLayout mProgressLayout;
 
     private ArrayList<Account> mAccounts = new ArrayList<>();
-    private AccountAdapter mAdapter;
+    private AccountAdapter mAdapter = new AccountAdapter();
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         final View view = inflater.inflate(R.layout.fragment_account_list, container, false);
 
-        mSwipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.layout_swipe_refresh);
-        mRecyclerView = (RecyclerView) view.findViewById(R.id.list_account);
+        mRecyclerView = (RefreshingRecyclerView) view.findViewById(R.id.list_account);
+        mEmptyLayout = (TextView) view.findViewById(android.R.id.empty);
+        mProgressLayout = (FrameLayout) view.findViewById(R.id.layout_progress);
 
         return view;
     }
@@ -48,34 +53,43 @@ public class AccountListFragment extends AbstractFragment {
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        mSwipeRefreshLayout.setColorSchemeColors(R.color.orange, R.color.green, R.color.blue);
-        mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-
-            }
-        });
-
         final LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         layoutManager.scrollToPosition(0);
         mRecyclerView.setLayoutManager(layoutManager);
         mRecyclerView.setHasFixedSize(true);
-        mAdapter = new AccountAdapter();
+        mRecyclerView.setEmptyView(mEmptyLayout);
         mRecyclerView.setAdapter(mAdapter);
         mRecyclerView.addItemDecoration(new DividerItemDecoration(getResources().getDrawable(R.drawable.divider_line)));
         ItemClickSupport.addTo(mRecyclerView);
-
-        loadAccounts();
     }
 
-    private void loadAccounts() {
-        final ParseQuery<Account> query = Account.getQuery();
-        query.findInBackground(new FindCallback<Account>() {
+    /**
+     * Load accounts by category id
+     */
+    public void loadAccounts(final String categoryId) {
+        mAccounts.clear();
+        mAdapter.notifyDataSetChanged();
+        mProgressLayout.setVisibility(View.VISIBLE);
+        mEmptyLayout.setVisibility(View.GONE);
+        Category.getInBackground(categoryId, new GetCallback<Category>() {
+            @Override
+            public void done(Category category, ParseException e) {
+                loadAccounts(category);
+            }
+        });
+    }
+
+    /**
+     * Load accounts
+     */
+    private void loadAccounts(Category category) {
+        Account.findInBackground(category, new FindCallback<Account>() {
             @Override
             public void done(List<Account> accounts, ParseException e) {
                 if (e == null) {
-                    mAccounts = new ArrayList<>(accounts);
+                    mProgressLayout.setVisibility(View.GONE);
+                    mAccounts.addAll(accounts);
                     mAdapter.notifyDataSetChanged();
                 }
             }
@@ -94,7 +108,7 @@ public class AccountListFragment extends AbstractFragment {
         public void onBindViewHolder(AccountViewHolder holder, int position) {
             final Account account = mAccounts.get(position);
             holder.mTitleText.setText(account.getTitle());
-            holder.mDateText.setText(Utils.getTimeSpan(account.getCreatedAt()));
+            holder.mDateText.setText(Utils.getTimeSpan(account.getCreateDate()));
         }
 
         @Override

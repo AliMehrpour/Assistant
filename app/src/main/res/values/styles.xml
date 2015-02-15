@@ -38,14 +38,28 @@
         <item name="contentInsetStart">0dp</item>
     </style>
 
-    <style name="Text.MediumG13" parent="@android:style/TextAppearance.Holo">
-        <item name="android:textSize">@dimen/text_size_13</item>
-        <item name="android:textColor">@color/grey_2</item>
+    <style name="FloatingActionMenu">
+        <item name="android:textSize">@dimen/text_size_16</item>
+        <item name="android:textColor">@android:color/white</item>
+        <item name="robotoTypeface">regular</item>
+        <item name="android:background">@drawable/fab_label_background</item>
+    </style>
+
+    <style name="Text.MediumGrey14" parent="@android:style/TextAppearance.Holo">
+        <item name="android:textColor">@color/grey_4</item>
+        <item name="android:textSize">@dimen/text_size_14</item>
+        <item name="robotoTypeface">medium</item>
+    </style>
+
+    <style name="Text.MediumWhite14" parent="@android:style/TextAppearance.Holo">
+        <item name="android:textSize">@dimen/text_size_14</item>
+        <item name="android:textColor">@android:color/white</item>
         <item name="robotoTypeface">medium</item>
     </style>
 
     <style name="Text.RegularDark16" parent="@android:style/TextAppearance.Holo">
         <item name="android:textSize">@dimen/text_size_16</item>
+        <item name="android:textColor">@color/grey_6</item>
         <item name="robotoTypeface">regular</item>
     </style>
 
@@ -57,6 +71,18 @@
     <style name="Text.RegularGrey12" parent="@android:style/TextAppearance.Holo">
         <item name="android:textColor">@color/grey_1</item>
         <item name="android:textSize">@dimen/text_size_12</item>
+        <item name="robotoTypeface">regular</item>
+    </style>
+
+    <style name="Text.RegularGrey18" parent="@android:style/TextAppearance.Holo">
+        <item name="android:textColor">@color/grey_3</item>
+        <item name="android:textSize">@dimen/text_size_18</item>
+        <item name="robotoTypeface">regular</item>
+    </style>
+
+    <style name="Text.RegularWhite14" parent="@android:style/TextAppearance.Holo">
+        <item name="android:textColor">@android:color/white</item>
+        <item name="android:textSize">@dimen/text_size_14</item>
         <item name="robotoTypeface">regular</item>
     </style>
 
@@ -72,12 +98,12 @@
         <item name="android:textStyle">bold</item>
     </style>
 
-    <style name="NavigationItem">
-        <item name="android:fontFamily">sans-serif</item>
-        <item name="android:textColor">#DD000000</item>
+    <style name="NavigationItem" parent="@android:style/TextAppearance.Holo">
+        <item name="robotoTypeface">medium</item>
+        <item name="android:textColor">@android:color/black</item>
         <item name="android:textSize">@dimen/text_size_14</item>
-        <item name="android:textStyle">normal</item>
-        <item name="android:maxLines">2</item>
+        <item name="android:singleLine">true</item>
+        <item name="android:maxLines">1</item>
         <item name="android:ellipsize">end</item>
     </style>
 

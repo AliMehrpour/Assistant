@@ -9,7 +9,7 @@
               android:layout_height="wrap_content"
               android:background="@android:color/white">
 
-    <com.volcano.assistant.widget.IconedEditText
+    <com.volcano.assistant.widget.IconizedEditText
         android:id="@+id/text_account_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -40,7 +40,7 @@
             android:layout_marginRight="@dimen/margin_16"
             android:layout_centerVertical="true"
             android:layout_toRightOf="@id/image_category"
-            android:hint="@string/hint_select_category"
+            android:hint="@string/hint_select_sub_category"
             style="@style/Text.RegularDark16" />
 
         <View
@@ -52,16 +52,17 @@
     </RelativeLayout>
 
     <FrameLayout
-        android:id="@+id/layout_category_list"
+        android:id="@+id/layout_sub_category_list"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:visibility="gone">
 
         <fragment
-            android:id="@+id/fargment_category_list"
+            android:id="@+id/fragment_sub_category_list"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:name="com.volcano.assistant.fragment.CategoryListFragment"
-            tools:layout="@layout/fragment_category_list"/>
+            android:name="com.volcano.assistant.fragment.SubCategoryListFragment"
+            tools:layout="@layout/fragment_sub_category_list"/>
 
     </FrameLayout>
 
