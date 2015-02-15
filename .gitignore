@@ -1,15 +1,14 @@
-
-.gradle
-/local.properties
-/.idea/workspace.xml
-/.idea/libraries
+# Local configuration file (sdk path, etc)
 .DS_Store
 
 # Android Studio
+.gradle
+local.properties
 **/.idea/workspace.xml
 **/.idea/libraries
 **/.idea/dictionaries
 **/.idea/codeStyleSettings.xml
 **/.idea/vcs.xml
 **/.idea/inspectionProfiles
+**/.idea/copyright
 build/
