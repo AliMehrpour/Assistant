@@ -13,7 +13,10 @@ import android.view.View;
 import com.volcano.assistant.util.Utils;
 
 /**
- * Created by alimehrpour on 2/3/15.
+ * An abstract class that implement touch listener of a recyclerview. Inhertited classes should
+ * define two methods {@link ClickItemTouchListener#performItemClick(android.support.v7.widget.RecyclerView, android.view.View, int, long)}
+ * and {@link ClickItemTouchListener#performItemLongClick(android.support.v7.widget.RecyclerView, android.view.View, int, long)}
+ * to notified when a click or long click has been occurred
  */
 abstract class ClickItemTouchListener implements RecyclerView.OnItemTouchListener {
 

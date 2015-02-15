@@ -5,7 +5,7 @@
                 xmlns:tools="http://schemas.android.com/tools"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_margin="@dimen/margin_16">
+                android:padding="@dimen/margin_16">
 
     <ImageView
         android:id="@+id/image_icon"
@@ -13,8 +13,8 @@
         android:layout_height="@dimen/account_avatar_size"
         android:layout_alignParentLeft="true"
         android:layout_centerVertical="true"
+        android:scaleType="center"
         android:layout_marginRight="@dimen/margin_16"
-        android:src="@drawable/button_float"
         tools:ignore="ContentDescription" />
 
     <com.volcano.assistant.widget.RobotoTextView
@@ -33,8 +33,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
-        android:layout_alignParentTop="true"
-        style="@style/Text.MediumGrey14"
+        android:layout_centerVertical="true"
+        style="@style/Text.RegularGrey12"
         tools:ignore="RelativeOverlap"/>
 
     <ImageView
@@ -44,6 +44,7 @@
         android:layout_alignParentRight="true"
         android:layout_alignParentBottom="true"
         android:src="@drawable/icon_star_outline"
+        android:visibility="gone"
         tools:ignore="ContentDescription"/>
 
 </RelativeLayout>

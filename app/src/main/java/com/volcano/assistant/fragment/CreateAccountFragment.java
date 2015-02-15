@@ -71,6 +71,7 @@ public class CreateAccountFragment extends AbstractFragment {
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
+        mSubCategoryListFragment.setDefaultColorStyle(CircleDrawable.FILL);
         mSubCategoryListFragment.setCategorySelectedListener(new SubCategoryListFragment.OnSubCategorySelectedListener() {
             @Override
             public void onSubCategorySelected(SubCategory subCategory) {
@@ -118,7 +119,7 @@ public class CreateAccountFragment extends AbstractFragment {
     public void setCategoryId(String categoryId, String categoryColor) {
         mSubCategoryListLayout.setVisibility(View.VISIBLE);
         mSubCategoryListFragment.setCategoryId(categoryId);
-        mCategoryImage.setBackground(new CircleDrawable(categoryColor, CircleDrawable.STROKE));
+        mCategoryImage.setImageDrawable(new CircleDrawable(categoryColor, CircleDrawable.STROKE));
     }
 
     /**
@@ -178,10 +179,10 @@ public class CreateAccountFragment extends AbstractFragment {
         mCategoryText.setText(mSelectedSubCategory.getName());
 
         if (mSelectedSubCategory.hasIcon()) {
-            mCategoryImage.setBackground(getResources().getDrawable(BitmapUtils.getDrawableIdentifier(getActivity(), subCategory.getIconName())));
+            mCategoryImage.setImageDrawable(getResources().getDrawable(BitmapUtils.getDrawableIdentifier(getActivity(), subCategory.getIconName())));
         }
         else {
-            mCategoryImage.setBackground(new CircleDrawable(subCategory.getCategory().getColor(), CircleDrawable.FILL));
+            mCategoryImage.setImageDrawable(new CircleDrawable(subCategory.getCategory().getColor(), CircleDrawable.FILL));
         }
     }
 

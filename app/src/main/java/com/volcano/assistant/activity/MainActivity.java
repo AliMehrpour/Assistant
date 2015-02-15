@@ -88,7 +88,7 @@ public class MainActivity extends AbstractActivity {
         };
         AccountManager.registerLoginResetReceiver(this, mLoginResetReceiver);
 
-        loadCategories();
+        loadFloatingMenuCategories();
 
         if (savedInstanceState != null) {
             loadAccounts(PrefUtils.getNavigatorLastCategory());
@@ -141,7 +141,7 @@ public class MainActivity extends AbstractActivity {
         }
     }
 
-    private void loadCategories() {
+    private void loadFloatingMenuCategories() {
         // TODO: It's needed show progress or not !?
         Category.findInBackground(new FindCallback<Category>() {
             @Override

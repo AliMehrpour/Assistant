@@ -1,6 +1,7 @@
 // Copyright (c) 2015 Volcano. All rights reserved.
 package com.volcano.assistant.widget.recyclerview;
 
+import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
 import android.view.HapticFeedbackConstants;
 import android.view.SoundEffectConstants;
@@ -10,10 +11,13 @@ import com.volcano.assistant.R;
 import com.volcano.assistant.util.LogUtils;
 
 /**
- * Handle item click actions on RecyclerView
+ * Handle item click actions on a RecyclerView.<br />
+ * For changing clicked item background, don't use margin in definition of list item layout, instead
+ * use padding
  */
 public class ItemClickSupport {
     private final static String TAG = LogUtils.makeLogTag(ItemClickSupport.class);
+    private final static int BACKGROUND_RESET_MILLIS    = 100;
 
     private final RecyclerView mRecyclerView;
     private final TouchListener mTouchListener;
@@ -77,6 +81,7 @@ public class ItemClickSupport {
      * RecyclerView has been clicked and held.
      * @param listener The callback that will be invoked.
      */
+    @SuppressWarnings("UnusedDeclaration")
     public void setOnItemLongClickListener(OnItemLongClickListener listener) {
         if (!mRecyclerView.isLongClickable()) {
             mRecyclerView.setLongClickable(true);
@@ -85,6 +90,11 @@ public class ItemClickSupport {
         mItemLongClickListener = listener;
     }
 
+    /**
+     * Add ItemClickSupport to the recyclerview
+     * @param recyclerView The recyclerview
+     * @return The new {@link ItemClickSupport}
+     */
     public static ItemClickSupport addTo(RecyclerView recyclerView) {
         ItemClickSupport itemClickSupport = from(recyclerView);
         if (itemClickSupport == null) {
@@ -98,6 +108,10 @@ public class ItemClickSupport {
         return itemClickSupport;
     }
 
+    /**
+     * Remove add ItemClickSupport from the recyclerview
+     * @param recyclerView The recyclerview
+     */
     public static void removeFrom(RecyclerView recyclerView) {
         final ItemClickSupport itemClickSupport = from(recyclerView);
         if (itemClickSupport == null) {
@@ -123,9 +137,16 @@ public class ItemClickSupport {
         }
 
         @Override
-        boolean performItemClick(RecyclerView parent, View view, int position, long id) {
+        boolean performItemClick(RecyclerView parent, final View view, int position, long id) {
             if (mItemClickListener != null) {
                 view.playSoundEffect(SoundEffectConstants.CLICK);
+                view.setBackgroundColor(Color.LTGRAY);
+                view.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        view.setBackgroundColor(Color.TRANSPARENT);
+                    }
+                }, BACKGROUND_RESET_MILLIS);
                 mItemClickListener.onItemClick(parent, view, position, id);
                 return true;
             }

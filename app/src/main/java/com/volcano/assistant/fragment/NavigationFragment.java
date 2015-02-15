@@ -25,7 +25,6 @@ import com.volcano.assistant.Managers;
 import com.volcano.assistant.R;
 import com.volcano.assistant.model.Category;
 import com.volcano.assistant.model.User;
-import com.volcano.assistant.util.BitmapUtils;
 import com.volcano.assistant.util.PrefUtils;
 import com.volcano.assistant.widget.CircleDrawable;
 import com.volcano.assistant.widget.RobotoTextView;
@@ -41,6 +40,8 @@ public final class NavigationFragment extends AbstractFragment {
     private ListView mDrawerListView;
     private DrawerLayout mDrawerLayout;
     private View mFragmentContainer;
+    private RobotoTextView mUsernameText;
+    private RobotoTextView mEmailText;
 
     private ActionBarDrawerToggle mDrawerToggle;
     private int mCurrentSelectedPosition;
@@ -78,9 +79,17 @@ public final class NavigationFragment extends AbstractFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         final View view = inflater.inflate(R.layout.fragment_navigation, container, false);
 
-        final RobotoTextView usernameText = (RobotoTextView) view.findViewById(R.id.text_username);
-        final RobotoTextView emailText = (RobotoTextView) view.findViewById(R.id.text_email);
+        mUsernameText = (RobotoTextView) view.findViewById(R.id.text_username);
+        mEmailText = (RobotoTextView) view.findViewById(R.id.text_email);
         mDrawerListView = (ListView) view.findViewById(R.id.list_navigation);
+
+        return view;
+    }
+
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+
         mDrawerListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -94,11 +103,9 @@ public final class NavigationFragment extends AbstractFragment {
 
         if (Managers.getAccountManager().isLoggedIn()) {
             final User user = Managers.getAccountManager().getCurrentUser();
-            usernameText.setText(user.getName());
-            emailText.setText(user.getEmail());
+            mUsernameText.setText(user.getName());
+            mEmailText.setText(user.getEmail());
         }
-
-        return view;
     }
 
     @Override
@@ -194,6 +201,10 @@ public final class NavigationFragment extends AbstractFragment {
 
                 mAdapter.notifyDataSetChanged();
                 selectItem(mCurrentSelectedPosition);
+                if (mListener != null) {
+                    final NavigationItem firstItem = mNavigationItems.get(mCurrentSelectedPosition);
+                    mListener.onCategorySelected(firstItem.id, firstItem.title);
+                }
             }
         });
     }
@@ -273,7 +284,7 @@ public final class NavigationFragment extends AbstractFragment {
         }
 
         public void setNavigationItem(NavigationItem item) {
-            mIcon.setBackground(new CircleDrawable(BitmapUtils.getColor(item.color), CircleDrawable.FILL));
+            mIcon.setImageDrawable(new CircleDrawable(item.color, CircleDrawable.FILL));
             mTitleText.setText(item.title);
             if (item.counter > 0) {
                 mCounterText.setText((item.counter > 99) ? getString(R.string.label_ninety_nine_plus) : item.counter + "");
