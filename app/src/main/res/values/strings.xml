@@ -13,11 +13,11 @@
     <string name="button_signup_facebook">SIGN UP WITH FACEBOOK</string>
     <string name="button_signup_twitter">SIGN UP WITH TWITTER</string>
 
-    <string name="error_sign_up_email">Email can not be empty</string>
-    <string name="error_sign_up_email_character">Email is not valid</string>
-    <string name="error_sign_up_name">Name can not be empty</string>
-    <string name="error_sign_up_sign_in_password">Password must be at least 6 characters</string>
-    <string name="error_sign_up_sign_in_username">Username can not be empty</string>
+    <string name="error_email_not_empty">Email can not be empty</string>
+    <string name="error_email_invalid">Email is not valid</string>
+    <string name="error_name_not_empty">Name can not be empty</string>
+    <string name="error_password_minimum_character">Password must be at least 6 characters</string>
+    <string name="error_username_not_empty">Username can not be empty</string>
 
     <string name="hint_account_name">Enter account title</string>
     <string name="hint_navigation_close">Close</string>
@@ -29,7 +29,7 @@
     <string name="hint_select_sub_category">Select Account Type</string>
     <string name="hint_username">Username</string>
 
-    <string name="label_initialize_data">Initializing for first time\n Be patient! It takes less than a minute...</string>
+    <string name="label_initialize_data">Initializing for first time\n Be patient! It takes less than a minute…</string>
     <string name="label_ninety_nine_plus">99+</string>
     <string name="label_signin">Sign In</string>
     <string name="label_signup">Sign Up</string>

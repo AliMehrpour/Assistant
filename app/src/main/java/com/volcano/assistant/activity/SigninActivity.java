@@ -17,8 +17,7 @@ import com.volcano.assistant.backend.ParseManager;
 import com.volcano.assistant.util.Utils;
 
 /**
- * Signin activity activity by ALI
- * validation is done by SHERRY
+ * Signin activity
  */
 public class SigninActivity extends AbstractActivity {
 
@@ -38,28 +37,28 @@ public class SigninActivity extends AbstractActivity {
         mUsernameErrorText = (TextView) findViewById(R.id.text_username);
         mPasswordEdit = (EditText) findViewById(R.id.edit_password);
         mPasswordErrorText = (TextView) findViewById(R.id.text_password);
-
         mSigninText = (TextView) findViewById(R.id.text_signin);
         mSignupText = (TextView) findViewById(R.id.text_signup_email);
 
         mSigninText.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (valid()) {
+                if (isValid()) {
                     enable(false);
-                    Managers.getAccountManager().signin(mUsernameEdit.getText().toString(), mPasswordEdit.getText().toString(), new ParseManager.Listener() {
-                        @Override
-                        public void onResponse() {
-                            setResult(RESULT_OK, new Intent());
-                            finish();
-                        }
+                    Managers.getAccountManager().signin(mUsernameEdit.getText().toString(), mPasswordEdit.getText().toString(),
+                            new ParseManager.Listener() {
+                                @Override
+                                public void onResponse() {
+                                    setResult(RESULT_OK, new Intent());
+                                    finish();
+                                }
 
-                        @Override
-                        public void onErrorResponse(ParseException e) {
-                            enable(true);
-                            Utils.showToast(getResources().getString(R.string.toast_sign_in_invalid));
-                        }
-                    });
+                                @Override
+                                public void onErrorResponse(ParseException e) {
+                                    enable(true);
+                                    Utils.showToast(getResources().getString(R.string.toast_sign_in_invalid));
+                                }
+                            });
                 }
             }
         });
@@ -67,16 +66,9 @@ public class SigninActivity extends AbstractActivity {
         mPasswordEdit.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
-                if (!hasFocus && mPasswordEdit.getText().toString().length() != 0) {
+                if (!hasFocus) {
                     isPasswordValid();
                 }
-            }
-        });
-
-        mSignupText.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivityForResult(Intents.getSignupIntent(), Intents.REQUEST_CODE_SIGNUP_LOGIN);
             }
         });
 
@@ -86,6 +78,13 @@ public class SigninActivity extends AbstractActivity {
                 if (!hasFocus) {
                     isUserNameValid();
                 }
+            }
+        });
+
+        mSignupText.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivityForResult(Intents.getSignupIntent(), Intents.REQUEST_CODE_SIGNUP_LOGIN);
             }
         });
     }
@@ -98,9 +97,6 @@ public class SigninActivity extends AbstractActivity {
             if (resultCode == Activity.RESULT_OK) {
                 finish();
             }
-            else {
-                // Nothing
-            }
         }
     }
 
@@ -108,6 +104,7 @@ public class SigninActivity extends AbstractActivity {
         if (!enable) {
             Utils.hideKeyboard(this);
         }
+
         mUsernameEdit.setEnabled(enable);
         mPasswordEdit.setEnabled(enable);
         mSigninText.setEnabled(enable);
@@ -116,32 +113,33 @@ public class SigninActivity extends AbstractActivity {
 
     private boolean isUserNameValid() {
         boolean isValid = true;
+        mUsernameErrorText.setVisibility(View.GONE);
+
         if (TextUtils.isEmpty(mUsernameEdit.getText())) {
             isValid = false;
             mUsernameErrorText.setVisibility(View.VISIBLE);
         }
-        else {
-            mUsernameErrorText.setVisibility(View.GONE);
-        }
+
         return isValid;
     }
 
     private boolean isPasswordValid() {
         boolean isValid = true;
+        mPasswordErrorText.setVisibility(View.GONE);
+
         if (mPasswordEdit.getText().toString().trim().length() <
                 getResources().getInteger(R.integer.min_password_length) ) {
             mPasswordErrorText.setVisibility(View.VISIBLE);
             isValid = false;
         }
-        else {
-            mPasswordErrorText.setVisibility(View.GONE);
-        }
+
         return isValid;
     }
 
-    private boolean valid(){
+    private boolean isValid() {
         mUsernameErrorText.setVisibility(View.GONE);
         mPasswordErrorText.setVisibility(View.GONE);
+
         return (isUserNameValid() && isPasswordValid());
     }
 }

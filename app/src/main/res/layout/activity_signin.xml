@@ -4,14 +4,15 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
-    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                  android:orientation="vertical"
-                  android:layout_width="match_parent"
-                  android:layout_height="match_parent"
-                  android:paddingLeft="@dimen/signup_horizontal_margin"
-                  android:paddingRight="@dimen/signup_horizontal_margin"
-                  android:animateLayoutChanges="true"
-                  android:background="@color/background_default">
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingLeft="@dimen/signup_horizontal_margin"
+        android:paddingRight="@dimen/signup_horizontal_margin"
+        android:animateLayoutChanges="true"
+        android:background="@color/background_default">
 
         <com.volcano.assistant.widget.RobotoTextView
             android:layout_width="match_parent"
@@ -39,7 +40,7 @@
             android:id="@+id/text_username"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/error_sign_up_sign_in_username"
+            android:text="@string/error_username_not_empty"
             android:gravity="center_vertical"
             style="@style/Text.RegularRed13"
             android:visibility="gone"/>
@@ -59,7 +60,7 @@
             android:id="@+id/text_password"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/error_sign_up_sign_in_password"
+            android:text="@string/error_password_minimum_character"
             android:gravity="center_vertical"
             style="@style/Text.RegularRed13"
             android:visibility="gone"/>

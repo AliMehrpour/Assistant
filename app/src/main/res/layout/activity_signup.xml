@@ -5,14 +5,14 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                  android:orientation="vertical"
-                  android:layout_width="match_parent"
-                  android:layout_height="wrap_content"
-                  android:paddingLeft="@dimen/signup_horizontal_margin"
-                  android:paddingRight="@dimen/signup_horizontal_margin"
-                  android:animateLayoutChanges="true"
-                  android:background="@color/background_default">
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingLeft="@dimen/signup_horizontal_margin"
+        android:paddingRight="@dimen/signup_horizontal_margin"
+        android:animateLayoutChanges="true"
+        android:background="@color/background_default">
 
         <com.volcano.assistant.widget.RobotoTextView
             android:layout_width="match_parent"
@@ -25,11 +25,31 @@
             style="@style/Text.RegularDark18" />
 
         <com.volcano.assistant.widget.RobotoEditText
-            android:id="@+id/edit_username"
+            android:id="@+id/edit_name"
             android:layout_width="match_parent"
             android:layout_height="@dimen/text_view_height"
             android:layout_marginTop="@dimen/margin_12"
-            android:paddingTop="@dimen/margin_16"
+            android:paddingTop="@dimen/margin_12"
+            android:gravity="center_vertical"
+            android:inputType="text|textFilter"
+            android:imeOptions="actionNext"
+            android:hint="@string/hint_name"
+            style="@style/Text.RegularDark16" />
+
+        <com.volcano.assistant.widget.RobotoTextView
+            android:id="@+id/text_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/error_name_not_empty"
+            android:gravity="center_vertical"
+            style="@style/Text.RegularRed13"
+            android:visibility="gone"/>
+
+        <com.volcano.assistant.widget.RobotoEditText
+            android:id="@+id/edit_username"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/text_view_height"
+            android:paddingTop="@dimen/margin_12"
             android:gravity="center_vertical"
             android:inputType="text|textNoSuggestions"
             android:imeOptions="actionNext"
@@ -43,27 +63,7 @@
             android:id="@+id/text_username"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/error_sign_up_sign_in_username"
-            android:gravity="center_vertical"
-            style="@style/Text.RegularRed13"
-            android:visibility="gone"/>
-
-        <com.volcano.assistant.widget.RobotoEditText
-            android:id="@+id/edit_name"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/text_view_height"
-            android:paddingTop="@dimen/margin_12"
-            android:gravity="center_vertical"
-            android:inputType="text|textFilter"
-            android:imeOptions="actionNext"
-            android:hint="@string/hint_name"
-            style="@style/Text.RegularDark16" />
-
-        <com.volcano.assistant.widget.RobotoTextView
-            android:id="@+id/text_name"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/error_sign_up_name"
+            android:text="@string/error_username_not_empty"
             android:gravity="center_vertical"
             style="@style/Text.RegularRed13"
             android:visibility="gone"/>
@@ -83,7 +83,7 @@
             android:id="@+id/text_password"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/error_sign_up_sign_in_password"
+            android:text="@string/error_password_minimum_character"
             android:gravity="center_vertical"
             style="@style/Text.RegularRed13"
             android:visibility="gone"/>
