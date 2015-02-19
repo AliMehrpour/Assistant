@@ -57,14 +57,20 @@
         <item name="robotoTypeface">medium</item>
     </style>
 
+    <style name="Text.RegularRed13" parent="@android:style/TextAppearance.Holo">
+        <item name="android:textColor">@color/theme_primary_dark</item>
+        <item name="android:textSize">@dimen/text_size_13</item>
+        <item name="robotoTypeface">regular</item>
+    </style>
+
     <style name="Text.RegularDark16" parent="@android:style/TextAppearance.Holo">
         <item name="android:textSize">@dimen/text_size_16</item>
         <item name="android:textColor">@color/grey_6</item>
         <item name="robotoTypeface">regular</item>
     </style>
 
-    <style name="Text.RegularDark36" parent="@android:style/TextAppearance.Holo">
-        <item name="android:textSize">@dimen/text_size_36</item>
+    <style name="Text.RegularDark18" parent="@android:style/TextAppearance.Holo">
+        <item name="android:textSize">@dimen/text_size_18</item>
         <item name="robotoTypeface">regular</item>
     </style>
 

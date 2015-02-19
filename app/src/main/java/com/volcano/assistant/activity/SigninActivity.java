@@ -4,6 +4,7 @@ package com.volcano.assistant.activity;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -16,12 +17,17 @@ import com.volcano.assistant.backend.ParseManager;
 import com.volcano.assistant.util.Utils;
 
 /**
- * Signin activity
+ * Signin activity activity by ALI
+ * validation is done by SHERRY
  */
 public class SigninActivity extends AbstractActivity {
 
     private EditText mUsernameEdit;
+    private TextView mUsernameText;
     private EditText mPasswordEdit;
+    private TextView mPasswordText;
+    private TextView mSigninText;
+    private TextView mSignupText;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,32 +35,66 @@ public class SigninActivity extends AbstractActivity {
         setContentView(R.layout.activity_signin);
 
         mUsernameEdit = (EditText) findViewById(R.id.edit_username);
+        mUsernameText = (TextView) findViewById(R.id.text_username);
         mPasswordEdit = (EditText) findViewById(R.id.edit_password);
-        final TextView signinText = (TextView) findViewById(R.id.text_signin);
-        final TextView signupText = (TextView) findViewById(R.id.text_signup_email);
+        mPasswordText = (TextView) findViewById(R.id.text_password);
 
-        signinText.setOnClickListener(new View.OnClickListener() {
+        mSigninText = (TextView) findViewById(R.id.text_signin);
+        mSignupText = (TextView) findViewById(R.id.text_signup_email);
+
+        mSigninText.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Managers.getAccountManager().signin(mUsernameEdit.getText().toString(), mPasswordEdit.getText().toString(), new ParseManager.Listener() {
-                    @Override
-                    public void onResponse() {
-                        setResult(RESULT_OK, new Intent());
-                        finish();
-                    }
+                if (valid()) {
+                    enable(false);
+                    Managers.getAccountManager().signin(mUsernameEdit.getText().toString(), mPasswordEdit.getText().toString(), new ParseManager.Listener() {
+                        @Override
+                        public void onResponse() {
+                            setResult(RESULT_OK, new Intent());
+                            finish();
+                        }
 
-                    @Override
-                    public void onErrorResponse(ParseException e) {
-                        Utils.showToast(e.getMessage());
-                    }
-                });
+                        @Override
+                        public void onErrorResponse(ParseException e) {
+                            enable(true);
+                            Utils.showToast(getResources().getString(R.string.label_sign_in_invalid));
+                        }
+                    });
+                }
             }
         });
 
-        signupText.setOnClickListener(new View.OnClickListener() {
+        mPasswordEdit.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if (!hasFocus && mPasswordEdit.getText().toString().length() !=0) {
+                    if (mPasswordEdit.getText().toString().trim().length() <
+                            getResources().getInteger(R.integer.min_password_length) ) {
+                        mPasswordText.setText(getResources().getString(R.string.label_sign_up_sign_in_password_character));
+                        mPasswordText.setVisibility(View.VISIBLE);
+                    }
+                    else {
+                        mPasswordText.setVisibility(View.GONE);
+                    }
+                }
+            }
+        });
+
+        mSignupText.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 startActivityForResult(Intents.getSignupIntent(), Intents.REQUEST_CODE_SIGNUP_LOGIN);
+            }
+        });
+
+        mUsernameEdit.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if (!hasFocus) {
+                    if (!TextUtils.isEmpty(mUsernameEdit.getText())) {
+                        mUsernameText.setVisibility(View.GONE);
+                    }
+                }
             }
         });
     }
@@ -73,5 +113,32 @@ public class SigninActivity extends AbstractActivity {
         }
     }
 
+    private void enable(boolean enable){
+        if (!enable) {
+            Utils.hideKeyboard(this);
+        }
+        mUsernameEdit.setEnabled(enable);
+        mPasswordEdit.setEnabled(enable);
+        mSigninText.setEnabled(enable);
+        mSignupText.setEnabled(enable);
+    }
 
+    private boolean valid(){
+        mUsernameText.setVisibility(View.GONE);
+        mPasswordText.setVisibility(View.GONE);
+        boolean validation = true;
+        if (TextUtils.isEmpty(mUsernameEdit.getText())) {
+            mUsernameText.setText(getResources().getString(R.string.label_sign_up_sign_in_username));
+            validation = false;
+            mUsernameText.setVisibility(View.VISIBLE);
+        }
+        else if (mPasswordEdit.getText().toString().trim().length() <
+                getResources().getInteger(R.integer.min_password_length) ) {
+            mPasswordText.setText(getResources().getString(R.string.label_sign_up_sign_in_password_character));
+            validation = false;
+            mPasswordText.setVisibility(View.VISIBLE);
+        }
+
+        return validation;
+    }
 }

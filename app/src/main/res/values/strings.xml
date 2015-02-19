@@ -24,9 +24,15 @@
     <string name="hint_username">Username</string>
 
     <string name="label_initialize_data">Initializing for first time\n Be patient! It takes less than a minute...</string>
-    <string name="label_signin">Sign In</string>
-    <string name="label_signup">Sign Up</string>
     <string name="label_ninety_nine_plus">99+</string>
+    <string name="label_signin">Sign In</string>
+    <string name="label_sign_in_invalid">Invalid username or password.</string>
+    <string name="label_signup">Sign Up</string>
+    <string name="label_sign_up_email">Email can not be empty.</string>
+    <string name="label_sign_up_email_character">Email is not valid!</string>
+    <string name="label_sign_up_name">Name can not be empty.</string>
+    <string name="label_sign_up_sign_in_password_character">Password must be at least 6 character!</string>
+    <string name="label_sign_up_sign_in_username">Username can not be empty.</string>
 
     <string name="menu_save">Save</string>
     <string name="menu_signin">Sign In</string>
