@@ -1,5 +1,6 @@
 package com.volcano.assistant.fragment;
 
+import android.app.Activity;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -16,6 +17,7 @@ import com.volcano.assistant.model.Account;
 import com.volcano.assistant.model.AccountFieldValue;
 import com.volcano.assistant.model.SubCategory;
 import com.volcano.assistant.util.BitmapUtils;
+import com.volcano.assistant.util.LogUtils;
 import com.volcano.assistant.util.Utils;
 import com.volcano.assistant.widget.CircleDrawable;
 import com.volcano.assistant.widget.FloatingLabeledEditText;
@@ -59,7 +61,7 @@ public class EditAccountFragment extends AbstractFragment {
         mFieldLayout.setVisibility(View.GONE);
         mListener.onEnableEdit(false);
 
-        Account.getFirstInBackground(accountId, new GetCallback<Account>() {
+        addCancellingRequest(Account.getFirstInBackground(accountId, new GetCallback<Account>() {
             @Override
             public void done(Account account, ParseException e) {
                 if (e == null) {
@@ -77,7 +79,7 @@ public class EditAccountFragment extends AbstractFragment {
                     }
                     mFieldLayout.addView(fle);
 
-                    AccountFieldValue.findInBackground(account, new FindCallback<AccountFieldValue>() {
+                    addCancellingRequest(AccountFieldValue.findInBackground(account, new FindCallback<AccountFieldValue>() {
                         @Override
                         public void done(List<AccountFieldValue> accountFieldValues, ParseException e) {
                             if (e == null) {
@@ -106,19 +108,24 @@ public class EditAccountFragment extends AbstractFragment {
                                 setErrorState();
                             }
                         }
-                    });
+                    }));
                 }
                 else {
                     setErrorState();
                 }
             }
-        });
+        }));
     }
 
     private void setErrorState() {
+        LogUtils.LogE(TAG, "Load account failed");
         mProgress.setVisibility(View.GONE);
         mFieldLayout.setVisibility(View.GONE);
         Utils.showToast(R.string.toast_load_account_failed);
-        getActivity().finish();
+
+        final Activity activity = getActivity();
+        if (activity != null) {
+            getActivity().finish();
+        }
     }
 }

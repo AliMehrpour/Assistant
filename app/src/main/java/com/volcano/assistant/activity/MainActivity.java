@@ -143,7 +143,7 @@ public class MainActivity extends AbstractActivity {
 
     private void loadFloatingMenuCategories() {
         // TODO: It's needed show progress or not !?
-        Category.findInBackground(new FindCallback<Category>() {
+        addCancellingRequest(Category.findInBackground(new FindCallback<Category>() {
             @Override
             public void done(final List<Category> categories, ParseException e) {
                 if (e == null) {
@@ -169,7 +169,7 @@ public class MainActivity extends AbstractActivity {
                     }
                 }
             }
-        });
+        }));
 
     }
 

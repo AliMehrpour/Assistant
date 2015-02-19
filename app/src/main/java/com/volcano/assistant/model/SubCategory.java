@@ -26,7 +26,7 @@ public class SubCategory extends ParseObject {
     private static final String ICON_NAME   = "iconName";
     public static final String CATEGORY     = "category";
 
-    public static void findInBackground(Category category, final FindCallback<SubCategory> callback) {
+    public static ParseQuery findInBackground(Category category, final FindCallback<SubCategory> callback) {
         final ParseQuery<SubCategory> query = getQuery();
         query.whereEqualTo(CATEGORY, category);
         query.findInBackground(new FindCallback<SubCategory>() {
@@ -35,9 +35,11 @@ public class SubCategory extends ParseObject {
                 callback.done(categories, e);
             }
         });
+
+        return query;
     }
 
-    public static void getInBackground(String subCategoryId, final GetCallback<SubCategory> callback) {
+    public static ParseQuery getInBackground(String subCategoryId, final GetCallback<SubCategory> callback) {
         final ParseQuery<SubCategory> query = getQuery();
         query.whereEqualTo("objectId", subCategoryId);
         query.include(CATEGORY);
@@ -47,6 +49,8 @@ public class SubCategory extends ParseObject {
                 callback.done(subCategory, e);
             }
         });
+
+        return query;
     }
 
     public static ParseQuery<SubCategory> getQuery() {

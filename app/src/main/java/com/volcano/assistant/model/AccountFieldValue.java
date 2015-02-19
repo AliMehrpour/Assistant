@@ -19,7 +19,7 @@ public class AccountFieldValue extends ParseObject {
     private static final String FIELD       = "field";
     private static final String VALUE       = "value";
 
-    public static void findInBackground(Account account, final FindCallback<AccountFieldValue> callback) {
+    public static ParseQuery findInBackground(Account account, final FindCallback<AccountFieldValue> callback) {
         final ParseQuery<AccountFieldValue> query = getQuery();
         query.whereEqualTo(ACCOUNT, account);
         query.include(FIELD);
@@ -29,6 +29,8 @@ public class AccountFieldValue extends ParseObject {
                 callback.done(accountFieldValues, e);
             }
         });
+
+        return query;
     }
 
     public static ParseQuery<AccountFieldValue> getQuery() {

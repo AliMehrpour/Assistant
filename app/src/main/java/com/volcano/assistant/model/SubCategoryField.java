@@ -27,6 +27,7 @@ public class SubCategoryField extends ParseObject {
                 .fromLocalDatastore()
                 .whereEqualTo(SUB_CATEGORY, subCategory);
         query.include(FIELD);
+
         return query;
     }
 

@@ -183,7 +183,7 @@ public final class NavigationFragment extends AbstractFragment {
      * Load navigation items
      */
     public void loadNavigationItems() {
-        Category.findInBackground(new FindCallback<Category>() {
+        addCancellingRequest(Category.findInBackground(new FindCallback<Category>() {
             @Override
             public void done(List<Category> categories, ParseException e) {
                 final int size = categories.size();
@@ -206,7 +206,7 @@ public final class NavigationFragment extends AbstractFragment {
                     mListener.onCategorySelected(firstItem.id, firstItem.title);
                 }
             }
-        });
+        }));
     }
 
     private void selectItem(int position) {

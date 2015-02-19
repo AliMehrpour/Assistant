@@ -32,6 +32,8 @@ public final class ParseManager {
     private static boolean isSubCategoryFieldsPinned = false;
     private static boolean isCurrentUserPinned = false;
 
+    private ParseRequestManager mRequestManager;
+
     public interface Listener {
         /**
          * Called when a successful response received
@@ -62,6 +64,8 @@ public final class ParseManager {
         Parse.enableLocalDatastore(VlApplication.getInstance());
         ParseCrashReporting.enable(VlApplication.getInstance());
         Parse.initialize(VlApplication.getInstance(), APPLICATION_ID, CLIENT_KEY);
+
+        mRequestManager = new ParseRequestManager();
     }
 
     public static void InitializeData(final OnDataInitializationListener listener) {
@@ -143,5 +147,13 @@ public final class ParseManager {
      */
     public static boolean isLocalDatabaseActive() {
         return false;
+    }
+
+    /**
+     * Get the {@link com.volcano.assistant.backend.ParseRequestManager}
+     * @return The ParseRequestManager
+     */
+    public ParseRequestManager getRequestManager() {
+        return mRequestManager;
     }
 }

@@ -22,7 +22,7 @@ public class Account extends ParseObject {
     private static final String CREATE_DATE     = "createDate";
     private static final String SUB_CATEGORY    = "subCategory";
 
-    public static void findInBackground(Category category, final FindCallback<Account> callback) {
+    public static ParseQuery findInBackground(Category category, final FindCallback<Account> callback) {
         final ParseQuery<SubCategory> innerQuery = SubCategory.getQuery();
         innerQuery.whereEqualTo(SubCategory.CATEGORY, category);
 
@@ -34,9 +34,11 @@ public class Account extends ParseObject {
                 callback.done(accounts, e);
             }
         });
+
+        return query;
     }
 
-    public static void getFirstInBackground(String accountId, final GetCallback<Account> callback) {
+    public static ParseQuery getFirstInBackground(String accountId, final GetCallback<Account> callback) {
         final ParseQuery<Account> query = getQuery()
                 .whereEqualTo("objectId", accountId);
         query.getFirstInBackground(new GetCallback<Account>() {
@@ -45,6 +47,8 @@ public class Account extends ParseObject {
                 callback.done(account, e);
             }
         });
+
+        return query;
     }
 
     public static ParseQuery<Account> getQuery() {

@@ -24,7 +24,7 @@ public class Category extends ParseObject {
     private static final String ICON_NAME       = "iconName";
     private static final String ORDER           = "order";
 
-    public static void findInBackground(final FindCallback<Category> callback) {
+    public static ParseQuery findInBackground(final FindCallback<Category> callback) {
         final ParseQuery<Category> query = getQuery();
         query.findInBackground(new FindCallback<Category>() {
             @Override
@@ -32,9 +32,11 @@ public class Category extends ParseObject {
                 callback.done(categories, e);
             }
         });
+
+        return query;
     }
 
-    public static void getInBackground(String categoryId, final GetCallback<Category> callback) {
+    public static ParseQuery getInBackground(String categoryId, final GetCallback<Category> callback) {
         final ParseQuery<Category> query = getQuery();
         query.whereEqualTo("objectId", categoryId);
         query.getFirstInBackground(new GetCallback<Category>() {
@@ -43,6 +45,8 @@ public class Category extends ParseObject {
                 callback.done(category, e);
             }
         });
+
+        return query;
     }
 
     public static ParseQuery<Category> getQuery() {

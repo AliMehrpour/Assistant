@@ -16,6 +16,7 @@ import android.widget.TextView;
 import com.parse.FindCallback;
 import com.parse.GetCallback;
 import com.parse.ParseException;
+import com.parse.ParseQuery;
 import com.parse.SaveCallback;
 import com.volcano.assistant.Intents;
 import com.volcano.assistant.R;
@@ -91,13 +92,13 @@ public class CreateAccountFragment extends AbstractFragment {
 
         if (savedInstanceState != null) {
             mSelectedSubCategoryId = savedInstanceState.getString(Intents.KEY_SUB_CATEGORY_ID);
-            SubCategory.getInBackground(mSelectedSubCategoryId, new GetCallback<SubCategory>() {
+            addCancellingRequest(SubCategory.getInBackground(mSelectedSubCategoryId, new GetCallback<SubCategory>() {
                 @Override
                 public void done(SubCategory subCategory, ParseException e) {
                     setSubCategory(subCategory);
                     loadFields();
                 }
-            });
+            }));
 
             mAccountTitle.setVisibility(View.VISIBLE);
         }
@@ -193,7 +194,10 @@ public class CreateAccountFragment extends AbstractFragment {
     }
 
     private void loadFields() {
-        SubCategoryField.getFieldBySubCategory(mSelectedSubCategory).findInBackground(
+        final ParseQuery query = SubCategoryField.getFieldBySubCategory(mSelectedSubCategory);
+        addCancellingRequest(query);
+        //noinspection unchecked
+        query.findInBackground(
                 new FindCallback<SubCategoryField>() {
                     @Override
                     public void done(List<SubCategoryField> subCategoryFields, ParseException e) {

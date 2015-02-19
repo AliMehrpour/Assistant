@@ -99,23 +99,25 @@ public class SubCategoryListFragment extends AbstractFragment {
     }
 
     private void loadSubCategories() {
-        Category.getInBackground(mCategoryId, new GetCallback<Category>() {
+        addCancellingRequest(Category.getInBackground(mCategoryId, new GetCallback<Category>() {
             @Override
             public void done(Category category, ParseException e) {
-                SubCategory.findInBackground(category, new FindCallback<SubCategory>() {
-                    @Override
-                    public void done(List<SubCategory> subCategories, ParseException e) {
-                        if (e == null) {
-                            mSubCategories.addAll(subCategories);
-                            mAdapter.notifyDataSetChanged();
+                if (e == null) {
+                    addCancellingRequest(SubCategory.findInBackground(category, new FindCallback<SubCategory>() {
+                        @Override
+                        public void done(List<SubCategory> subCategories, ParseException e) {
+                            if (e == null) {
+                                mSubCategories.addAll(subCategories);
+                                mAdapter.notifyDataSetChanged();
+                            }
+                            else {
+                                Utils.showToast(R.string.toast_load_category_failed);
+                            }
                         }
-                        else {
-                            Utils.showToast(R.string.toast_load_category_failed);
-                        }
-                    }
-                });
+                    }));
+                }
             }
-        });
+        }));
     }
 
     private class SubCategoryAdapter extends BaseAdapter {

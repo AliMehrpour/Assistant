@@ -7,6 +7,8 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.Toolbar;
 
+import com.parse.ParseQuery;
+import com.volcano.assistant.Managers;
 import com.volcano.assistant.R;
 import com.volcano.assistant.util.BitmapUtils;
 import com.volcano.assistant.util.LogUtils;
@@ -31,6 +33,27 @@ public class AbstractActivity extends ActionBarActivity {
         //    Utils.showToast(R.string.toast_device_offline_message);
         //}
     }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+
+        Managers.getParseManager().getRequestManager().cancelAll(this);
+    }
+
+    @SuppressLint("NewApi")
+    public void setToolbarColor(String color) {
+        final Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        final int realColor = Color.parseColor(String.format("#%s", color));
+        if (toolbar != null) {
+            toolbar.setBackgroundColor(realColor);
+        }
+
+        if (Utils.hasLollipopApi()) {
+            getWindow().setStatusBarColor(BitmapUtils.darkenColor(realColor, 0.8f));
+        }
+    }
+
     public void setTitle(int resId) {
         setTitle(getString(resId));
     }
@@ -48,16 +71,7 @@ public class AbstractActivity extends ActionBarActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
 
-    @SuppressLint("NewApi")
-    public void setToolbarColor(String color) {
-        final Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        final int realColor = Color.parseColor(String.format("#%s", color));
-        if (toolbar != null) {
-            toolbar.setBackgroundColor(realColor);
-        }
-
-        if (Utils.hasLollipopApi()) {
-            getWindow().setStatusBarColor(BitmapUtils.darkenColor(realColor, 0.8f));
-        }
+    protected void addCancellingRequest(ParseQuery query) {
+        Managers.getParseManager().getRequestManager().addRequest(this, query);
     }
 }

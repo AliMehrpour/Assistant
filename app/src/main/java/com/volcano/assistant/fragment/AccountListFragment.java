@@ -90,19 +90,19 @@ public class AccountListFragment extends AbstractFragment {
         mAdapter.notifyDataSetChanged();
         mProgressLayout.setVisibility(View.VISIBLE);
         mEmptyLayout.setVisibility(View.GONE);
-        Category.getInBackground(categoryId, new GetCallback<Category>() {
+        addCancellingRequest(Category.getInBackground(categoryId, new GetCallback<Category>() {
             @Override
             public void done(Category category, ParseException e) {
                 loadAccounts(category);
             }
-        });
+        }));
     }
 
     /**
      * Load accounts
      */
     private void loadAccounts(Category category) {
-        Account.findInBackground(category, new FindCallback<Account>() {
+        addCancellingRequest(Account.findInBackground(category, new FindCallback<Account>() {
             @Override
             public void done(List<Account> accounts, ParseException e) {
                 if (e == null) {
@@ -112,7 +112,7 @@ public class AccountListFragment extends AbstractFragment {
                     mAdapter.notifyDataSetChanged();
                 }
             }
-        });
+        }));
     }
 
     private class AccountAdapter extends RecyclerView.Adapter<AccountViewHolder> {
