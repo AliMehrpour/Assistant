@@ -58,7 +58,7 @@
     </style>
 
     <style name="Text.RegularRed13" parent="@android:style/TextAppearance.Holo">
-        <item name="android:textColor">@color/theme_primary_dark</item>
+        <item name="android:textColor">@color/red_2</item>
         <item name="android:textSize">@dimen/text_size_13</item>
         <item name="robotoTypeface">regular</item>
     </style>

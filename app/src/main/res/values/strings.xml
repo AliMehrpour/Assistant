@@ -13,6 +13,12 @@
     <string name="button_signup_facebook">SIGN UP WITH FACEBOOK</string>
     <string name="button_signup_twitter">SIGN UP WITH TWITTER</string>
 
+    <string name="error_sign_up_email">Email can not be empty</string>
+    <string name="error_sign_up_email_character">Email is not valid</string>
+    <string name="error_sign_up_name">Name can not be empty</string>
+    <string name="error_sign_up_sign_in_password">Password must be at least 6 characters</string>
+    <string name="error_sign_up_sign_in_username">Username can not be empty</string>
+
     <string name="hint_account_name">Enter account title</string>
     <string name="hint_navigation_close">Close</string>
     <string name="hint_navigation_open">Open</string>
@@ -26,13 +32,7 @@
     <string name="label_initialize_data">Initializing for first time\n Be patient! It takes less than a minute...</string>
     <string name="label_ninety_nine_plus">99+</string>
     <string name="label_signin">Sign In</string>
-    <string name="label_sign_in_invalid">Invalid username or password.</string>
     <string name="label_signup">Sign Up</string>
-    <string name="label_sign_up_email">Email can not be empty.</string>
-    <string name="label_sign_up_email_character">Email is not valid!</string>
-    <string name="label_sign_up_name">Name can not be empty.</string>
-    <string name="label_sign_up_sign_in_password_character">Password must be at least 6 character!</string>
-    <string name="label_sign_up_sign_in_username">Username can not be empty.</string>
 
     <string name="menu_save">Save</string>
     <string name="menu_signin">Sign In</string>
@@ -43,6 +43,7 @@
     <string name="toast_load_category_failed">Load Category Failed</string>
     <string name="toast_save_account_failed">Save account failed</string>
     <string name="toast_save_account_validation">Please fill required information</string>
+    <string name="toast_sign_in_invalid">Invalid username or password</string>
     <string name="toast_signup_failed">Signup failed</string>
 
 </resources>

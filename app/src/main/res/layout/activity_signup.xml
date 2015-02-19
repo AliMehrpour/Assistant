@@ -8,7 +8,7 @@
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
                   android:orientation="vertical"
                   android:layout_width="match_parent"
-                  android:layout_height="match_parent"
+                  android:layout_height="wrap_content"
                   android:paddingLeft="@dimen/signup_horizontal_margin"
                   android:paddingRight="@dimen/signup_horizontal_margin"
                   android:animateLayoutChanges="true"
@@ -43,6 +43,7 @@
             android:id="@+id/text_username"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:text="@string/error_sign_up_sign_in_username"
             android:gravity="center_vertical"
             style="@style/Text.RegularRed13"
             android:visibility="gone"/>
@@ -62,6 +63,7 @@
             android:id="@+id/text_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:text="@string/error_sign_up_name"
             android:gravity="center_vertical"
             style="@style/Text.RegularRed13"
             android:visibility="gone"/>
@@ -81,6 +83,7 @@
             android:id="@+id/text_password"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:text="@string/error_sign_up_sign_in_password"
             android:gravity="center_vertical"
             style="@style/Text.RegularRed13"
             android:visibility="gone"/>

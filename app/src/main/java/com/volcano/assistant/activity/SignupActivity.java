@@ -1,9 +1,7 @@
 package com.volcano.assistant.activity;
 
 import android.os.Bundle;
-import android.text.Editable;
 import android.text.TextUtils;
-import android.text.TextWatcher;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.LinearLayout;
@@ -12,13 +10,9 @@ import android.widget.TextView;
 import com.parse.ParseException;
 import com.volcano.assistant.Managers;
 import com.volcano.assistant.R;
-import com.volcano.assistant.backend.AccountManager;
 import com.volcano.assistant.backend.ParseManager;
 import com.volcano.assistant.util.LogUtils;
 import com.volcano.assistant.util.Utils;
-
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 /**
  * Sign up activity by ALI
@@ -27,16 +21,16 @@ import java.util.regex.Pattern;
 public class SignupActivity extends AbstractActivity {
 
     @SuppressWarnings("FieldCanBeLocal")
+    private EditText mEmailEdit;
+    private TextView mEmailErrorText;
+    private EditText mNameEdit;
+    private TextView mNameErrorText;
+    private EditText mPasswordEdit;
+    private TextView mPasswordErrorText;
+    private LinearLayout mProgressLayout;
     private TextView mSignupButton;
     private EditText mUsernameEdit;
-    private TextView mUsernameText;
-    private EditText mNameEdit;
-    private TextView mNameText;
-    private EditText mPasswordEdit;
-    private TextView mPasswordText;
-    private EditText mEmailEdit;
-    private TextView mEmailText;
-    private LinearLayout mProgressLayout;
+    private TextView mUsernameErrorText;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,13 +39,13 @@ public class SignupActivity extends AbstractActivity {
 
         mSignupButton = (TextView) findViewById(R.id.button_signup);
         mUsernameEdit = (EditText) findViewById(R.id.edit_username);
-        mUsernameText = (TextView) findViewById(R.id.text_username);
+        mUsernameErrorText = (TextView) findViewById(R.id.text_username);
         mNameEdit = (EditText) findViewById(R.id.edit_name);
-        mNameText = (TextView) findViewById(R.id.text_name);
+        mNameErrorText = (TextView) findViewById(R.id.text_name);
         mPasswordEdit = (EditText) findViewById(R.id.edit_password);
-        mPasswordText = (TextView) findViewById(R.id.text_password);
+        mPasswordErrorText = (TextView) findViewById(R.id.text_password);
         mEmailEdit = (EditText) findViewById(R.id.edit_email);
-        mEmailText = (TextView) findViewById(R.id.text_email);
+        mEmailErrorText = (TextView) findViewById(R.id.text_email);
         mProgressLayout = (LinearLayout) findViewById(R.id.layout_progress);
 
         mSignupButton.setOnClickListener(new View.OnClickListener() {
@@ -65,9 +59,7 @@ public class SignupActivity extends AbstractActivity {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
                 if (!hasFocus) {
-                    if (!TextUtils.isEmpty(mUsernameEdit.getText())) {
-                        mUsernameText.setVisibility(View.GONE);
-                    }
+                    isUserNameValid();
                 }
             }
         });
@@ -76,9 +68,7 @@ public class SignupActivity extends AbstractActivity {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
                 if (!hasFocus) {
-                    if (!TextUtils.isEmpty(mNameEdit.getText())) {
-                        mNameText.setVisibility(View.GONE);
-                    }
+                    isNameValid();
                 }
             }
         });
@@ -86,15 +76,8 @@ public class SignupActivity extends AbstractActivity {
         mPasswordEdit.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
-                if (!hasFocus && mPasswordEdit.getText().toString().length() !=0) {
-                    if (mPasswordEdit.getText().toString().trim().length() <
-                            getResources().getInteger(R.integer.min_password_length) ) {
-                        mPasswordText.setText(getResources().getString(R.string.label_sign_up_sign_in_password_character));
-                        mPasswordText.setVisibility(View.VISIBLE);
-                    }
-                    else {
-                        mPasswordText.setVisibility(View.GONE);
-                    }
+                if (!hasFocus && mPasswordEdit.getText().toString().length() != 0) {
+                    isPasswordValid();
                 }
             }
         });
@@ -104,13 +87,7 @@ public class SignupActivity extends AbstractActivity {
             public void onFocusChange(View v, boolean hasFocus) {
                 String email = mEmailEdit.getText().toString().trim();
                 if (!hasFocus && email.length() != 0) {
-                    if (!android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
-                        mEmailText.setText(getResources().getString(R.string.label_sign_up_email_character));
-                        mEmailText.setVisibility(View.VISIBLE);
-                    }
-                }
-                else {
-                    mEmailText.setVisibility(View.GONE);
+                    isEmailValid();
                 }
             }
         });
@@ -120,7 +97,6 @@ public class SignupActivity extends AbstractActivity {
         if (valid()) {
             Utils.hideKeyboard(this);
             enable(false);
-
             final String username = mUsernameEdit.getText().toString();
             final String name = mNameEdit.getText().toString();
             final String password = mPasswordEdit.getText().toString();
@@ -135,13 +111,17 @@ public class SignupActivity extends AbstractActivity {
 
                 @Override
                 public void onErrorResponse(ParseException e) {
-                    if (e.getCode() == AccountManager.ERROR_CODE_USERNAME_EXIST) {
-                        mUsernameText.setText(e.getMessage());
-                        mUsernameText.setVisibility(View.VISIBLE);
+                    if (e.getCode() == ParseException.USERNAME_TAKEN) {
+                        mUsernameErrorText.setText(e.getMessage());
+                        mUsernameErrorText.setVisibility(View.VISIBLE);
                     }
-                    else if (e.getCode() == AccountManager.ERROR_CODE_EMAIL_EXIST) {
-                        mEmailText.setText(e.getMessage());
-                        mEmailText.setVisibility(View.VISIBLE);
+                    else if (e.getCode() == ParseException.EMAIL_TAKEN) {
+                        mEmailErrorText.setText(e.getMessage());
+                        mEmailErrorText.setVisibility(View.VISIBLE);
+                    }
+                    else if (e.getCode() == ParseException.INVALID_EMAIL_ADDRESS) {
+                        mEmailErrorText.setText(e.getMessage());
+                        mEmailErrorText.setVisibility(View.VISIBLE);
                     }
                     else {
                         Utils.showToast(R.string.toast_signup_failed);
@@ -154,40 +134,11 @@ public class SignupActivity extends AbstractActivity {
     }
 
     private boolean valid() {
-        mUsernameText.setVisibility(View.GONE);
-        mNameText.setVisibility(View.GONE);
-        mPasswordText.setVisibility(View.GONE);
-        mEmailText.setVisibility(View.GONE);
-        String email = mEmailEdit.getText().toString().trim();
-        boolean validation = true;
-
-        if (TextUtils.isEmpty(mUsernameEdit.getText())) {
-            mUsernameText.setText(getResources().getString(R.string.label_sign_up_sign_in_username));
-            validation = false;
-            mUsernameText.setVisibility(View.VISIBLE);
-        }
-        else if (TextUtils.isEmpty(mNameEdit.getText())) {
-            mNameText.setText(getResources().getString(R.string.label_sign_up_name));
-            validation = false;
-            mNameText.setVisibility(View.VISIBLE);
-        }
-        else if (mPasswordEdit.getText().toString().trim().length() <
-                getResources().getInteger(R.integer.min_password_length) ) {
-            mPasswordText.setText(getResources().getString(R.string.label_sign_up_sign_in_password_character));
-            validation = false;
-            mPasswordText.setVisibility(View.VISIBLE);
-        }
-        else if (TextUtils.isEmpty(mEmailEdit.getText())) {
-            mEmailText.setText(getResources().getString(R.string.label_sign_up_email));
-            validation = false;
-            mEmailText.setVisibility(View.VISIBLE);
-        }
-        else if (!android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
-            mEmailText.setText(getResources().getString(R.string.label_sign_up_email_character));
-            validation = false;
-            mEmailText.setVisibility(View.VISIBLE);
-        }
-        return validation;
+        mUsernameErrorText.setVisibility(View.GONE);
+        mNameErrorText.setVisibility(View.GONE);
+        mPasswordErrorText.setVisibility(View.GONE);
+        mEmailErrorText.setVisibility(View.GONE);
+        return (isUserNameValid() && isNameValid() && isPasswordValid() && isEmailValid());
     }
 
     private void enable(boolean enable) {
@@ -216,4 +167,64 @@ public class SignupActivity extends AbstractActivity {
         });
     }
 
+    private boolean isUserNameValid() {
+        boolean isValid = true;
+        if (TextUtils.isEmpty(mUsernameEdit.getText())) {
+            isValid = false;
+            mUsernameErrorText.setVisibility(View.VISIBLE);
+            mUsernameEdit.requestFocus();
+        }
+        else {
+            mUsernameErrorText.setVisibility(View.GONE);
+        }
+        return isValid;
+    }
+
+    private boolean isPasswordValid() {
+        boolean isValid = true;
+        if (mPasswordEdit.getText().toString().trim().length() <
+                getResources().getInteger(R.integer.min_password_length) ) {
+            mPasswordErrorText.setVisibility(View.VISIBLE);
+            mPasswordEdit.requestFocus();
+            isValid = false;
+        }
+        else {
+            mPasswordErrorText.setVisibility(View.GONE);
+        }
+        return isValid;
+    }
+
+    private boolean isNameValid() {
+        boolean isValid = true;
+        if (TextUtils.isEmpty(mNameEdit.getText())) {
+            isValid = false;
+            mNameErrorText.setVisibility(View.VISIBLE);
+            mNameEdit.requestFocus();
+        }
+        else {
+            mNameErrorText.setVisibility(View.GONE);
+        }
+        return isValid;
+    }
+
+    private boolean isEmailValid() {
+        String email = mEmailEdit.getText().toString().trim();
+        boolean isValid = true;
+        if (TextUtils.isEmpty(mEmailEdit.getText())) {
+            isValid = false;
+            mEmailErrorText.setText(getResources().getString(R.string.error_sign_up_email));
+            mEmailErrorText.setVisibility(View.VISIBLE);
+            mEmailEdit.requestFocus();
+        }
+        else if (!android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
+            mEmailErrorText.setText(getResources().getString(R.string.error_sign_up_email_character));
+            isValid = false;
+            mEmailErrorText.setVisibility(View.VISIBLE);
+            mEmailEdit.requestFocus();
+        }
+        else {
+            mEmailErrorText.setVisibility(View.GONE);
+        }
+        return isValid;
+    }
 }

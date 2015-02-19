@@ -18,9 +18,6 @@ import com.volcano.assistant.model.User;
  */
 public class AccountManager {
 
-    public static final int ERROR_CODE_USERNAME_EXIST = 202;
-    public static final int ERROR_CODE_EMAIL_EXIST = 203;
-
     public boolean isLoggedIn() {
         return ParseUser.getCurrentUser() != null;
     }

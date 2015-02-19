@@ -23,9 +23,9 @@ import com.volcano.assistant.util.Utils;
 public class SigninActivity extends AbstractActivity {
 
     private EditText mUsernameEdit;
-    private TextView mUsernameText;
     private EditText mPasswordEdit;
-    private TextView mPasswordText;
+    private TextView mPasswordErrorText;
+    private TextView mUsernameErrorText;
     private TextView mSigninText;
     private TextView mSignupText;
 
@@ -35,9 +35,9 @@ public class SigninActivity extends AbstractActivity {
         setContentView(R.layout.activity_signin);
 
         mUsernameEdit = (EditText) findViewById(R.id.edit_username);
-        mUsernameText = (TextView) findViewById(R.id.text_username);
+        mUsernameErrorText = (TextView) findViewById(R.id.text_username);
         mPasswordEdit = (EditText) findViewById(R.id.edit_password);
-        mPasswordText = (TextView) findViewById(R.id.text_password);
+        mPasswordErrorText = (TextView) findViewById(R.id.text_password);
 
         mSigninText = (TextView) findViewById(R.id.text_signin);
         mSignupText = (TextView) findViewById(R.id.text_signup_email);
@@ -57,7 +57,7 @@ public class SigninActivity extends AbstractActivity {
                         @Override
                         public void onErrorResponse(ParseException e) {
                             enable(true);
-                            Utils.showToast(getResources().getString(R.string.label_sign_in_invalid));
+                            Utils.showToast(getResources().getString(R.string.toast_sign_in_invalid));
                         }
                     });
                 }
@@ -67,15 +67,8 @@ public class SigninActivity extends AbstractActivity {
         mPasswordEdit.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
-                if (!hasFocus && mPasswordEdit.getText().toString().length() !=0) {
-                    if (mPasswordEdit.getText().toString().trim().length() <
-                            getResources().getInteger(R.integer.min_password_length) ) {
-                        mPasswordText.setText(getResources().getString(R.string.label_sign_up_sign_in_password_character));
-                        mPasswordText.setVisibility(View.VISIBLE);
-                    }
-                    else {
-                        mPasswordText.setVisibility(View.GONE);
-                    }
+                if (!hasFocus && mPasswordEdit.getText().toString().length() != 0) {
+                    isPasswordValid();
                 }
             }
         });
@@ -91,9 +84,7 @@ public class SigninActivity extends AbstractActivity {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
                 if (!hasFocus) {
-                    if (!TextUtils.isEmpty(mUsernameEdit.getText())) {
-                        mUsernameText.setVisibility(View.GONE);
-                    }
+                    isUserNameValid();
                 }
             }
         });
@@ -123,22 +114,34 @@ public class SigninActivity extends AbstractActivity {
         mSignupText.setEnabled(enable);
     }
 
-    private boolean valid(){
-        mUsernameText.setVisibility(View.GONE);
-        mPasswordText.setVisibility(View.GONE);
-        boolean validation = true;
+    private boolean isUserNameValid() {
+        boolean isValid = true;
         if (TextUtils.isEmpty(mUsernameEdit.getText())) {
-            mUsernameText.setText(getResources().getString(R.string.label_sign_up_sign_in_username));
-            validation = false;
-            mUsernameText.setVisibility(View.VISIBLE);
+            isValid = false;
+            mUsernameErrorText.setVisibility(View.VISIBLE);
         }
-        else if (mPasswordEdit.getText().toString().trim().length() <
-                getResources().getInteger(R.integer.min_password_length) ) {
-            mPasswordText.setText(getResources().getString(R.string.label_sign_up_sign_in_password_character));
-            validation = false;
-            mPasswordText.setVisibility(View.VISIBLE);
+        else {
+            mUsernameErrorText.setVisibility(View.GONE);
         }
+        return isValid;
+    }
 
-        return validation;
+    private boolean isPasswordValid() {
+        boolean isValid = true;
+        if (mPasswordEdit.getText().toString().trim().length() <
+                getResources().getInteger(R.integer.min_password_length) ) {
+            mPasswordErrorText.setVisibility(View.VISIBLE);
+            isValid = false;
+        }
+        else {
+            mPasswordErrorText.setVisibility(View.GONE);
+        }
+        return isValid;
+    }
+
+    private boolean valid(){
+        mUsernameErrorText.setVisibility(View.GONE);
+        mPasswordErrorText.setVisibility(View.GONE);
+        return (isUserNameValid() && isPasswordValid());
     }
 }
