@@ -25,13 +25,15 @@
         </activity>
 
         <activity android:name=".activity.SigninActivity"
-                  android:label="@string/label_signin" />
+                  android:label="@string/label_signin"
+                  android:windowSoftInputMode="stateAlwaysHidden" />
         
         <activity android:name=".activity.SignupActivity"
-                  android:label="@string/label_signup" />
+                  android:label="@string/label_signup"
+                  android:windowSoftInputMode="stateAlwaysHidden" />
 
         <activity android:name=".activity.CreateAccountActivity"
-            android:label="@string/hint_new_account"/>
+            android:label="@string/hint_new_account" />
 
         <provider
             android:authorities="com.volcano.assistant"
