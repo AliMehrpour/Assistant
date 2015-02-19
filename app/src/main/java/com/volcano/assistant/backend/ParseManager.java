@@ -2,6 +2,7 @@ package com.volcano.assistant.backend;
 
 import com.parse.FindCallback;
 import com.parse.Parse;
+import com.parse.ParseCrashReporting;
 import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.volcano.assistant.VlApplication;
@@ -24,6 +25,7 @@ public final class ParseManager {
     private static final String TAG = LogUtils.makeLogTag(ParseManager.class);
 
     private static int INITIALIZE_DATA_TIME_OUT_MILLIS  = 20 * 1000; // 20 seconds
+
     private static boolean isCategoriesPinned = false;
     private static boolean isSubCategoriesPinned = false;
     private static boolean isFieldsPinned = false;
@@ -58,6 +60,7 @@ public final class ParseManager {
         ParseObject.registerSubclass(Account.class);
         ParseObject.registerSubclass(AccountFieldValue.class);
         Parse.enableLocalDatastore(VlApplication.getInstance());
+        ParseCrashReporting.enable(VlApplication.getInstance());
         Parse.initialize(VlApplication.getInstance(), APPLICATION_ID, CLIENT_KEY);
     }
 
@@ -115,13 +118,14 @@ public final class ParseManager {
                             isSubCategoryFieldsPinned && isCurrentUserPinned;
 
                     if (result || elapsedMillis >= INITIALIZE_DATA_TIME_OUT_MILLIS) {
+                        final float elapsedSeconds = elapsedMillis / 1000;
                         if (result) {
-                            LogUtils.LogI(TAG, "Initialization finished in " + elapsedMillis / 1000 + " seconds");
+                            LogUtils.LogI(TAG, "Initialization finished in " + elapsedSeconds + " seconds");
                             listener.onInitilize(true);
                             break;
                         }
                         else {
-                            LogUtils.LogI(TAG, "Initialization failed after " + elapsedMillis / 1000 + " seconds");
+                            LogUtils.LogI(TAG, "Initialization failed after " + elapsedSeconds + " seconds");
                             listener.onInitilize(false);
                             break;
                         }
@@ -132,5 +136,12 @@ public final class ParseManager {
         };
 
         new Thread(runnable).start();
+    }
+
+    /**
+     * @return True if local database is active, otherwise false
+     */
+    public static boolean isLocalDatabaseActive() {
+        return false;
     }
 }

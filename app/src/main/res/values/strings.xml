@@ -29,7 +29,9 @@
     <string name="hint_select_sub_category">Select Account Type</string>
     <string name="hint_username">Username</string>
 
-    <string name="label_initialize_data">Initializing for first time\n Be patient! It takes less than a minute…</string>
+    <string name="label_category">Category</string>
+    <string name="label_initialize_data">Initializing for first time\n Be patient! It takes less than a minute...</string>
+    <string name="label_new_account">New Account</string>
     <string name="label_ninety_nine_plus">99+</string>
     <string name="label_signin">Sign In</string>
     <string name="label_signup">Sign Up</string>
@@ -40,7 +42,8 @@
 
     <string name="toast_device_offline_message">Your device appears to be offline</string>
     <string name="toast_initialize_failed">Initialization failed</string>
-    <string name="toast_load_category_failed">Load Category Failed</string>
+    <string name="toast_load_category_failed">Load category failed</string>
+    <string name="toast_load_account_failed">Load account failed</string>
     <string name="toast_save_account_failed">Save account failed</string>
     <string name="toast_save_account_validation">Please fill required information</string>
     <string name="toast_sign_in_invalid">Invalid username or password</string>

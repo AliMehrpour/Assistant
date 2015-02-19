@@ -7,6 +7,7 @@ import com.parse.ParseClassName;
 import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
+import com.volcano.assistant.backend.ParseManager;
 import com.volcano.assistant.util.LogUtils;
 
 import java.util.List;
@@ -45,9 +46,13 @@ public class Category extends ParseObject {
     }
 
     public static ParseQuery<Category> getQuery() {
-        return ParseQuery.getQuery(Category.class)
-                .fromLocalDatastore()
-                .orderByAscending(ORDER);
+        final ParseQuery<Category> query = ParseQuery.getQuery(Category.class);
+        query.orderByAscending(ORDER);
+        if (ParseManager.isLocalDatabaseActive()) {
+            query.fromLocalDatastore();
+        }
+
+        return query;
     }
 
     /**

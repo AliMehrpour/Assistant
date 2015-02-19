@@ -98,11 +98,10 @@
         <item name="robotoTypeface">regular</item>
     </style>
 
-    <style name="Text.Indicator25" parent="@android:style/TextAppearance.Holo">
-        <item name="android:textSize">@dimen/text_size_25</item>
-        <item name="android:textColor">@color/theme_primary</item>
-        <item name="android:textStyle">bold</item>
-        <item name="robotoTypeface">medium</item>
+    <style name="Text.RegularWhite30" parent="@android:style/TextAppearance.Holo">
+        <item name="android:textColor">@android:color/white</item>
+        <item name="android:textSize">@dimen/text_size_30</item>
+        <item name="robotoTypeface">regular</item>
     </style>
 
     <style name="Toolbar.Title" parent="@android:style/TextAppearance">

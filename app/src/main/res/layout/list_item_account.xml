@@ -15,18 +15,7 @@
         android:layout_centerVertical="true"
         android:scaleType="center"
         android:layout_marginRight="@dimen/margin_16"
-        tools:ignore="ContentDescription" />
-
-    <com.volcano.assistant.widget.RobotoTextView
-        android:id="@+id/text_account_title"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_toRightOf="@id/image_icon"
-        android:layout_centerVertical="true"
-        android:singleLine="true"
-        android:ellipsize="end"
-        style="@style/Text.RegularDark16"
-        tools:ignore="RelativeOverlap"/>
+        tools:ignore="ContentDescription"/>
 
     <com.volcano.assistant.widget.RobotoTextView
         android:id="@+id/text_date"
@@ -35,6 +24,19 @@
         android:layout_alignParentRight="true"
         android:layout_centerVertical="true"
         style="@style/Text.RegularGrey12"
+        tools:ignore="RelativeOverlap"/>
+
+    <com.volcano.assistant.widget.RobotoTextView
+        android:id="@+id/text_account_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@id/image_icon"
+        android:layout_toLeftOf="@id/text_date"
+        android:layout_marginRight="@dimen/margin_16"
+        android:layout_centerVertical="true"
+        android:maxLines="2"
+        android:ellipsize="end"
+        style="@style/Text.RegularDark16"
         tools:ignore="RelativeOverlap"/>
 
     <ImageView

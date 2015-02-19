@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
+    <integer name="animation_button_zoom_in_millis">500</integer>
     <integer name="max_name_length">20</integer>
     <integer name="max_username_length">15</integer>
     <integer name="max_bio_length">140</integer>

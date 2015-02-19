@@ -6,6 +6,7 @@ import com.parse.ParseClassName;
 import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
+import com.volcano.assistant.backend.ParseManager;
 import com.volcano.assistant.util.LogUtils;
 
 import java.util.List;
@@ -31,11 +32,6 @@ public class Field extends ParseObject {
     private final static String NAME        = "name";
     private final static String TYPE        = "type";
 
-    public static ParseQuery<Field> getQuery() {
-        return ParseQuery.getQuery(Field.class)
-                .fromLocalDatastore();
-    }
-
     /**
      * This method only should call for getting fields for first time and exclusively called by
      * {@link com.volcano.assistant.backend.ParseManager#InitializeData(com.volcano.assistant.backend.ParseManager.OnDataInitializationListener)}
@@ -59,6 +55,15 @@ public class Field extends ParseObject {
                 }
             }
         });
+    }
+
+    public static ParseQuery<Field> getQuery() {
+        final ParseQuery<Field> query = ParseQuery.getQuery(Field.class);
+        if (ParseManager.isLocalDatabaseActive()) {
+            query.fromLocalDatastore();
+        }
+
+        return query;
     }
 
     public String getName() {

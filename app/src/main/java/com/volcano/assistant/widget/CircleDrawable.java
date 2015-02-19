@@ -30,28 +30,31 @@ public class CircleDrawable extends Drawable {
     private Paint mPaint;
     private int mStyle;
     private int mColor;
+    private int mTextColor;
     private String mText;
 
     public CircleDrawable() {
-        this(Color.RED, STROKE, null);
+        this(Color.RED, STROKE, null, Color.WHITE);
     }
 
     public CircleDrawable(String color, int style) {
-        this(BitmapUtils.getColor(color), style, null);
+        this(BitmapUtils.getColor(color), style, null, Color.WHITE);
     }
 
     public CircleDrawable(String color, int style, String text) {
-        this(BitmapUtils.getColor(color), style, text);
+        this(BitmapUtils.getColor(color), style, text, Color.WHITE);
     }
 
-    public CircleDrawable(int color, int style, String text) {
+    public CircleDrawable(String color, int style, String text, String textColor) {
+        this(BitmapUtils.getColor(color), style, text, BitmapUtils.getColor(textColor));
+    }
+
+    public CircleDrawable(int color, int style, String text, int textColor) {
+        mTextColor = textColor;
         mColor = color;
         mStyle = style;
         mText = text;
         mPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-        mPaint.setStyle(Paint.Style.values()[mStyle]);
-        mPaint.setStrokeWidth(STROKE_WIDTH);
-        mPaint.setColor(mColor);
     }
 
     @Override
@@ -63,10 +66,14 @@ public class CircleDrawable extends Drawable {
     }
     @Override
     public void draw(Canvas canvas) {
+        mPaint.setStyle(Paint.Style.values()[mStyle]);
+        mPaint.setStrokeWidth(STROKE_WIDTH);
+        mPaint.setColor(mColor);
         canvas.drawCircle(mCenterX, mCenterY, mRadius, mPaint);
+
         if (mText != null) {
             mPaint.setStyle(Paint.Style.FILL);
-            mPaint.setColor(Color.WHITE);
+            mPaint.setColor(mTextColor);
             mPaint.setTextSize(VlApplication.getInstance().getResources().getDimension(R.dimen.text_size_25));
             mPaint.setStrokeWidth(1);
             mPaint.setTypeface(RobotoUtils.obtainTypeface(RobotoUtils.ROBOTO_REGULAR));

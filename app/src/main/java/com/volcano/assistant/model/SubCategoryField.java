@@ -5,6 +5,7 @@ import com.parse.ParseClassName;
 import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
+import com.volcano.assistant.backend.ParseManager;
 import com.volcano.assistant.util.LogUtils;
 
 import java.util.List;
@@ -30,9 +31,13 @@ public class SubCategoryField extends ParseObject {
     }
 
     public static ParseQuery<SubCategoryField> getQuery() {
-        return ParseQuery.getQuery(SubCategoryField.class)
-                .fromLocalDatastore()
-                .orderByAscending(ORDER);
+        final ParseQuery<SubCategoryField> query = ParseQuery.getQuery(SubCategoryField.class);
+        query.orderByAscending(ORDER);
+        if (ParseManager.isLocalDatabaseActive()) {
+            query.fromLocalDatastore();
+        }
+
+        return query;
     }
 
     /**

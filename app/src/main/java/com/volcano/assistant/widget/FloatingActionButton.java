@@ -23,6 +23,7 @@ import android.util.AttributeSet;
 import android.widget.ImageButton;
 
 import com.volcano.assistant.R;
+import com.volcano.assistant.util.BitmapUtils;
 import com.volcano.assistant.util.Utils;
 
 /**
@@ -157,6 +158,22 @@ public class FloatingActionButton extends ImageButton {
      */
     public String getTitle() {
         return mTitle;
+    }
+
+    /**
+     *
+     * @param colorNormal
+     * @param lighten
+     */
+    public void setColorNormal(String colorNormal, boolean lighten) {
+        if (lighten) {
+            mColorNormal = lightenColor(BitmapUtils.getColor(colorNormal));
+        }
+        else {
+            mColorNormal = BitmapUtils.getColor(colorNormal);
+        }
+
+        updateBackground();
     }
 
     @Override
@@ -324,11 +341,11 @@ public class FloatingActionButton extends ImageButton {
     }
 
     private int darkenColor(int argb) {
-        return adjustColorBrightness(argb, 0.9f);
+        return adjustColorBrightness(argb, 0.8f);
     }
 
     private int lightenColor(int argb) {
-        return adjustColorBrightness(argb, 1.1f);
+        return adjustColorBrightness(argb, 1.2f);
     }
 
     private int adjustColorBrightness(int argb, float factor) {

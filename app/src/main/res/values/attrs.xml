@@ -32,7 +32,7 @@
 
     </declare-styleable>
 
-    <declare-styleable name="FloatLabeledEditText">
+    <declare-styleable name="FloatingLabeledEditText">
 
         <attr name="floatTextAppearance" format="reference" />
         <attr name="floatPadding" format="reference|dimension" />

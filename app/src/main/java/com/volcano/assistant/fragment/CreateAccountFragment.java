@@ -2,6 +2,7 @@
 package com.volcano.assistant.fragment;
 
 import android.app.Activity;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -131,7 +132,8 @@ public class CreateAccountFragment extends AbstractFragment {
             account.setTitle(mAccountTitle.getText().toString());
             account.setCreateDate(new Date());
             account.setSubCategory(mSelectedSubCategory);
-            account.pinInBackground(new SaveCallback() {
+
+            account.save(new SaveCallback() {
                 @Override
                 public void done(ParseException e) {
                     if (e == null) {
@@ -143,7 +145,7 @@ public class CreateAccountFragment extends AbstractFragment {
                             value.setAccount(account);
                             value.setField(mFields.get(i).getField());
                             value.setValue(fieldEditText.getText().toString());
-                            value.pinInBackground(new SaveCallback() {
+                            value.save(new SaveCallback() {
                                 @Override
                                 public void done(ParseException e) {
                                     if (e == null) {
@@ -209,7 +211,8 @@ public class CreateAccountFragment extends AbstractFragment {
                                     fieldEditText.setIcon(getResources().getDrawable(BitmapUtils.getDrawableIdentifier(getActivity(), iconName)));
                                 }
                                 else {
-                                    fieldEditText.setIndicatorText(field.getField().getName().substring(0, 1));
+                                    fieldEditText.setIcon(new CircleDrawable(Color.TRANSPARENT, CircleDrawable.FILL,
+                                            field.getField().getName().substring(0, 1), getResources().getColor(R.color.theme_primary)));
                                 }
                                 if (!TextUtils.isEmpty(field.getDefaultValue())) {
                                     fieldEditText.setText(field.getDefaultValue());

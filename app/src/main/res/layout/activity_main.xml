@@ -44,6 +44,7 @@
             android:layout_height="match_parent"
             android:layout_below="@id/toolbar"
             android:background="@color/fab_transparent_background"
+            android:clickable="false"
             android:visibility="gone" />
 
        <com.volcano.assistant.widget.FloatingActionMenu

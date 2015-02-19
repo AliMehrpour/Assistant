@@ -36,6 +36,7 @@
     <dimen name="margin_25">25dp</dimen>
     <dimen name="margin_30">30dp</dimen>
     <dimen name="margin_40">40dp</dimen>
+    <dimen name="margin_56">56dp</dimen>
 
     <dimen name="navigation_item_counter_width">40dp</dimen>
     <dimen name="navigation_item_height">48dp</dimen>
@@ -53,8 +54,12 @@
     <dimen name="text_size_18">18sp</dimen>
     <dimen name="text_size_20">20sp</dimen>
     <dimen name="text_size_25">25sp</dimen>
+    <dimen name="text_size_30">30sp</dimen>
     <dimen name="text_size_36">36sp</dimen>
 
     <dimen name="text_view_height">56dp</dimen>
+    
+    <dimen name="toolbar_extended_height">128dp</dimen>
+    <dimen name="toolbar_extended_button_margin_top">100dp</dimen>
 
 </resources>

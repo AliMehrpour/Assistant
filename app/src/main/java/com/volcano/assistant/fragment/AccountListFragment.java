@@ -14,6 +14,7 @@ import android.widget.TextView;
 import com.parse.FindCallback;
 import com.parse.GetCallback;
 import com.parse.ParseException;
+import com.volcano.assistant.Intents;
 import com.volcano.assistant.R;
 import com.volcano.assistant.model.Account;
 import com.volcano.assistant.model.Category;
@@ -68,7 +69,8 @@ public class AccountListFragment extends AbstractFragment {
         itemClick.setOnItemClickListener(new ItemClickSupport.OnItemClickListener() {
             @Override
             public void onItemClick(RecyclerView parent, View view, int position, long id) {
-                Utils.showToast(mAccounts.get(position).getTitle());
+                final Account account = mAccounts.get(position);
+                startActivity(Intents.getEditAccountIntent(account.getObjectId(),account.getSubCategory().getCategory().getColor(), account.getTitle()));
             }
         });
     }
@@ -105,6 +107,7 @@ public class AccountListFragment extends AbstractFragment {
             public void done(List<Account> accounts, ParseException e) {
                 if (e == null) {
                     mProgressLayout.setVisibility(View.GONE);
+                    mAccounts.clear();
                     mAccounts.addAll(accounts);
                     mAdapter.notifyDataSetChanged();
                 }

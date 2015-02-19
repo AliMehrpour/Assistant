@@ -23,7 +23,6 @@ public class IconizedEditText extends RelativeLayout {
 
     private EditText mEditText;
     private ImageView mIcon;
-    private TextView mIndicatorText;
 
     public IconizedEditText(Context context) {
         this(context, null);
@@ -44,7 +43,6 @@ public class IconizedEditText extends RelativeLayout {
 
         mEditText = (EditText) findViewById(R.id.edittext);
         mIcon = (ImageView) findViewById(R.id.image_indicator);
-        mIndicatorText = (TextView) findViewById(R.id.text_indicator);
 
         final TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.IconizedEditText);
         try {
@@ -72,15 +70,7 @@ public class IconizedEditText extends RelativeLayout {
     }
 
     public void setIcon(Drawable drawable) {
-        mIcon.setVisibility(View.VISIBLE);
-        mIndicatorText.setVisibility(View.INVISIBLE);
         mIcon.setImageDrawable(drawable);
-    }
-
-    public void setIndicatorText(String text) {
-        mIcon.setVisibility(View.INVISIBLE);
-        mIndicatorText.setVisibility(View.VISIBLE);
-        mIndicatorText.setText(text);
     }
 
     public Editable getText() {

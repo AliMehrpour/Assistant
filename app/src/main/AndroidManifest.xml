@@ -1,10 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!-- Copyright (c) 2015 Volcano. All rights reserved. -->
+
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.volcano.assistant" >
+          xmlns:tools="http://schemas.android.com/tools"
+          package="com.volcano.assistant" >
 
     <uses-sdk
         android:minSdkVersion="16"
-        android:targetSdkVersion="21" />
+        android:targetSdkVersion="21"
+        tools:ignore="GradleOverrides"/>
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
@@ -24,6 +28,11 @@
             </intent-filter>
         </activity>
 
+        <activity android:name=".activity.CreateAccountActivity"
+                  android:label="@string/label_new_account" />
+
+        <activity android:name=".activity.EditAccountActivity" />
+
         <activity android:name=".activity.SigninActivity"
                   android:label="@string/label_signin"
                   android:windowSoftInputMode="stateAlwaysHidden" />
@@ -31,9 +40,6 @@
         <activity android:name=".activity.SignupActivity"
                   android:label="@string/label_signup"
                   android:windowSoftInputMode="stateAlwaysHidden" />
-
-        <activity android:name=".activity.CreateAccountActivity"
-            android:label="@string/hint_new_account" />
 
         <provider
             android:authorities="com.volcano.assistant"
