@@ -35,11 +35,11 @@
         <activity android:name=".activity.EditAccountActivity" />
 
         <activity android:name=".activity.SigninActivity"
-                  android:label="@string/label_signin"
+                  android:label="@string/label_sign_in"
                   android:windowSoftInputMode="stateAlwaysHidden" />
         
         <activity android:name=".activity.SignupActivity"
-                  android:label="@string/label_signup"
+                  android:label="@string/label_sign_up"
                   android:windowSoftInputMode="stateAlwaysHidden" />
 
         <activity

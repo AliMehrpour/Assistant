@@ -6,8 +6,8 @@ import com.volcano.assistant.activity.CreateAccountActivity;
 import com.volcano.assistant.activity.EditAccountActivity;
 import com.volcano.assistant.activity.MainActivity;
 import com.volcano.assistant.activity.PasscodeActivity;
-import com.volcano.assistant.activity.SignInActivity;
-import com.volcano.assistant.activity.SignUpActivity;
+import com.volcano.assistant.activity.SigninActivity;
+import com.volcano.assistant.activity.SignupActivity;
 
 /**
  * Contain various application-wide Intent constants
@@ -57,10 +57,10 @@ public final class Intents {
     }
 
     public static Intent getSigninIntent() {
-        return new Intent(VlApplication.getInstance(), SignInActivity.class);
+        return new Intent(VlApplication.getInstance(), SigninActivity.class);
     }
 
     public static Intent getSignupIntent() {
-        return new Intent(VlApplication.getInstance(), SignUpActivity.class);
+        return new Intent(VlApplication.getInstance(), SignupActivity.class);
     }
 }

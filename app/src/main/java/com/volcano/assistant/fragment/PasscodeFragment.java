@@ -14,6 +14,7 @@ import com.volcano.assistant.Managers;
 import com.volcano.assistant.R;
 import com.volcano.assistant.VlApplication;
 import com.volcano.assistant.util.PrefUtils;
+import com.volcano.assistant.util.Utils;
 
 /**
  * Passcode fragment. used for unlock application or enable, disable or
@@ -226,7 +227,7 @@ public final class PasscodeFragment extends AbstractFragment {
                             if (mFirstPasscodeEntry.equals(secondPasscodeEntry)) {
                                 getActivity().finish();
                                 Managers.getAccountManager().enablePasscode(secondPasscodeEntry);
-                                showToast(getString(R.string.toast_passcode_enabled));
+                                Utils.showToast(getString(R.string.toast_passcode_enabled));
                             }
                         }
                     }
@@ -237,7 +238,7 @@ public final class PasscodeFragment extends AbstractFragment {
                         }
                         else {
                             clearPinsText();
-                           showToast(getString(R.string.toast_passcode_invalid));
+                            Utils.showToast(getString(R.string.toast_passcode_invalid));
                        }
                     }
                     else if (mMode == MODE_PASSCODE_DISABLE) {
@@ -246,12 +247,12 @@ public final class PasscodeFragment extends AbstractFragment {
                         String passcode = PrefUtils.getPref(context.getString(R.string.preference_passcode), "");
                         if (enteredPasscode.equals(passcode)) {
                             PrefUtils.remove(getString(R.string.preference_passcode));
-                            showToast(getString(R.string.toast_passcode_disabled));
+                            Utils.showToast(getString(R.string.toast_passcode_disabled));
                             getActivity().finish();
                         }
                         else {
                             getActivity().finish();
-                            showToast(getString(R.string.toast_passcode_invalid));
+                            Utils.showToast(getString(R.string.toast_passcode_invalid));
                         }
                     }
                     else if (mMode == MODE_PASSCODE_CHANGE) {
@@ -266,7 +267,7 @@ public final class PasscodeFragment extends AbstractFragment {
                             }
                             else {
                                 getActivity().finish();
-                                showToast(getString(R.string.toast_passcode_invalid));
+                                Utils.showToast(getString(R.string.toast_passcode_invalid));
                             }
                         }
                         else {
@@ -281,11 +282,11 @@ public final class PasscodeFragment extends AbstractFragment {
                                 if (mFirstPasscodeEntry.equals(secondPasscodeEntry)) {
                                     getActivity().finish();
                                     Managers.getAccountManager().enablePasscode(secondPasscodeEntry);
-                                    showToast(getString(R.string.toast_passcode_changed));
+                                    Utils.showToast(getString(R.string.toast_passcode_changed));
                                 }
                                 else {
                                     getActivity().finish();
-                                    showToast(getString(R.string.toast_passcode_matched));
+                                    Utils.showToast(getString(R.string.toast_passcode_matched));
                                 }
                             }
                         }
