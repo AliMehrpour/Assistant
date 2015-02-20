@@ -1,7 +1,6 @@
 // Copyright (c) 2015 Volcano. All rights reserved.
 package com.volcano.assistant.fragment;
 
-import android.app.Activity;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -43,6 +42,7 @@ public class CreateAccountFragment extends AbstractFragment {
     private String mSelectedSubCategoryId;
     private final ArrayList<SubCategoryField> mFields = new ArrayList<>();
     private boolean mInitialized = false;
+    private int mSavedFieldCount;
 
     private IconizedEditText mAccountTitle;
     private TextView mCategoryText;
@@ -138,11 +138,14 @@ public class CreateAccountFragment extends AbstractFragment {
                 @Override
                 public void done(ParseException e) {
                     if (e == null) {
+                        LogUtils.LogI(TAG, "New account successfully saved");
+
+                        mSavedFieldCount = 0;
                         final int size = mFields.size();
                         for (int i = 0; i < size; i++) {
                             final IconizedEditText fieldEditText = (IconizedEditText) mFieldLayout.getChildAt(i);
 
-                            AccountFieldValue value = new AccountFieldValue();
+                            final AccountFieldValue value = new AccountFieldValue();
                             value.setAccount(account);
                             value.setField(mFields.get(i).getField());
                             value.setValue(fieldEditText.getText().toString());
@@ -150,15 +153,12 @@ public class CreateAccountFragment extends AbstractFragment {
                                 @Override
                                 public void done(ParseException e) {
                                     if (e == null) {
-                                        LogUtils.LogI(TAG, "New account successfully saved");
-                                        final Activity activity = getActivity();
-                                        if (activity != null) {
-                                            startActivity(Intents.getMainIntent(true));
-                                        }
+                                        mSavedFieldCount++;
+                                        checkDone();
                                     }
                                     else {
-                                        LogUtils.LogI(TAG, "Save account failed", e);
                                         Utils.showToast(R.string.toast_save_account_failed);
+                                        deleteAccount();
                                     }
                                 }
                             });
@@ -174,6 +174,18 @@ public class CreateAccountFragment extends AbstractFragment {
         else {
             Utils.showToast(R.string.toast_save_account_validation);
         }
+    }
+
+    private void checkDone() {
+        if (mSavedFieldCount == mFields.size()) {
+            if (getActivity() != null) {
+                startActivity(Intents.getMainIntent());
+            }
+        }
+    }
+
+    private void deleteAccount() {
+        // TODO delete account and inserted fields
     }
 
     private void setSubCategory(SubCategory subCategory) {

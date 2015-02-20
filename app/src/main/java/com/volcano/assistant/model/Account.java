@@ -1,6 +1,7 @@
 // Copyright (c) 2015 Volcano. All rights reserved.
 package com.volcano.assistant.model;
 
+import com.parse.DeleteCallback;
 import com.parse.FindCallback;
 import com.parse.GetCallback;
 import com.parse.ParseClassName;
@@ -62,6 +63,39 @@ public class Account extends ParseObject {
         return query;
     }
 
+    public void save(final SaveCallback callback) {
+        final SaveCallback saveCallback = new SaveCallback() {
+            @Override
+            public void done(ParseException e) {
+                callback.done(e);
+            }
+        };
+
+        if (ParseManager.isLocalDatabaseActive()) {
+            pinInBackground(saveCallback);
+        }
+        else {
+            saveInBackground(saveCallback);
+        }
+    }
+
+    public void remove(final DeleteCallback callback) {
+        final DeleteCallback deleteCallback = new DeleteCallback() {
+            @Override
+            public void done(ParseException e) {
+                callback.done(e);
+            }
+        };
+
+        if (ParseManager.isLocalDatabaseActive()) {
+            unpinInBackground(deleteCallback);
+        }
+        else {
+            deleteInBackground(deleteCallback);
+        }
+
+    }
+
     public String getTitle() {
         return getString(TITLE);
     }
@@ -89,19 +123,4 @@ public class Account extends ParseObject {
         put(CREATE_DATE, date);
     }
 
-    public void save(final SaveCallback callback) {
-        final SaveCallback saveCallback = new SaveCallback() {
-            @Override
-            public void done(ParseException e) {
-                callback.done(e);
-            }
-        };
-
-        if (ParseManager.isLocalDatabaseActive()) {
-            pinInBackground(saveCallback);
-        }
-        else {
-            saveInBackground(saveCallback);
-        }
-    }
 }

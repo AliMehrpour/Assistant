@@ -1,12 +1,12 @@
 // Copyright (c) 2015 Volcano. All rights reserved.
 package com.volcano.assistant.activity;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.FrameLayout;
 import android.widget.TextView;
 
 import com.parse.ParseException;
@@ -27,6 +27,7 @@ public class SigninActivity extends AbstractActivity {
     private TextView mUsernameErrorText;
     private TextView mSigninText;
     private TextView mSignupText;
+    private FrameLayout mProgressLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,23 +40,27 @@ public class SigninActivity extends AbstractActivity {
         mPasswordErrorText = (TextView) findViewById(R.id.text_password);
         mSigninText = (TextView) findViewById(R.id.text_signin);
         mSignupText = (TextView) findViewById(R.id.text_signup_email);
+        mProgressLayout = (FrameLayout) findViewById(R.id.layout_progress);
 
         mSigninText.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (isValid()) {
                     enable(false);
+                    mProgressLayout.setVisibility(View.VISIBLE);
                     Managers.getAccountManager().signin(mUsernameEdit.getText().toString(), mPasswordEdit.getText().toString(),
                             new ParseManager.Listener() {
                                 @Override
                                 public void onResponse() {
-                                    setResult(RESULT_OK, new Intent());
+                                    setResult(RESULT_OK);
+                                    mProgressLayout.setVisibility(View.GONE);
                                     finish();
                                 }
 
                                 @Override
                                 public void onErrorResponse(ParseException e) {
                                     enable(true);
+                                    mProgressLayout.setVisibility(View.GONE);
                                     Utils.showToast(getResources().getString(R.string.toast_sign_in_invalid));
                                 }
                             });
@@ -84,7 +89,7 @@ public class SigninActivity extends AbstractActivity {
         mSignupText.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivityForResult(Intents.getSignupIntent(), Intents.REQUEST_CODE_SIGNUP_LOGIN);
+                startActivityForResult(Intents.getSignupIntent(), Intents.REQUEST_CODE_SIGNUP);
             }
         });
     }
@@ -93,8 +98,9 @@ public class SigninActivity extends AbstractActivity {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if (requestCode == Intents.REQUEST_CODE_SIGNUP_LOGIN) {
-            if (resultCode == Activity.RESULT_OK) {
+        if (requestCode == Intents.REQUEST_CODE_SIGNUP) {
+            if (resultCode == RESULT_OK) {
+                setResult(RESULT_OK);
                 finish();
             }
         }

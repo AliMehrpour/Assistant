@@ -31,7 +31,6 @@ public class MainActivity extends AbstractActivity {
 
     private AccountManager.LoginResetReceiver mLoginResetReceiver;
     private FloatingActionMenu mCreateAccountMenu;
-    @SuppressWarnings("FieldCanBeLocal")
     private NavigationFragment mNavigationFragment;
     private AccountListFragment mAccountListFragment;
     private View mTransparentBackground;
@@ -44,9 +43,9 @@ public class MainActivity extends AbstractActivity {
         setContentView(R.layout.activity_main);
 
         final Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
+        setActionbar(toolbar);
+        setTitle(R.string.app_name);
         toolbar.setNavigationIcon(R.drawable.icon_drawer);
-        toolbar.setTitle(R.string.app_name);
 
         final FragmentManager fragmentManager = getFragmentManager();
         mAccountListFragment = (AccountListFragment) fragmentManager.findFragmentById(R.id.fragment_account_list);
@@ -62,11 +61,18 @@ public class MainActivity extends AbstractActivity {
             }
         });
 
-        if (!Managers.getAccountManager().isLoggedIn()) { // TODO: check data has been initialized or not too
-            startActivity(Intents.getSigninIntent());
+        if (!Managers.getAccountManager().isLoggedIn()) {
+            startActivityForResult(Intents.getSigninIntent(), Intents.REQUEST_CODE_SIGNIN);
         }
         else {
+            if (savedInstanceState != null) {
+                loadAccounts(savedInstanceState.getString(Intents.KEY_CATEGORY_ID));
+            }
+            else {
+                loadAccounts(PrefUtils.getNavigatorLastCategory());
+            }
             mNavigationFragment.loadNavigationItems();
+            loadFloatingMenuCategories();
         }
 
         mCreateAccountMenu.setOnFloatingActionsMenuUpdateListener(new FloatingActionMenu.OnFloatingActionsMenuUpdateListener() {
@@ -83,36 +89,43 @@ public class MainActivity extends AbstractActivity {
         mLoginResetReceiver = new AccountManager.LoginResetReceiver() {
             @Override
             public void onReset() {
-                invalidateOptionsMenu();
+                if (Managers.getAccountManager().isLoggedIn()) {
+                    loadAccounts(PrefUtils.getNavigatorLastCategory());
+                    mNavigationFragment.loadNavigationItems();
+                    loadFloatingMenuCategories();
+                }
             }
         };
         AccountManager.registerLoginResetReceiver(this, mLoginResetReceiver);
+    }
 
-        loadFloatingMenuCategories();
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
 
-        if (savedInstanceState != null) {
-            loadAccounts(PrefUtils.getNavigatorLastCategory());
+        if (requestCode == Intents.REQUEST_CODE_SIGNIN) {
+            if (resultCode != RESULT_OK) {
+                finish();
+            }
         }
     }
 
     @Override
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
-        if (intent.getBooleanExtra(Intents.EXTRA_RESET, false)) {
-            loadAccounts(mCategoryId);
-        }
+        loadAccounts(mCategoryId);
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+
+        outState.putString(Intents.KEY_CATEGORY_ID, mCategoryId);
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_main, menu);
-
-        final MenuItem signinItem = menu.findItem(R.id.action_signin);
-        signinItem.setVisible(!Managers.getAccountManager().isLoggedIn());
-
-        final MenuItem signoutItem = menu.findItem(R.id.action_signout);
-        signoutItem.setVisible(Managers.getAccountManager().isLoggedIn());
-
         return true;
     }
 
@@ -120,12 +133,9 @@ public class MainActivity extends AbstractActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         final int id = item.getItemId();
 
-        if (id == R.id.action_signin) {
-            startActivity(Intents.getSigninIntent());
-            return true;
-        }
-        else if (id == R.id.action_signout) {
+        if (id == R.id.action_signout) {
             Managers.getAccountManager().signout();
+            startActivityForResult(Intents.getSigninIntent(), Intents.REQUEST_CODE_SIGNIN);
             return true;
         }
 
@@ -142,7 +152,6 @@ public class MainActivity extends AbstractActivity {
     }
 
     private void loadFloatingMenuCategories() {
-        // TODO: It's needed show progress or not !?
         addCancellingRequest(Category.findInBackground(new FindCallback<Category>() {
             @Override
             public void done(final List<Category> categories, ParseException e) {
@@ -161,7 +170,6 @@ public class MainActivity extends AbstractActivity {
                                 mCreateAccountMenu.toggle();
 
                                 final Category category = (Category) menu.getTag(R.id.category);
-                                mCategoryId = category.getObjectId();
                                 startActivity(Intents.getCreateAccountIntent(category.getObjectId(), category.getColor()));
                             }
                         });
@@ -174,7 +182,7 @@ public class MainActivity extends AbstractActivity {
     }
 
     private void loadAccounts(String categoryId) {
-        PrefUtils.setNavigatorLastCategory(categoryId);
+        mCategoryId = categoryId;
         mAccountListFragment.loadAccounts(categoryId);
     }
 }

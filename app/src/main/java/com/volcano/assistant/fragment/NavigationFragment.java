@@ -14,6 +14,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
@@ -42,6 +43,7 @@ public final class NavigationFragment extends AbstractFragment {
     private View mFragmentContainer;
     private RobotoTextView mUsernameText;
     private RobotoTextView mEmailText;
+    private FrameLayout mEmptyView;
 
     private ActionBarDrawerToggle mDrawerToggle;
     private int mCurrentSelectedPosition;
@@ -72,7 +74,7 @@ public final class NavigationFragment extends AbstractFragment {
             mCurrentSelectedPosition = savedInstanceState.getInt(Intents.KEY_POSITION);
         }
 
-        selectItem(mCurrentSelectedPosition);
+        selectItem(mCurrentSelectedPosition, true);
     }
 
     @Override
@@ -82,6 +84,7 @@ public final class NavigationFragment extends AbstractFragment {
         mUsernameText = (RobotoTextView) view.findViewById(R.id.text_username);
         mEmailText = (RobotoTextView) view.findViewById(R.id.text_email);
         mDrawerListView = (ListView) view.findViewById(R.id.list_navigation);
+        mEmptyView = (FrameLayout) view.findViewById(android.R.id.empty);
 
         return view;
     }
@@ -90,10 +93,11 @@ public final class NavigationFragment extends AbstractFragment {
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
+        mDrawerListView.setEmptyView(mEmptyView);
         mDrawerListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                selectItem(position);
+                selectItem(position, true);
                 final NavigationItem item = (NavigationItem) mDrawerListView.getItemAtPosition(position);
                 mListener.onCategorySelected(item.id, item.title);
             }
@@ -139,6 +143,11 @@ public final class NavigationFragment extends AbstractFragment {
             @Override
             public void onDrawerClosed(View drawerView) {
                 super.onDrawerClosed(drawerView);
+
+                if (!mUserLearnNavigator) {
+                    mUserLearnNavigator = false;
+                    PrefUtils.markUserLearnNavigator();
+                }
             }
 
             @Override
@@ -146,11 +155,6 @@ public final class NavigationFragment extends AbstractFragment {
                 super.onDrawerOpened(drawerView);
                 if (!isAdded()) {
                     return;
-                }
-
-                if (!mUserLearnNavigator) {
-                    mUserLearnNavigator = false;
-                    PrefUtils.markUserLearnNavigator();
                 }
             }
         };
@@ -183,12 +187,17 @@ public final class NavigationFragment extends AbstractFragment {
      * Load navigation items
      */
     public void loadNavigationItems() {
+        mNavigationItems.clear();
         addCancellingRequest(Category.findInBackground(new FindCallback<Category>() {
             @Override
             public void done(List<Category> categories, ParseException e) {
                 final int size = categories.size();
                 for (int i = 0; i < size; i++) {
                     final Category category = categories.get(i);
+
+                    if (i == 0) {
+                        PrefUtils.setNavigatorLastCategory(category.getObjectId());
+                    }
 
                     final NavigationItem item = new NavigationItem();
                     item.id = category.getObjectId();
@@ -200,22 +209,18 @@ public final class NavigationFragment extends AbstractFragment {
                 }
 
                 mAdapter.notifyDataSetChanged();
-                selectItem(mCurrentSelectedPosition);
-                if (mListener != null) {
-                    final NavigationItem firstItem = mNavigationItems.get(mCurrentSelectedPosition);
-                    mListener.onCategorySelected(firstItem.id, firstItem.title);
-                }
+                selectItem(mCurrentSelectedPosition, false);
             }
         }));
     }
 
-    private void selectItem(int position) {
+    private void selectItem(int position, boolean close) {
         mCurrentSelectedPosition = position;
         mAdapter.resetCheck();
         if (mDrawerListView != null) {
             mAdapter.setChecked(mCurrentSelectedPosition, true);
         }
-        if (mDrawerLayout != null) {
+        if (mDrawerLayout != null && close) {
             mDrawerLayout.closeDrawer(mFragmentContainer);
         }
     }

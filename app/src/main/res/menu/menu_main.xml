@@ -6,11 +6,6 @@
       xmlns:tools="http://schemas.android.com/tools"
       tools:context=".MainActivity">
 
-    <item android:id="@+id/action_signin"
-          android:title="@string/menu_signin"
-          android:orderInCategory="100"
-          app:showAsAction="never"/>
-
     <item android:id="@+id/action_signout"
           android:title="@string/menu_signout"
           android:orderInCategory="100"

@@ -20,19 +20,18 @@ public final class Intents {
     public static final String EXTRA_ACCOUNT_TITLE      = INTENT_NAMESPACE + "account_title";
     public static final String EXTRA_CATEGORY_COLOR     = INTENT_NAMESPACE + "category_color";
     public static final String EXTRA_CATEGORY_ID        = INTENT_NAMESPACE + "category_id";
-    public static final String EXTRA_RESET              = INTENT_NAMESPACE + "reset";
 
+    public static final String KEY_CATEGORY_ID      = "category_id";
     public static final String KEY_INITIALIZED      = "initialized";
     public static final String KEY_POSITION         = "position";
     public static final String KEY_SUB_CATEGORY_ID  = "sub_category_id";
 
-    public static final int REQUEST_CODE_SIGNUP_LOGIN   = 1;
+    public static final int REQUEST_CODE_SIGNIN   = 1;
+    public static final int REQUEST_CODE_SIGNUP   = 2;
 
-    public static Intent getMainIntent(boolean reset) {
+    public static Intent getMainIntent() {
         final Intent intent = new Intent(VlApplication.getInstance(), MainActivity.class)
-                .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
-                .putExtra(EXTRA_RESET, reset);
-
+                .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         return intent;
     }
 
