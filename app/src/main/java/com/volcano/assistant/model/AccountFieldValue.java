@@ -1,5 +1,6 @@
 package com.volcano.assistant.model;
 
+import com.parse.DeleteCallback;
 import com.parse.FindCallback;
 import com.parse.ParseClassName;
 import com.parse.ParseException;
@@ -18,11 +19,13 @@ public class AccountFieldValue extends ParseObject {
     private static final String ACCOUNT     = "account";
     private static final String FIELD       = "field";
     private static final String VALUE       = "value";
+    private static final String ORDER       = "order";
 
     public static ParseQuery findInBackground(Account account, final FindCallback<AccountFieldValue> callback) {
         final ParseQuery<AccountFieldValue> query = getQuery();
         query.whereEqualTo(ACCOUNT, account);
         query.include(FIELD);
+        query.orderByAscending(ORDER);
         query.findInBackground(new FindCallback<AccountFieldValue>() {
             @Override
             public void done(List<AccountFieldValue> accountFieldValues, ParseException e) {
@@ -58,6 +61,22 @@ public class AccountFieldValue extends ParseObject {
         }
     }
 
+    public static void remove(List<AccountFieldValue> objects, final DeleteCallback callback) {
+        final DeleteCallback deleteCallback = new DeleteCallback() {
+            @Override
+            public void done(ParseException e) {
+                callback.done(e);
+            }
+        };
+
+        if (ParseManager.isLocalDatabaseActive()) {
+            unpinAllInBackground(objects, deleteCallback);
+        }
+        else {
+            deleteAllInBackground(objects, deleteCallback);
+        }
+    }
+
     public Account getAccount() {
         return (Account) getParseObject(ACCOUNT);
     }
@@ -82,4 +101,7 @@ public class AccountFieldValue extends ParseObject {
         put(VALUE, value);
     }
 
+    public void setOrder(int order) {
+        put(ORDER, order);
+    }
 }

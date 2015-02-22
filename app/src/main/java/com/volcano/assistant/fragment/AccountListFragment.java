@@ -127,7 +127,7 @@ public class AccountListFragment extends AbstractFragment {
         public void onBindViewHolder(AccountViewHolder holder, int position) {
             final Account account = mAccounts.get(position);
             holder.mTitleText.setText(account.getTitle());
-            holder.mDateText.setText(Utils.getTimeSpan(account.getCreateDate()));
+            holder.mDateText.setText(Utils.getTimeSpan(account.getCreatedAt()));
             if (account.getSubCategory().hasIcon()) {
                 holder.mIconImage.setImageDrawable(getResources().getDrawable(BitmapUtils.getDrawableIdentifier(getActivity(), account.getSubCategory().getIconName())));
             }

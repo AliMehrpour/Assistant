@@ -138,9 +138,12 @@ public final class FloatingActionMenu extends ViewGroup {
     }
 
     public void collapse() {
-        mExpanded = false;
-        mCollapseAnimation.start();
-        mExpandAnimation.cancel();
+        // If call outside, collapse if it has been expanded before
+        if (mExpanded) {
+            mExpanded = false;
+            mCollapseAnimation.start();
+            mExpandAnimation.cancel();
+        }
 
         if (mListener != null) {
             mListener.onMenuCollapsed();

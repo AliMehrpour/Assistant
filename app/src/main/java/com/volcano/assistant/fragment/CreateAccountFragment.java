@@ -12,12 +12,14 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.parse.DeleteCallback;
 import com.parse.FindCallback;
 import com.parse.GetCallback;
 import com.parse.ParseException;
 import com.parse.ParseQuery;
 import com.parse.SaveCallback;
 import com.volcano.assistant.Intents;
+import com.volcano.assistant.Managers;
 import com.volcano.assistant.R;
 import com.volcano.assistant.model.Account;
 import com.volcano.assistant.model.AccountFieldValue;
@@ -30,7 +32,6 @@ import com.volcano.assistant.widget.CircleDrawable;
 import com.volcano.assistant.widget.IconizedEditText;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -38,11 +39,12 @@ import java.util.List;
  */
 public class CreateAccountFragment extends AbstractFragment {
 
+    private Account mAccount;
+    private ArrayList<AccountFieldValue> mAccountFieldValues = new ArrayList<>();
+    private final ArrayList<SubCategoryField> mFields = new ArrayList<>();
     private SubCategory mSelectedSubCategory;
     private String mSelectedSubCategoryId;
-    private final ArrayList<SubCategoryField> mFields = new ArrayList<>();
     private boolean mInitialized = false;
-    private int mSavedFieldCount;
 
     private IconizedEditText mAccountTitle;
     private TextView mCategoryText;
@@ -104,7 +106,6 @@ public class CreateAccountFragment extends AbstractFragment {
         }
     }
 
-
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
@@ -129,34 +130,36 @@ public class CreateAccountFragment extends AbstractFragment {
      */
     public void save() {
         if (valid()) {
-            final Account account = new Account();
-            account.setTitle(mAccountTitle.getText().toString());
-            account.setCreateDate(new Date());
-            account.setSubCategory(mSelectedSubCategory);
-
-            account.save(new SaveCallback() {
+            mAccount = new Account();
+            mAccount.setTitle(mAccountTitle.getText().toString());
+            mAccount.setSubCategory(mSelectedSubCategory);
+            mAccount.setUser(Managers.getAccountManager().getCurrentUser());
+            mAccount.save(new SaveCallback() {
                 @Override
                 public void done(ParseException e) {
                     if (e == null) {
                         LogUtils.LogI(TAG, "New account successfully saved");
 
-                        mSavedFieldCount = 0;
+                        mAccountFieldValues.clear();
                         final int size = mFields.size();
                         for (int i = 0; i < size; i++) {
                             final IconizedEditText fieldEditText = (IconizedEditText) mFieldLayout.getChildAt(i);
 
                             final AccountFieldValue value = new AccountFieldValue();
-                            value.setAccount(account);
-                            value.setField(mFields.get(i).getField());
+                            final SubCategoryField field = mFields.get(i);
+                            value.setAccount(mAccount);
+                            value.setField(field.getField());
                             value.setValue(fieldEditText.getText().toString());
+                            value.setOrder(field.getOrder());
                             value.save(new SaveCallback() {
                                 @Override
                                 public void done(ParseException e) {
                                     if (e == null) {
-                                        mSavedFieldCount++;
+                                        mAccountFieldValues.add(value);
                                         checkDone();
                                     }
                                     else {
+                                        LogUtils.LogI(TAG, "Save account failed", e);
                                         Utils.showToast(R.string.toast_save_account_failed);
                                         deleteAccount();
                                     }
@@ -177,7 +180,7 @@ public class CreateAccountFragment extends AbstractFragment {
     }
 
     private void checkDone() {
-        if (mSavedFieldCount == mFields.size()) {
+        if (mAccountFieldValues.size() == mFields.size()) {
             if (getActivity() != null) {
                 startActivity(Intents.getMainIntent());
             }
@@ -185,7 +188,17 @@ public class CreateAccountFragment extends AbstractFragment {
     }
 
     private void deleteAccount() {
-        // TODO delete account and inserted fields
+        mAccount.remove(mAccountFieldValues, new DeleteCallback() {
+            @Override
+            public void done(ParseException e) {
+                if (e == null) {
+                    // In case of edit account show a toast
+                }
+                else {
+                    LogUtils.LogE(TAG, "Delete account failed");
+                }
+            }
+        });
     }
 
     private void setSubCategory(SubCategory subCategory) {

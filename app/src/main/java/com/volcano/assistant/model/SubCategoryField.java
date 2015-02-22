@@ -24,7 +24,6 @@ public class SubCategoryField extends ParseObject {
 
     public static ParseQuery<SubCategoryField> getFieldBySubCategory(SubCategory subCategory) {
         final ParseQuery<SubCategoryField> query = getQuery()
-                .fromLocalDatastore()
                 .whereEqualTo(SUB_CATEGORY, subCategory);
         query.include(FIELD);
 
@@ -72,5 +71,9 @@ public class SubCategoryField extends ParseObject {
 
     public String getDefaultValue() {
         return getString(DEFAULT_VALUE);
+    }
+
+    public int getOrder() {
+        return getInt(ORDER);
     }
 }
