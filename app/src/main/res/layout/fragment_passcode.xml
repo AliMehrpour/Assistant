@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!-- Copyright (c) 2015 Volcano. All rights reserved. -->
+
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -10,23 +11,16 @@
         android:layout_alignParentTop="true"
         android:orientation="vertical">
 
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/margin_60"
-            android:layout_marginBottom="@dimen/margin_25"
-            android:layout_gravity="center"
-            android:src="@drawable/icon_launcher"
-            tools:ignore="ContentDescription" />
-
         <TextView
             android:id="@+id/text_description"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
+            android:layout_marginTop="@dimen/margin_60"
             android:layout_marginBottom="@dimen/margin_25"
-            android:text="@string/label_enter_passcode"
-            style="@style/Text.Dark20"/>
+            android:drawablePadding="@dimen/margin_20"
+            android:drawableTop="@drawable/icon_launcher"
+            style="@style/Text.RegularDark20" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -37,27 +31,27 @@
 
             <EditText
                 android:id="@+id/edit_pin_1"
-                style="@style/Text.Dark30"
+                style="@style/Text.PassCode"
                 android:tag="1"/>
 
             <EditText
                 android:id="@+id/edit_pin_2"
-                style="@style/Text.Dark30"
+                style="@style/Text.PassCode"
                 android:tag="2"/>
 
             <EditText
                 android:id="@+id/edit_pin_3"
-                style="@style/Text.Dark30"
+                style="@style/Text.PassCode"
                 android:tag="3"/>
 
             <EditText
                 android:id="@+id/edit_pin_4"
-                style="@style/Text.Dark30"
+                style="@style/Text.PassCode"
                 android:tag="4"/>
 
         </LinearLayout>
 
-        </LinearLayout>
+    </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -72,22 +66,21 @@
 
             <Button
                 android:id="@+id/button_1"
-                android:tag="1"
                 android:text="@string/button_1"
-                style="@style/passcode_button"
-                />
+                android:tag="1"
+                style="@style/ButtonPasscode" />
 
             <Button
                 android:id="@+id/button_2"
-                android:tag="2"
                 android:text="@string/button_2"
-                style="@style/passcode_button"/>
+                android:tag="2"
+                style="@style/ButtonPasscode" />
 
             <Button
                 android:id="@+id/button_3"
-                android:tag="3"
                 android:text="@string/button_3"
-                style="@style/passcode_button"/>
+                android:tag="3"
+                style="@style/ButtonPasscode" />
 
         </LinearLayout>
 
@@ -98,21 +91,21 @@
 
             <Button
                 android:id="@+id/button_4"
-                android:tag="4"
                 android:text="@string/button_4"
-                style="@style/passcode_button"/>
+                android:tag="4"
+                style="@style/ButtonPasscode"/>
 
             <Button
                 android:id="@+id/button_5"
-                android:tag="5"
                 android:text="@string/button_5"
-                style="@style/passcode_button"/>
+                android:tag="5"
+                style="@style/ButtonPasscode"/>
 
             <Button
                 android:id="@+id/button_6"
-                android:tag="6"
                 android:text="@string/button_6"
-                style="@style/passcode_button"/>
+                android:tag="6"
+                style="@style/ButtonPasscode"/>
 
         </LinearLayout>
 
@@ -123,21 +116,21 @@
 
             <Button
                 android:id="@+id/button_7"
-                android:tag="7"
                 android:text="@string/button_7"
-                style="@style/passcode_button"/>
+                android:tag="7"
+                style="@style/ButtonPasscode"/>
 
             <Button
                 android:id="@+id/button_8"
-                android:tag="8"
                 android:text="@string/button_8"
-                style="@style/passcode_button"/>
+                android:tag="8"
+                style="@style/ButtonPasscode"/>
 
             <Button
                 android:id="@+id/button_9"
-                android:tag="9"
                 android:text="@string/button_9"
-                style="@style/passcode_button"/>
+                android:tag="9"
+                style="@style/ButtonPasscode"/>
 
         </LinearLayout>
 
@@ -147,21 +140,21 @@
             android:orientation="horizontal">
 
             <Button
-                style="@style/passcode_button"/>
+                style="@style/ButtonPasscode"/>
 
             <Button
                 android:id="@+id/button_0"
-                android:tag="0"
                 android:text="@string/button_0"
-                style="@style/passcode_button"/>
+                android:tag="0"
+                style="@style/ButtonPasscode"/>
 
             <Button
-                android:id="@+id/button_delete"
+                android:id="@+id/button_clear"
                 android:text="@string/button_delete"
-                style="@style/passcode_button"/>
+                style="@style/ButtonPasscode"/>
 
         </LinearLayout>
 
-        </LinearLayout>
+    </LinearLayout>
 
 </RelativeLayout>

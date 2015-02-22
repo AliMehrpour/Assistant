@@ -1,5 +1,4 @@
 // Copyright (c) 2015 Volcano. All rights reserved.
-
 package com.volcano.assistant.fragment;
 
 import android.content.Context;

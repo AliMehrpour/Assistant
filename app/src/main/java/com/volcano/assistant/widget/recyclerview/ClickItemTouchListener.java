@@ -1,3 +1,4 @@
+// Copyright (c) 2015 Volcano. All rights reserved.
 package com.volcano.assistant.widget.recyclerview;
 
 import android.annotation.TargetApi;

@@ -7,12 +7,12 @@
       tools:context=".MainActivity">
 
     <item android:id="@+id/action_signout"
-          android:title="@string/menu_sign_out"
+          android:title="@string/menu_signout"
           android:orderInCategory="100"
           app:showAsAction="never"/>
 
     <item android:id="@+id/action_setting"
-        android:title="@string/menu_setting"
+        android:title="@string/menu_settings"
         android:orderInCategory="100"
         app:showAsAction="never"/>
 

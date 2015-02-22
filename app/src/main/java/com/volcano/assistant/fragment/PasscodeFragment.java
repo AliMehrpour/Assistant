@@ -1,7 +1,9 @@
+// Copyright (c) 2015 Volcano. All rights reserved.
 package com.volcano.assistant.fragment;
 
-import android.content.Context;
 import android.os.Bundle;
+import android.text.TextUtils;
+import android.view.HapticFeedbackConstants;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -10,340 +12,288 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.volcano.assistant.Intents;
 import com.volcano.assistant.Managers;
 import com.volcano.assistant.R;
-import com.volcano.assistant.VlApplication;
-import com.volcano.assistant.util.PrefUtils;
 import com.volcano.assistant.util.Utils;
 
 /**
- * Passcode fragment. used for unlock application or enable, disable or
- * change passcode
+ * Passcode fragment
  */
 public final class PasscodeFragment extends AbstractFragment {
 
-    public static final int MODE_PASSCODE_CHANGE    = 1;
-    public static final int MODE_PASSCODE_DISABLE   = 2;
-    public static final int MODE_PASSCODE_ENABLE    = 3;
-    public static final int MODE_PASSCODE_UNLOCK    = 4;
+    private EditText mPinEdit1, mPinEdit2, mPinEdit3, mPinEdit4, mCurrentEdit;
+    private TextView mDescriptionText;
 
-    private int mMode = MODE_PASSCODE_UNLOCK;
-    private boolean mPassApproved = false;
+    private String mFirstPasscode = "";
+    private Mode mMode = Mode.UNLOCK;
+    private boolean mOldPasscodeApproved = false;
 
-    EditText mPin_1, mPin_2, mPin_3, mPin_4, mEditText_selected;
-    Button mButton_0, mButton_1, mButton_2, mButton_3, mButton_4,
-            mButton_5, mButton_6, mButton_7, mButton_8, mButton_9, mButton_delete;
-    TextView mDescription;
-    private String mFirstPasscodeEntry = "";
-
+    /**
+     * The passcode mode
+     */
+    public enum Mode {
+        ENABLE,
+        DISABLE,
+        CHANGE,
+        UNLOCK
+    }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-            Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_passcode, container, false);
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        final View view = inflater.inflate(R.layout.fragment_passcode, container, false);
 
-        mPin_1 = (EditText) view.findViewById(R.id.edit_pin_1);
-        mPin_2 = (EditText) view.findViewById(R.id.edit_pin_2);
-        mPin_3 = (EditText) view.findViewById(R.id.edit_pin_3);
-        mPin_4 = (EditText) view.findViewById(R.id.edit_pin_4);
+        mDescriptionText = (TextView) view.findViewById(R.id.text_description);
 
-        mEditText_selected = mPin_1;
+        mPinEdit1 = (EditText) view.findViewById(R.id.edit_pin_1);
+        mPinEdit2 = (EditText) view.findViewById(R.id.edit_pin_2);
+        mPinEdit3 = (EditText) view.findViewById(R.id.edit_pin_3);
+        mPinEdit4 = (EditText) view.findViewById(R.id.edit_pin_4);
+        mCurrentEdit = mPinEdit1;
 
-        mPin_1.setOnTouchListener(new View.OnTouchListener() {
+        final View.OnTouchListener pinTouchListener = new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
-                if(event.getAction() == MotionEvent.ACTION_DOWN) {
-                    delete_pin((EditText) v);
+                if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                    clearText((EditText) v);
                 }
                 return false;
             }
-        });
+        };
+        mPinEdit1.setOnTouchListener(pinTouchListener);
+        mPinEdit2.setOnTouchListener(pinTouchListener);
+        mPinEdit3.setOnTouchListener(pinTouchListener);
+        mPinEdit4.setOnTouchListener(pinTouchListener);
 
-        mPin_2.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                if(event.getAction() == MotionEvent.ACTION_DOWN) {
-                    delete_pin((EditText) v);
-                }
-                return false;
-            }
-        });
+        final Button button0, button1, button2, button3, button4, button5,
+                button6, button7, button8, button9, clearButton;
+        button0 = (Button) view.findViewById(R.id.button_0);
+        button1 = (Button) view.findViewById(R.id.button_1);
+        button2 = (Button) view.findViewById(R.id.button_2);
+        button3 = (Button) view.findViewById(R.id.button_3);
+        button4 = (Button) view.findViewById(R.id.button_4);
+        button5 = (Button) view.findViewById(R.id.button_5);
+        button6 = (Button) view.findViewById(R.id.button_6);
+        button7 = (Button) view.findViewById(R.id.button_7);
+        button8 = (Button) view.findViewById(R.id.button_8);
+        button9 = (Button) view.findViewById(R.id.button_9);
 
-        mPin_3.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                if(event.getAction() == MotionEvent.ACTION_DOWN) {
-                    delete_pin((EditText) v);
-                }
-                return false;
-            }
-        });
-
-        mPin_4.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                if(event.getAction() == MotionEvent.ACTION_DOWN) {
-                    delete_pin((EditText) v);
-                }
-                return false;
-            }
-        });
-
-        mButton_0= (Button) view.findViewById(R.id.button_0);
-        mButton_1= (Button) view.findViewById(R.id.button_1);
-        mButton_2= (Button) view.findViewById(R.id.button_2);
-        mButton_3= (Button) view.findViewById(R.id.button_3);
-        mButton_4= (Button) view.findViewById(R.id.button_4);
-        mButton_5= (Button) view.findViewById(R.id.button_5);
-        mButton_6= (Button) view.findViewById(R.id.button_6);
-        mButton_7= (Button) view.findViewById(R.id.button_7);
-        mButton_8= (Button) view.findViewById(R.id.button_8);
-        mButton_9= (Button) view.findViewById(R.id.button_9);
-        mButton_delete= (Button) view.findViewById(R.id.button_delete);
-
-        mButton_0.setOnClickListener(new View.OnClickListener() {
+        final View.OnClickListener numberClickListener = new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                setEditText_selected(v.getTag().toString());
+                setCurrentText(v.getTag().toString());
+                v.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP);
             }
-        });
+        };
+        button0.setOnClickListener(numberClickListener);
+        button1.setOnClickListener(numberClickListener);
+        button2.setOnClickListener(numberClickListener);
+        button3.setOnClickListener(numberClickListener);
+        button4.setOnClickListener(numberClickListener);
+        button5.setOnClickListener(numberClickListener);
+        button6.setOnClickListener(numberClickListener);
+        button7.setOnClickListener(numberClickListener);
+        button8.setOnClickListener(numberClickListener);
+        button9.setOnClickListener(numberClickListener);
 
-        mButton_1.setOnClickListener(new View.OnClickListener() {
+        clearButton = (Button) view.findViewById(R.id.button_clear);
+        clearButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                setEditText_selected(v.getTag().toString());
+                clearCurrentEditText();
+                v.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP);
             }
         });
 
-        mButton_2.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                setEditText_selected(v.getTag().toString());
+        if (savedInstanceState != null) {
+            mOldPasscodeApproved = savedInstanceState.getBoolean(Intents.KEY_APPROVED);
+            mFirstPasscode = savedInstanceState.getString(Intents.KEY_PASSCODE);
+            final String indexEditText = savedInstanceState.getString(Intents.KEY_POSITION);
+            if (indexEditText.equals("1")) {
+                mCurrentEdit = mPinEdit1;
             }
-        });
-
-        mButton_3.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                setEditText_selected(v.getTag().toString());
+            else if (indexEditText.equals("2")) {
+                mCurrentEdit = mPinEdit2;
             }
-        });
-
-        mButton_4.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                setEditText_selected(v.getTag().toString());
+            else if (indexEditText.equals("3")) {
+                mCurrentEdit = mPinEdit3;
             }
-        });
-
-        mButton_5.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                setEditText_selected(v.getTag().toString());
+            else {
+                mCurrentEdit = mPinEdit4;
             }
-        });
-
-        mButton_6.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                setEditText_selected(v.getTag().toString());
-            }
-        });
-
-        mButton_7.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                setEditText_selected(v.getTag().toString());
-            }
-        });
-
-        mButton_8.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                setEditText_selected(v.getTag().toString());
-            }
-        });
-
-        mButton_9.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                setEditText_selected(v.getTag().toString());
-            }
-        });
-
-        mButton_delete.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                deleteEditText();
-            }
-        });
-
-        mDescription = (TextView) view.findViewById(R.id.text_description);
+        }
 
         return view;
     }
 
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+
+        outState.putBoolean(Intents.KEY_APPROVED, mOldPasscodeApproved);
+        outState.putString(Intents.KEY_PASSCODE, mFirstPasscode);
+        outState.putString(Intents.KEY_POSITION, mCurrentEdit.getTag().toString());
+    }
+
     /**
-     * Set use case mode
-     * @param mode One of {@link PasscodeFragment#MODE_PASSCODE_ENABLE},
-     *                    {@link PasscodeFragment#MODE_PASSCODE_UNLOCK},
-     *                    {@link PasscodeFragment#MODE_PASSCODE_CHANGE} or
-     *                    {@link PasscodeFragment#MODE_PASSCODE_DISABLE} values
+     * Set mode
+     * @param mode The {@link Mode}
      */
-    public void setPasscodeMode(int mode){
+    public void setPasscodeMode(Mode mode) {
         mMode = mode;
+        final boolean enteredFirstPasscode = !TextUtils.isEmpty(mFirstPasscode);
+        if (mMode == Mode.CHANGE) {
+            // Handle restore state
+            mMode = mOldPasscodeApproved ? Mode.ENABLE : Mode.CHANGE;
+            mDescriptionText.setText(getString(mOldPasscodeApproved ?
+                    enteredFirstPasscode ? R.string.label_re_enter_new_passcode : R.string.label_enter_new_passcode :
+                    R.string.label_enter_old_passcode));
+        }
+        else if (mMode == Mode.ENABLE) {
+            mDescriptionText.setText(enteredFirstPasscode ? R.string.label_re_enter_passcode : R.string.label_enter_passcode);
+        }
+        else {
+            mDescriptionText.setText(getString(R.string.label_enter_passcode));
+        }
     }
 
     /**
      * Set selected EditText to String text and select next EditText. in 4th EditText, passcode is enabled, unlocked, changed or disabled.
      * @param text is string must be set to selected to EditText
      */
-    private void setEditText_selected(String text) {
-        mEditText_selected.setText(text);
-        String tag = mEditText_selected.getTag().toString();
-        switch (tag){
-            case "1": mEditText_selected = mPin_2;
+    private void setCurrentText(String text) {
+        mCurrentEdit.setText(text);
+        final String indexEditText = mCurrentEdit.getTag().toString();
+        switch (indexEditText) {
+            case "1":
+                mCurrentEdit = mPinEdit2;
                 break;
-            case "2": mEditText_selected = mPin_3;
+
+            case "2":
+                mCurrentEdit = mPinEdit3;
                 break;
-            case "3" : mEditText_selected = mPin_4;
+
+            case "3" :
+                mCurrentEdit = mPinEdit4;
                 break;
+
             case "4":
-                // enter to app in case passcode to unlock. Or make passcode on. Or make passcode disable! Or change passcode.
-                String pin1 = mPin_1.getText().toString();
-                String pin2 = mPin_2.getText().toString();
-                String pin3 = mPin_3.getText().toString();
-                String pin4 = mPin_4.getText().toString();
-                if (!pin1.equals("")&& !pin2.equals("") && !pin3.equals("") && !pin4.equals("")) {
-                    if (mMode == MODE_PASSCODE_ENABLE) {
-                        if (mFirstPasscodeEntry.equals("")) {
-                            mDescription.setText(getString(R.string.label_reEnter_passcode));
-                            mFirstPasscodeEntry = pin1 + pin2 + pin3 + pin4;
-                            clearPinsText();
+                final String pin1 = mPinEdit1.getText().toString();
+                final String pin2 = mPinEdit2.getText().toString();
+                final String pin3 = mPinEdit3.getText().toString();
+                final String pin4 = mPinEdit4.getText().toString();
+
+                if (!TextUtils.isEmpty(pin1) && !TextUtils.isEmpty(pin2) && !TextUtils.isEmpty(pin3) && !TextUtils.isEmpty(pin4)) {
+                    final String pin = pin1 + pin2 + pin3 + pin4;
+
+                    if (mMode == Mode.ENABLE) {
+                        if (TextUtils.isEmpty(mFirstPasscode)) {
+                            mDescriptionText.setText(getString(mOldPasscodeApproved ? R.string.label_re_enter_new_passcode : R.string.label_re_enter_passcode));
+                            mFirstPasscode = pin;
+                            clearPins();
                         }
-                        else {
-                            String secondPasscodeEntry;
-                            secondPasscodeEntry = pin1 + pin2 + pin3 + pin4;
-                            if (mFirstPasscodeEntry.equals(secondPasscodeEntry)) {
-                                getActivity().finish();
-                                Managers.getAccountManager().enablePasscode(secondPasscodeEntry);
-                                Utils.showToast(getString(R.string.toast_passcode_enabled));
-                            }
-                        }
-                    }
-                    else if (mMode == MODE_PASSCODE_UNLOCK) {
-                        final String passcode = pin1 + pin2 + pin3 + pin4;
-                        if (Managers.getAccountManager().isPasscodeValid(passcode)) {
+                        else if (mFirstPasscode.equals(pin)) {
+                            Managers.getApplicationLockManager().getApplicationLock().setPasscode(pin);
+                            Utils.showToast(getString(mOldPasscodeApproved ? R.string.toast_passcode_changed : R.string.toast_passcode_enabled));
                             getActivity().finish();
                         }
                         else {
-                            clearPinsText();
-                            Utils.showToast(getString(R.string.toast_passcode_invalid));
-                       }
+                            Utils.showToast(getString(R.string.toast_passcode_not_matched));
+                            mDescriptionText.setText(getString(mOldPasscodeApproved ? R.string.label_enter_new_passcode : R.string.label_enter_passcode));
+                            mFirstPasscode = "";
+                            clearPins();
+                        }
                     }
-                    else if (mMode == MODE_PASSCODE_DISABLE) {
-                        String enteredPasscode = pin1 + pin2 + pin3 + pin4;
-                        final Context context = VlApplication.getInstance();
-                        String passcode = PrefUtils.getPref(context.getString(R.string.preference_passcode), "");
-                        if (enteredPasscode.equals(passcode)) {
-                            PrefUtils.remove(getString(R.string.preference_passcode));
+                    else if (mMode == Mode.DISABLE) {
+                        if (Managers.getApplicationLockManager().getApplicationLock().verifyPasscode(pin)) {
+                            Managers.getApplicationLockManager().getApplicationLock().setPasscode(null);
                             Utils.showToast(getString(R.string.toast_passcode_disabled));
                             getActivity().finish();
                         }
                         else {
-                            getActivity().finish();
                             Utils.showToast(getString(R.string.toast_passcode_invalid));
+                            clearPins();
                         }
                     }
-                    else if (mMode == MODE_PASSCODE_CHANGE) {
-                        if (!mPassApproved) {
-                            String enteredPasscode = pin1 + pin2 + pin3 + pin4;
-                            final Context context = VlApplication.getInstance();
-                            String passcode = PrefUtils.getPref(context.getString(R.string.preference_passcode), "");
-                            if (enteredPasscode.equals(passcode)) {
-                                mPassApproved = true;
-                                clearPinsText();
-                                mDescription.setText(getString(R.string.label_Enter_newPasscode));
+                    else if (mMode == Mode.CHANGE) {
+                        if (!mOldPasscodeApproved) {
+                            if (Managers.getApplicationLockManager().getApplicationLock().verifyPasscode(pin)) {
+                                mOldPasscodeApproved = true;
+                                mDescriptionText.setText(getString(R.string.label_enter_new_passcode));
+                                mMode = Mode.ENABLE;
+                                clearPins();
                             }
                             else {
-                                getActivity().finish();
                                 Utils.showToast(getString(R.string.toast_passcode_invalid));
+                                clearPins();
                             }
                         }
+                    }
+                    else if (mMode == Mode.UNLOCK) {
+                        if (Managers.getApplicationLockManager().getApplicationLock().verifyPasscode(pin)) {
+                            getActivity().finish();
+                        }
                         else {
-                            if (mFirstPasscodeEntry.equals("")) {
-                                mFirstPasscodeEntry = pin1 + pin2 + pin3 + pin4;
-                                clearPinsText();
-                                mDescription.setText(getString(R.string.label_reEnter_newPasscode));
-                            }
-                            else {
-                                String secondPasscodeEntry;
-                                secondPasscodeEntry = pin1 + pin2 + pin3 + pin4;
-                                if (mFirstPasscodeEntry.equals(secondPasscodeEntry)) {
-                                    getActivity().finish();
-                                    Managers.getAccountManager().enablePasscode(secondPasscodeEntry);
-                                    Utils.showToast(getString(R.string.toast_passcode_changed));
-                                }
-                                else {
-                                    getActivity().finish();
-                                    Utils.showToast(getString(R.string.toast_passcode_matched));
-                                }
-                            }
+                            Utils.showToast(getString(R.string.toast_passcode_invalid));
+                            clearPins();
                         }
                     }
                 }
                 break;
-            default: mEditText_selected = mPin_1;
+
+            default:
+                mCurrentEdit = mPinEdit1;
                 break;
         }
-        mEditText_selected.requestFocus();
+
+        mCurrentEdit.requestFocus();
     }
 
     /**
-     * Delete Selected EditText and then Select next EditText
+     * Clear selected EditText and focus next EditText
      */
-    private void deleteEditText() {
-        if(mEditText_selected.getText().toString().equals("")){
-            String tag = mEditText_selected.getTag().toString();
+    private void clearCurrentEditText() {
+        if (mCurrentEdit.getText().toString().equals("")) {
+            final String tag = mCurrentEdit.getTag().toString();
             switch (tag) {
                 case "2":
-                    mEditText_selected = mPin_1;
+                    mCurrentEdit = mPinEdit1;
                     break;
                 case "3":
-                    mEditText_selected = mPin_2;
+                    mCurrentEdit = mPinEdit2;
                     break;
                 case "4":
-                    mEditText_selected = mPin_3;
+                    mCurrentEdit = mPinEdit3;
                     break;
                 case "1":
-                    mEditText_selected = mPin_1;
+                    mCurrentEdit = mPinEdit1;
                     break;
                 default:
                     break;
             }
-            mEditText_selected.requestFocus();
+            mCurrentEdit.requestFocus();
         }
-        mEditText_selected.setText("");
+        mCurrentEdit.setText("");
     }
 
     /**
-     * Delete data from passcode EditText and then set the listener of EditText to avoid android keyboard to open.
-     * @param editText is EditText in layout for passcode
+     * Clear focused EditText's content
+     * @param editText The current EditText
      */
-    private void delete_pin(EditText editText) {
+    private void clearText(EditText editText) {
         editText.setText("");
         editText.setKeyListener(null);
     }
 
     /**
-     * Initial pin EditTexts to data entry
+     * Clear all pins
      */
-    private void clearPinsText() {
-        mPin_1.setText("");
-        mPin_2.setText("");
-        mPin_3.setText("");
-        mPin_4.setText("");
-        mEditText_selected = mPin_1;
+    private void clearPins() {
+        mPinEdit1.setText("");
+        mPinEdit2.setText("");
+        mPinEdit3.setText("");
+        mPinEdit4.setText("");
+        mCurrentEdit = mPinEdit1;
     }
 
 }

@@ -81,7 +81,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/margin_10"
             android:gravity="center_horizontal|center_vertical"
-            android:text="@string/button_signup_email"
+            android:text="@string/button_signup"
             android:background="@drawable/button_full_width_teal"
             style="@style/ButtonFullWidth" />
 

@@ -1,3 +1,4 @@
+// Copyright (c) 2015 Volcano. All rights reserved.
 package com.volcano.assistant.widget;
 
 import android.animation.AnimatorSet;
@@ -135,6 +136,27 @@ public final class FloatingActionMenu extends ViewGroup {
             expand();
         }
     }
+
+    public void collapse() {
+        mExpanded = false;
+        mCollapseAnimation.start();
+        mExpandAnimation.cancel();
+
+        if (mListener != null) {
+            mListener.onMenuCollapsed();
+        }
+    }
+
+    public void expand() {
+        mExpanded = true;
+        mCollapseAnimation.cancel();
+        mExpandAnimation.start();
+
+        if (mListener != null) {
+            mListener.onMenuExpanded();
+        }
+    }
+
     private int getColor(@ColorRes int id) {
         return getResources().getColor(id);
     }
@@ -333,26 +355,6 @@ public final class FloatingActionMenu extends ViewGroup {
             addView(label);
 
             menuItem.setTag(R.id.fab_label, label);
-        }
-    }
-
-    private void collapse() {
-        mExpanded = false;
-        mCollapseAnimation.start();
-        mExpandAnimation.cancel();
-
-        if (mListener != null) {
-            mListener.onMenuCollapsed();
-        }
-    }
-
-    private void expand() {
-        mExpanded = true;
-        mCollapseAnimation.cancel();
-        mExpandAnimation.start();
-
-        if (mListener != null) {
-            mListener.onMenuExpanded();
         }
     }
 

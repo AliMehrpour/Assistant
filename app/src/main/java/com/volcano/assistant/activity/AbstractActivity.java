@@ -6,6 +6,7 @@ import android.graphics.Color;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.MenuItem;
 
 import com.parse.ParseQuery;
 import com.volcano.assistant.Managers;
@@ -38,6 +39,17 @@ public class AbstractActivity extends ActionBarActivity {
         super.onDestroy();
 
         Managers.getParseManager().getRequestManager().cancelAll(this);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                finish();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 
     @SuppressLint("NewApi")

@@ -1,6 +1,6 @@
+// Copyright (c) 2015 Volcano. All rights reserved.
 package com.volcano.assistant.backend;
 
-import com.parse.Parse;
 import com.parse.ParseObject;
 import com.volcano.assistant.model.Category;
 import com.volcano.assistant.model.SubCategory;

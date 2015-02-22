@@ -1,32 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!-- Copyright (c) 2015 Volcano. All rights reserved. -->
 
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
-                  android:layout_width="match_parent"
-                  android:layout_height="match_parent">
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
 
-    <PreferenceCategory android:title="@string/preference_category_title_passcode"
-                        android:key="@string/preference_category_key_passcode">
+    <PreferenceCategory
+        android:title="@string/preference_passcode_category_title">
 
-        <PreferenceScreen
-            android:key="@string/preference_key_passcode"
-            android:title="@string/preference_title_passcode">
+        <Preference
+            android:key="@string/preference_passcode_enable_key"
+            android:title="@string/preference_passcode_enable_title" />
 
-            <CheckBoxPreference
-                android:key="@string/preference_key_checkbox_passcode"
-                android:summary="@string/preference_summary_checkbox_passcode"
-                android:title="@string/preference_title_checkbox"
-                android:defaultValue="false" />
-
-            <Preference
-                android:key="@string/preference_key_change_passcode"
-                android:summary="@string/preference_summary_passcode_change"
-                android:title="@string/preference_title_passcode_change"
-                android:dependency="@string/preference_key_checkbox_passcode">
-                <intent
-                    android:action="com.volcano.assistant.action.PASSCODE"/>
-            </Preference>
-
-        </PreferenceScreen>
+        <Preference
+            android:key="@string/preference_passcode_change_key"
+            android:title="@string/preference_passcode_change_title" />
 
     </PreferenceCategory>
 

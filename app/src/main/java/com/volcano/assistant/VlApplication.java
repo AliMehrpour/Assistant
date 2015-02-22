@@ -31,6 +31,7 @@ public final class VlApplication extends Application {
     public void onCreate() {
         super.onCreate();
         Managers.initalize();
+        Managers.getApplicationLockManager().enableApplicationLockIfAvailable(this);
 
         registerActivityLifecycleCallbacks(new ActivityLifecycleCallbacks() {
             @Override

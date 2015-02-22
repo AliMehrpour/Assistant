@@ -58,6 +58,7 @@ public class MainActivity extends AbstractActivity {
             public void onCategorySelected(String categoryId, String title) {
                 setTitle(title);
                 loadAccounts(categoryId);
+                mCreateAccountMenu.collapse();
             }
         });
 
@@ -134,8 +135,8 @@ public class MainActivity extends AbstractActivity {
         final int id = item.getItemId();
 
         if (id == R.id.action_setting){
-            Intent intent = new Intent(this , SettingActivity.class);
-            startActivity(intent);
+            startActivity(new Intent(this, SettingsActivity.class));
+            return true;
         }
         else if (id == R.id.action_signout) {
             Managers.getAccountManager().signout();

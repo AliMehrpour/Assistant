@@ -61,7 +61,7 @@ public class SigninActivity extends AbstractActivity {
                                 public void onErrorResponse(ParseException e) {
                                     enable(true);
                                     mProgressLayout.setVisibility(View.GONE);
-                                    Utils.showToast(getResources().getString(R.string.toast_sign_in_invalid));
+                                    Utils.showToast(getResources().getString(R.string.toast_invalid_username_or_password));
                                 }
                             });
                 }

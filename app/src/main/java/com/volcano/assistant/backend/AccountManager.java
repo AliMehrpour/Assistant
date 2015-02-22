@@ -1,3 +1,4 @@
+// Copyright (c) 2015 Volcano. All rights reserved.
 package com.volcano.assistant.backend;
 
 import android.content.BroadcastReceiver;
@@ -10,24 +11,13 @@ import com.parse.ParseException;
 import com.parse.ParseUser;
 import com.parse.SignUpCallback;
 import com.volcano.assistant.Intents;
-import com.volcano.assistant.R;
 import com.volcano.assistant.VlApplication;
 import com.volcano.assistant.model.User;
-import com.volcano.assistant.util.PrefUtils;
 
 /**
  * Manager handles all operation for users
  */
 public class AccountManager {
-
-    /**
-     * Save user's passcode in shared preference.
-     * @param passcode is user's created passcode.
-     */
-    public void enablePasscode(String passcode) {
-        final Context context = VlApplication.getInstance();
-        PrefUtils.setPref(context.getString(R.string.preference_passcode), passcode);
-    }
 
     public boolean isLoggedIn() {
         return ParseUser.getCurrentUser() != null;
@@ -35,21 +25,6 @@ public class AccountManager {
 
     public User getCurrentUser() {
         return (User) ParseUser.getCurrentUser();
-    }
-
-    /**
-     * Compare entered passcode with save passcode by user.
-     * @param passcode is passcode entered by user.
-     * @return is a boolean value to user validation.
-     */
-    public boolean isPasscodeValid(String passcode) {
-        final Context context = VlApplication.getInstance();
-        return PrefUtils.getPref(context.getString(R.string.preference_passcode), "").equals(passcode);
-    }
-
-    public boolean isPasscodeEnable() {
-        final Context context = VlApplication.getInstance();
-        return PrefUtils.exists(context.getString(R.string.preference_passcode));
     }
 
     public void signin(String username, String password, final ParseManager.Listener listener) {
