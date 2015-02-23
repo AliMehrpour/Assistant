@@ -49,7 +49,6 @@ public class CreateAccountFragment extends AbstractFragment {
     private final ArrayList<SubCategoryField> mFields = new ArrayList<>();
     private SubCategory mSelectedSubCategory;
     private String mSelectedSubCategoryId;
-    private boolean mInitialized = false;
     private int mSavedFieldCount = 0;
 
     private IconizedEditText mAccountTitle;
@@ -97,10 +96,19 @@ public class CreateAccountFragment extends AbstractFragment {
         super.onActivityCreated(savedInstanceState);
 
         mSubCategoryListFragment.setDefaultColorStyle(CircleDrawable.FILL);
-        mSubCategoryListFragment.setCategorySelectedListener(new SubCategoryListFragment.OnSubCategorySelectedListener() {
+        mSubCategoryListFragment.setSubCategoryListener(new SubCategoryListFragment.OnSubCategoryListener() {
+            @Override
+            public void onSubCategoriesLoadFailed() {
+                setErrorState();
+            }
+
+            @Override
+            public void onSubCategoriesEmpty() {
+                setErrorState();
+            }
+
             @Override
             public void onSubCategorySelected(SubCategory subCategory) {
-                mInitialized = true;
                 mSubCategoryListLayout.setVisibility(View.GONE);
                 mFieldLayout.setVisibility(View.VISIBLE);
                 if (mSelectedSubCategory == null || mSelectedSubCategory != subCategory) {
@@ -137,7 +145,6 @@ public class CreateAccountFragment extends AbstractFragment {
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
 
-        outState.putBoolean(Intents.KEY_INITIALIZED, mInitialized);
         outState.putString(Intents.KEY_SUB_CATEGORY_ID, mSelectedSubCategoryId);
     }
 

@@ -27,7 +27,6 @@ public final class Intents {
 
     public static final String KEY_APPROVED         = "approved";
     public static final String KEY_CATEGORY_ID      = "category_id";
-    public static final String KEY_INITIALIZED      = "initialized";
     public static final String KEY_PASSCODE         = "passcode";
     public static final String KEY_POSITION         = "position";
     public static final String KEY_SUB_CATEGORY_ID  = "sub_category_id";

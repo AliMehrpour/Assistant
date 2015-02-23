@@ -6,7 +6,9 @@
     <string name="app_name">eSecureBox</string>
 
     <string name="alert_delete_account">Are you sure you want to delete account?</string>
-    <string name="alert_refresh_accounts">No account!\nUse + button to create new one.</string>
+    <string name="alert_load_accounts">Your accounts is unavailable\n please check your network connection and tap to try again</string>
+    <string name="alert_load_categories">Categories is unavailable\n please check your network connection and tap to try again</string>
+    <string name="alert_no_account">No account!\nUse + button to create new one.</string>
     <string name="alert_signout">Are you sure you want to sign out?</string>
 
     <string name="button_0">0</string>
@@ -63,14 +65,15 @@
     <string name="preference_passcode_enable_title">Turn passcode on</string>
     <string name="preference_passcode_category_title">PASSCODE</string>
 
+    <string name="toast_account_create_failed">Create new account failed</string>
     <string name="toast_account_delete_successful">Account deleted successfully</string>
     <string name="toast_account_delete_failed">Delete account failed</string>
     <string name="toast_account_load_failed">Load account failed</string>
     <string name="toast_account_save_failed">Save account failed</string>
     <string name="toast_account_save_validation">Please fill required information</string>
     <string name="toast_account_update_failed">Update account failed</string>
+    <string name="toast_category_for_create_account_unavailable">Creating account is unavailable, please check your network connection and try again</string>
     <string name="toast_device_offline_message">Your device appears to be offline</string>
-    <string name="toast_field_load_failed">Load fields failed</string>
     <string name="toast_initialize_failed">Initialization failed</string>
     <string name="toast_load_category_failed">Load category failed</string>
     <string name="toast_passcode_changed">Passcode changed</string>

@@ -52,6 +52,7 @@ public final class FloatingActionMenu extends ViewGroup {
     private OnFloatingActionsMenuUpdateListener mListener;
 
     public interface OnFloatingActionsMenuUpdateListener {
+        void onMenuIsEmptyOnExpanding();
         void onMenuExpanded();
         void onMenuCollapsed();
     }
@@ -166,6 +167,12 @@ public final class FloatingActionMenu extends ViewGroup {
     }
 
     public void expand() {
+        if (!hasMenuItems()) {
+            if (mListener != null) {
+                mListener.onMenuIsEmptyOnExpanding();
+            }
+        }
+
         mExpanded = true;
         mCollapseAnimation.cancel();
         mExpandAnimation.start();

@@ -1,6 +1,9 @@
 // Copyright (c) 2015 Volcano. All rights reserved.
 package com.volcano.assistant.util;
 
+import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Build;
 import android.widget.Toast;
 
@@ -74,5 +77,14 @@ public class Utils {
      */
     public static void showToast(CharSequence text) {
         Toast.makeText(VlApplication.getInstance(), text, Toast.LENGTH_SHORT).show();
+    }
+
+    /**
+     * @return True if at least one network is available, otherwise false
+     */
+    public static boolean isNetworkAvailable() {
+        final ConnectivityManager cm = (ConnectivityManager) VlApplication.getInstance().getSystemService(Context.CONNECTIVITY_SERVICE);
+        final NetworkInfo ni = cm.getActiveNetworkInfo();
+        return !((ni == null) || (!ni.isConnected()));
     }
 }

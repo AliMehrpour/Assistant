@@ -38,8 +38,10 @@ public class AccountListFragment extends AbstractFragment {
     private TextView mEmptyLayout;
     private FrameLayout mProgressLayout;
 
+    private boolean mInitialized;
     private ArrayList<Account> mAccounts = new ArrayList<>();
     private AccountAdapter mAdapter = new AccountAdapter();
+    private String mCategoryId;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -74,6 +76,15 @@ public class AccountListFragment extends AbstractFragment {
                         account.getSubCategory().getCategory().getColor(), account.getTitle()));
             }
         });
+
+        mEmptyLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (!mInitialized) {
+                    loadAccounts(mCategoryId);
+                }
+            }
+        });
     }
 
     @Override
@@ -87,6 +98,8 @@ public class AccountListFragment extends AbstractFragment {
      * Load accounts by category id
      */
     public void loadAccounts(final String categoryId) {
+        mInitialized = false;
+        mCategoryId = categoryId;
         mAccounts.clear();
         mAdapter.notifyDataSetChanged();
         mProgressLayout.setVisibility(View.VISIBLE);
@@ -94,26 +107,39 @@ public class AccountListFragment extends AbstractFragment {
         addCancellingRequest(Category.getInBackground(categoryId, new GetCallback<Category>() {
             @Override
             public void done(Category category, ParseException e) {
-                loadAccounts(category);
+                if (e == null) {
+                    addCancellingRequest(Account.findInBackground(category, new FindCallback<Account>() {
+                        @Override
+                        public void done(List<Account> accounts, ParseException e) {
+                            if (e == null) {
+                                mInitialized = true;
+                                mProgressLayout.setVisibility(View.GONE);
+                                if (accounts.size() > 0) {
+                                    mAccounts.clear();
+                                    mAccounts.addAll(accounts);
+                                    mAdapter.notifyDataSetChanged();
+                                }
+                                else {
+                                    setErrorState();
+                                }
+                            }
+                            else {
+                                setErrorState();
+                            }
+                        }
+                    }));
+                }
+                else {
+                    setErrorState();
+                }
             }
         }));
     }
 
-    /**
-     * Load accounts
-     */
-    private void loadAccounts(Category category) {
-        addCancellingRequest(Account.findInBackground(category, new FindCallback<Account>() {
-            @Override
-            public void done(List<Account> accounts, ParseException e) {
-                if (e == null) {
-                    mProgressLayout.setVisibility(View.GONE);
-                    mAccounts.clear();
-                    mAccounts.addAll(accounts);
-                    mAdapter.notifyDataSetChanged();
-                }
-            }
-        }));
+    private void setErrorState() {
+        mProgressLayout.setVisibility(View.GONE);
+        mEmptyLayout.setVisibility(View.VISIBLE);
+        mEmptyLayout.setText(mInitialized ? R.string.alert_no_account : R.string.alert_load_accounts);
     }
 
     private class AccountAdapter extends RecyclerView.Adapter<AccountViewHolder> {

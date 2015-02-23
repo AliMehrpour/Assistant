@@ -3,7 +3,6 @@ package com.volcano.assistant.fragment;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,7 +21,6 @@ import com.volcano.assistant.R;
 import com.volcano.assistant.model.Category;
 import com.volcano.assistant.model.SubCategory;
 import com.volcano.assistant.util.BitmapUtils;
-import com.volcano.assistant.util.Utils;
 import com.volcano.assistant.widget.CircleDrawable;
 
 import java.util.ArrayList;
@@ -34,26 +32,27 @@ import java.util.List;
 public class SubCategoryListFragment extends AbstractFragment {
 
     private ListView mListView;
-    private FrameLayout mEmptyView;
+    private FrameLayout mProgressLayout;
 
     private SubCategoryAdapter mAdapter = new SubCategoryAdapter();
     private ArrayList<SubCategory> mSubCategories = new ArrayList<>();
-    private OnSubCategorySelectedListener mListener;
+    private OnSubCategoryListener mListener;
     private SubCategory mSelectedSubCategory;
     private String mCategoryId;
     private int mDefaultColorStyle = CircleDrawable.FILL;
 
-    public interface OnSubCategorySelectedListener {
+    public interface OnSubCategoryListener {
+        public void onSubCategoriesLoadFailed();
+        public void onSubCategoriesEmpty();
         public void onSubCategorySelected(SubCategory subCategory);
     }
 
-    @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         final View view = inflater.inflate(R.layout.fragment_sub_category_list, container, false);
 
         mListView = (ListView) view.findViewById(R.id.list_sub_category);
-        mEmptyView = (FrameLayout) view.findViewById(android.R.id.empty);
+        mProgressLayout = (FrameLayout) view.findViewById(R.id.layout_progress);
 
         return  view;
     }
@@ -62,7 +61,6 @@ public class SubCategoryListFragment extends AbstractFragment {
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        mListView.setEmptyView(mEmptyView);
         mListView.setAdapter(mAdapter);
         mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -80,7 +78,7 @@ public class SubCategoryListFragment extends AbstractFragment {
         loadSubCategories();
     }
 
-    public void setCategorySelectedListener(OnSubCategorySelectedListener l) {
+    public void setSubCategoryListener(OnSubCategoryListener l) {
         mListener = l;
     }
 
@@ -99,6 +97,8 @@ public class SubCategoryListFragment extends AbstractFragment {
     }
 
     private void loadSubCategories() {
+        mProgressLayout.setVisibility(View.VISIBLE);
+        mSubCategories.clear();
         addCancellingRequest(Category.getInBackground(mCategoryId, new GetCallback<Category>() {
             @Override
             public void done(Category category, ParseException e) {
@@ -107,14 +107,23 @@ public class SubCategoryListFragment extends AbstractFragment {
                         @Override
                         public void done(List<SubCategory> subCategories, ParseException e) {
                             if (e == null) {
-                                mSubCategories.addAll(subCategories);
-                                mAdapter.notifyDataSetChanged();
+                                mProgressLayout.setVisibility(View.GONE);
+                                if (subCategories.size() > 0) {
+                                    mSubCategories.addAll(subCategories);
+                                    mAdapter.notifyDataSetChanged();
+                                }
+                                else {
+                                    mListener.onSubCategoriesEmpty();
+                                }
                             }
                             else {
-                                Utils.showToast(R.string.toast_load_category_failed);
+                                mListener.onSubCategoriesLoadFailed();
                             }
                         }
                     }));
+                }
+                else {
+                    mListener.onSubCategoriesLoadFailed();
                 }
             }
         }));

@@ -5,15 +5,13 @@ import android.app.AlertDialog;
 import android.app.FragmentManager;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.support.v4.widget.DrawerLayout;
 import android.os.Bundle;
+import android.support.v4.widget.DrawerLayout;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
-import com.parse.FindCallback;
-import com.parse.ParseException;
 import com.volcano.assistant.Intents;
 import com.volcano.assistant.Managers;
 import com.volcano.assistant.R;
@@ -21,13 +19,17 @@ import com.volcano.assistant.VlApplication;
 import com.volcano.assistant.backend.AccountManager;
 import com.volcano.assistant.fragment.AccountListFragment;
 import com.volcano.assistant.fragment.NavigationFragment;
+import com.volcano.assistant.fragment.NavigationFragment.NavigationListener;
 import com.volcano.assistant.model.Category;
 import com.volcano.assistant.util.BitmapUtils;
+import com.volcano.assistant.ConfigManager;
 import com.volcano.assistant.util.PrefUtils;
+import com.volcano.assistant.util.Utils;
 import com.volcano.assistant.widget.FloatingActionButton;
 import com.volcano.assistant.widget.FloatingActionMenu;
+import com.volcano.assistant.widget.FloatingActionMenu.OnFloatingActionsMenuUpdateListener;
 
-import java.util.List;
+import java.util.ArrayList;
 
 public class MainActivity extends AbstractActivity {
 
@@ -55,7 +57,7 @@ public class MainActivity extends AbstractActivity {
         mCreateAccountMenu = (FloatingActionMenu) findViewById(R.id.menu_create_account);
         mTransparentBackground = findViewById(R.id.background_transparent);
         mNavigationFragment.setup(R.id.fragment_navigation_drawer, (DrawerLayout) findViewById(R.id.drawer_layout), toolbar);
-        mNavigationFragment.setNavigationListener(new NavigationFragment.NavigationListener() {
+        mNavigationFragment.setNavigationListener(new NavigationListener() {
             @Override
             public void onCategorySelected(String categoryId, String title) {
                 setTitle(title);
@@ -78,7 +80,7 @@ public class MainActivity extends AbstractActivity {
             loadFloatingMenuCategories();
         }
 
-        mCreateAccountMenu.setOnFloatingActionsMenuUpdateListener(new FloatingActionMenu.OnFloatingActionsMenuUpdateListener() {
+        mCreateAccountMenu.setOnFloatingActionsMenuUpdateListener(new OnFloatingActionsMenuUpdateListener() {
             @Override
             public void onMenuExpanded() {
                 mTransparentBackground.setVisibility(View.VISIBLE);
@@ -88,7 +90,15 @@ public class MainActivity extends AbstractActivity {
             public void onMenuCollapsed() {
                 mTransparentBackground.setVisibility(View.GONE);
             }
+
+            @Override
+            public void onMenuIsEmptyOnExpanding() {
+                mCreateAccountMenu.collapse();
+                loadFloatingMenuCategories();
+                Utils.showToast(R.string.toast_category_for_create_account_unavailable);
+            }
         });
+
         mLoginResetReceiver = new AccountManager.LoginResetReceiver() {
             @Override
             public void onReset() {
@@ -169,32 +179,41 @@ public class MainActivity extends AbstractActivity {
 
     private void loadFloatingMenuCategories() {
         if (!mCreateAccountMenu.hasMenuItems()) {
-            addCancellingRequest(Category.findInBackground(new FindCallback<Category>() {
-                @Override
-                public void done(final List<Category> categories, ParseException e) {
-                    if (e == null) {
-                        final int size = categories.size();
-                        for (int i = 0; i < size; i++) {
-                            final Category category = categories.get(i);
-                            final FloatingActionButton menu = new FloatingActionButton(VlApplication.getInstance());
-                            menu.setTitle(category.getName());
-                            menu.setType(FloatingActionButton.TYPE_MINI);
-                            menu.setIcon(BitmapUtils.getDrawableIdentifier(VlApplication.getInstance(), category.getIconName()));
-                            menu.setTag(R.id.category, category);
-                            menu.setOnClickListener(new View.OnClickListener() {
-                                @Override
-                                public void onClick(View v) {
-                                    mCreateAccountMenu.toggle();
+            final ArrayList<Category> mCategories = ConfigManager.getCategories();
+            final int size = mCategories.size();
+            if (size > 0) {
+                for (int i = 0; i < size; i++) {
+                    final Category category = mCategories.get(i);
+                    final FloatingActionButton menu = new FloatingActionButton(VlApplication.getInstance());
+                    menu.setTitle(category.getName());
+                    menu.setType(FloatingActionButton.TYPE_MINI);
+                    menu.setIcon(BitmapUtils.getDrawableIdentifier(VlApplication.getInstance(), category.getIconName()));
+                    menu.setTag(R.id.category, category);
+                    menu.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            mCreateAccountMenu.toggle();
 
-                                    final Category category = (Category) menu.getTag(R.id.category);
-                                    startActivity(Intents.getCreateAccountIntent(category.getObjectId(), category.getColor()));
-                                }
-                            });
-                            mCreateAccountMenu.addMenuItem(menu);
+                            final Category category = (Category) menu.getTag(R.id.category);
+                            startActivity(Intents.getCreateAccountIntent(category.getObjectId(), category.getColor()));
+                        }
+                    });
+                    mCreateAccountMenu.addMenuItem(menu);
+                }
+            }
+            else {
+                ConfigManager.refreshCategories(new ConfigManager.RefreshCategoryCallback() {
+                    @Override
+                    public void onRefreshComplete(boolean isSuccessful) {
+                        if (isSuccessful) {
+                            loadFloatingMenuCategories();
+                        }
+                        else {
+                            Utils.showToast(R.string.toast_category_for_create_account_unavailable);
                         }
                     }
-                }
-            }));
+                });
+            }
         }
     }
 
