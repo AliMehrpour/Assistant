@@ -5,12 +5,13 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/layout_swipe_refresh"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@android:color/white">
 
     <com.volcano.assistant.widget.recyclerview.RefreshingRecyclerView
         android:id="@+id/list_account"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"/>
 
     <com.volcano.assistant.widget.RobotoTextView
         android:id="@android:id/empty"

@@ -70,7 +70,8 @@ public class AccountListFragment extends AbstractFragment {
             @Override
             public void onItemClick(RecyclerView parent, View view, int position, long id) {
                 final Account account = mAccounts.get(position);
-                startActivity(Intents.getEditAccountIntent(account.getObjectId(),account.getSubCategory().getCategory().getColor(), account.getTitle()));
+                startActivity(Intents.getDisplayAccountIntent(account.getObjectId(),
+                        account.getSubCategory().getCategory().getColor(), account.getTitle()));
             }
         });
     }

@@ -4,30 +4,29 @@ package com.volcano.assistant.activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
-import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 
 import com.volcano.assistant.Intents;
 import com.volcano.assistant.R;
-import com.volcano.assistant.fragment.EditAccountFragment;
+import com.volcano.assistant.fragment.DisplayAccountFragment;
 import com.volcano.assistant.widget.FloatingActionButton;
 import com.volcano.assistant.widget.RobotoTextView;
 
 /**
- * Created by alimehrpour on 2/15/15.
+ * Display a account values
  */
-public class EditAccountActivity extends AbstractActivity {
+public class DisplayAccountActivity extends AbstractActivity {
 
     private FloatingActionButton mEditButton;
-    private EditAccountFragment mFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_edit_account);
+        setContentView(R.layout.activity_display_account);
 
         final Intent intent = getIntent();
+        final String accountId = intent.getStringExtra(Intents.EXTRA_ACCOUNT_ID);
         final String color = intent.getStringExtra(Intents.EXTRA_CATEGORY_COLOR);
         setToolbarColor(color);
 
@@ -44,17 +43,22 @@ public class EditAccountActivity extends AbstractActivity {
 
         mEditButton = (FloatingActionButton) findViewById(R.id.button_edit);
         mEditButton.setColorNormal(color, true);
-        final Animation buttonAnimation = AnimationUtils.loadAnimation(this, R.anim.button_zoom_in);
-        mEditButton.startAnimation(buttonAnimation);
+        mEditButton.startAnimation(AnimationUtils.loadAnimation(this, R.anim.button_zoom_in));
+        mEditButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+                startActivity(Intents.getEditAccountIntent(accountId, color));
+            }
+        });
 
-        mFragment = (EditAccountFragment) getFragmentManager().findFragmentById(R.id.fragment_edit_account);
-        mFragment.setOnEnableEditListener(new EditAccountFragment.OnEnableEditListener() {
+        final DisplayAccountFragment fragment = (DisplayAccountFragment) getFragmentManager().findFragmentById(R.id.fragment_edit_account);
+        fragment.setOnEnableEditListener(new DisplayAccountFragment.OnEnableEditListener() {
             @Override
             public void onEnableEdit(boolean enable) {
                 mEditButton.setEnabled(enable);
             }
         });
-        mFragment.loadFields(intent.getStringExtra(Intents.EXTRA_ACCOUNT_ID));
-
+        fragment.loadFields(accountId);
     }
 }

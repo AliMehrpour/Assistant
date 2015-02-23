@@ -14,6 +14,7 @@ import com.volcano.assistant.Intents;
 import com.volcano.assistant.Managers;
 import com.volcano.assistant.R;
 import com.volcano.assistant.backend.ParseManager;
+import com.volcano.assistant.util.SoftKeyboardUtils;
 import com.volcano.assistant.util.Utils;
 
 /**
@@ -108,7 +109,7 @@ public class SigninActivity extends AbstractActivity {
 
     private void enable(boolean enable){
         if (!enable) {
-            Utils.hideKeyboard(this);
+            SoftKeyboardUtils.hideSoftKeyboard(this);
         }
 
         mUsernameEdit.setEnabled(enable);

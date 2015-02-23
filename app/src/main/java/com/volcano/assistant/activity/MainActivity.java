@@ -1,7 +1,9 @@
 // Copyright (c) 2015 Volcano. All rights reserved.
 package com.volcano.assistant.activity;
 
+import android.app.AlertDialog;
 import android.app.FragmentManager;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.v4.widget.DrawerLayout;
 import android.os.Bundle;
@@ -139,8 +141,17 @@ public class MainActivity extends AbstractActivity {
             return true;
         }
         else if (id == R.id.action_signout) {
-            Managers.getAccountManager().signout();
-            startActivityForResult(Intents.getSigninIntent(), Intents.REQUEST_CODE_SIGNIN);
+            new AlertDialog.Builder(this)
+                    .setMessage(R.string.alert_signout)
+                    .setNegativeButton(android.R.string.no, null)
+                    .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            Managers.getAccountManager().signout();
+                            startActivityForResult(Intents.getSigninIntent(), Intents.REQUEST_CODE_SIGNIN);
+                        }
+                    })
+                    .show();
             return true;
         }
 
@@ -157,33 +168,34 @@ public class MainActivity extends AbstractActivity {
     }
 
     private void loadFloatingMenuCategories() {
-        addCancellingRequest(Category.findInBackground(new FindCallback<Category>() {
-            @Override
-            public void done(final List<Category> categories, ParseException e) {
-                if (e == null) {
-                    final int size = categories.size();
-                    for (int i = 0; i < size; i++) {
-                        final Category category = categories.get(i);
-                        final FloatingActionButton menu = new FloatingActionButton(VlApplication.getInstance());
-                        menu.setTitle(category.getName());
-                        menu.setType(FloatingActionButton.TYPE_MINI);
-                        menu.setIcon(BitmapUtils.getDrawableIdentifier(VlApplication.getInstance(), category.getIconName()));
-                        menu.setTag(R.id.category, category);
-                        menu.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                mCreateAccountMenu.toggle();
+        if (!mCreateAccountMenu.hasMenuItems()) {
+            addCancellingRequest(Category.findInBackground(new FindCallback<Category>() {
+                @Override
+                public void done(final List<Category> categories, ParseException e) {
+                    if (e == null) {
+                        final int size = categories.size();
+                        for (int i = 0; i < size; i++) {
+                            final Category category = categories.get(i);
+                            final FloatingActionButton menu = new FloatingActionButton(VlApplication.getInstance());
+                            menu.setTitle(category.getName());
+                            menu.setType(FloatingActionButton.TYPE_MINI);
+                            menu.setIcon(BitmapUtils.getDrawableIdentifier(VlApplication.getInstance(), category.getIconName()));
+                            menu.setTag(R.id.category, category);
+                            menu.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    mCreateAccountMenu.toggle();
 
-                                final Category category = (Category) menu.getTag(R.id.category);
-                                startActivity(Intents.getCreateAccountIntent(category.getObjectId(), category.getColor()));
-                            }
-                        });
-                        mCreateAccountMenu.addMenuItem(menu);
+                                    final Category category = (Category) menu.getTag(R.id.category);
+                                    startActivity(Intents.getCreateAccountIntent(category.getObjectId(), category.getColor()));
+                                }
+                            });
+                            mCreateAccountMenu.addMenuItem(menu);
+                        }
                     }
                 }
-            }
-        }));
-
+            }));
+        }
     }
 
     private void loadAccounts(String categoryId) {

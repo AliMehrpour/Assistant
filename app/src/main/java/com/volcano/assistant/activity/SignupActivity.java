@@ -13,6 +13,7 @@ import com.volcano.assistant.Managers;
 import com.volcano.assistant.R;
 import com.volcano.assistant.backend.ParseManager;
 import com.volcano.assistant.util.LogUtils;
+import com.volcano.assistant.util.SoftKeyboardUtils;
 import com.volcano.assistant.util.Utils;
 
 /**
@@ -93,7 +94,7 @@ public class SignupActivity extends AbstractActivity {
 
     private void Signup() {
         if (isValid()) {
-            Utils.hideKeyboard(this);
+            SoftKeyboardUtils.hideSoftKeyboard(this);
             enable(false);
 
             final String username = mUsernameEdit.getText().toString();

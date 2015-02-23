@@ -5,7 +5,9 @@
 
     <string name="app_name">eSecureBox</string>
 
+    <string name="alert_delete_account">Are you sure you want to delete account?</string>
     <string name="alert_refresh_accounts">No account!\nUse + button to create new one.</string>
+    <string name="alert_signout">Are you sure you want to sign out?</string>
 
     <string name="button_0">0</string>
     <string name="button_1">1</string>
@@ -17,7 +19,8 @@
     <string name="button_7">7</string>
     <string name="button_8">8</string>
     <string name="button_9">9</string>
-    <string name="button_delete">DEL</string>
+    <string name="button_del_uppercase">DEL</string>
+    <string name="button_delete_uppercase">DELETE</string>
     <string name="button_signin">SIGN IN</string>
     <string name="button_signup">SIGN UP</string>
 
@@ -38,6 +41,7 @@
     <string name="hint_username">Username</string>
 
     <string name="label_category">Category</string>
+    <string name="label_edit_account">Edit Account</string>
     <string name="label_enter_passcode">Enter your passcode</string>
     <string name="label_enter_new_passcode">Enter your new passcode</string>
     <string name="label_enter_old_passcode">Enter your old passcode</string>
@@ -59,17 +63,21 @@
     <string name="preference_passcode_enable_title">Turn passcode on</string>
     <string name="preference_passcode_category_title">PASSCODE</string>
 
+    <string name="toast_account_delete_successful">Account deleted successfully</string>
+    <string name="toast_account_delete_failed">Delete account failed</string>
+    <string name="toast_account_load_failed">Load account failed</string>
+    <string name="toast_account_save_failed">Save account failed</string>
+    <string name="toast_account_save_validation">Please fill required information</string>
+    <string name="toast_account_update_failed">Update account failed</string>
     <string name="toast_device_offline_message">Your device appears to be offline</string>
+    <string name="toast_field_load_failed">Load fields failed</string>
     <string name="toast_initialize_failed">Initialization failed</string>
     <string name="toast_load_category_failed">Load category failed</string>
-    <string name="toast_load_account_failed">Load account failed</string>
     <string name="toast_passcode_changed">Passcode changed</string>
     <string name="toast_passcode_disabled">Passcode disabled</string>
     <string name="toast_passcode_enabled">Passcode enabled</string>
     <string name="toast_passcode_invalid">Wrong passcode, please try again</string>
     <string name="toast_passcode_not_matched">The Passcodes didn\'t match, pleas try again</string>
-    <string name="toast_save_account_failed">Save account failed</string>
-    <string name="toast_save_account_validation">Please fill required information</string>
     <string name="toast_invalid_username_or_password">Invalid username or password</string>
     <string name="toast_signup_failed">Signup failed</string>
 

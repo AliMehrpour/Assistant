@@ -3,23 +3,40 @@ package com.volcano.assistant.util;
 
 import android.content.Context;
 import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 
 /**
- * A Utility class for work with bitmaps and generally picutres
+ * A utility class for working with bitmaps, colors and pictures
  */
 public final class BitmapUtils {
 
     /**
      * Make a color darker
-     * @param color The main color
-     * @param value Value [0...1]
+     * @param argb The main color
+     * @param value Float value [0...1]
      * @return The darker color code
      */
-    public static int darkenColor(int color, float value) {
+    public static int getDarkenColor(int argb, float value) {
+        return adjustColorBrightness(argb, value);
+    }
+
+    /**
+     * Make a color lighter
+     * @param argb The main color
+     * @param value Float value [0...1]
+     * @return The lighter color code
+     */
+    public static int getLightenColor(int argb, float value) {
+        return adjustColorBrightness(argb, 1 + value);
+    }
+
+    private static int adjustColorBrightness(int argb, float factor) {
         final float[] hsv = new float[3];
-        Color.colorToHSV(color, hsv);
-        hsv[2] *= value;
-        return Color.HSVToColor(hsv);
+        Color.colorToHSV(argb, hsv);
+
+        hsv[2] = Math.min(hsv[2] * factor, 1f);
+
+        return Color.HSVToColor(Color.alpha(argb), hsv);
     }
 
     /**
@@ -41,4 +58,13 @@ public final class BitmapUtils {
     {
         return context.getResources().getIdentifier(name, "drawable", context.getPackageName());
     }
+
+    /**
+     * @param color The color
+     * @return A {@link android.graphics.drawable.ColorDrawable}
+     */
+    public static ColorDrawable getColorDrawablr(int color) {
+        return new ColorDrawable(color);
+    }
+
 }

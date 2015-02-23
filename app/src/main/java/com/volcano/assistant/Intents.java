@@ -4,7 +4,7 @@ package com.volcano.assistant;
 import android.content.Intent;
 
 import com.volcano.assistant.activity.CreateAccountActivity;
-import com.volcano.assistant.activity.EditAccountActivity;
+import com.volcano.assistant.activity.DisplayAccountActivity;
 import com.volcano.assistant.activity.MainActivity;
 import com.volcano.assistant.activity.PasscodeActivity;
 import com.volcano.assistant.activity.SigninActivity;
@@ -46,11 +46,17 @@ public final class Intents {
                 .putExtra(EXTRA_CATEGORY_COLOR, color);
     }
 
-    public static Intent getEditAccountIntent(String accountId, String color, String title) {
-        return new Intent(VlApplication.getInstance(), EditAccountActivity.class)
+    public static Intent getDisplayAccountIntent(String accountId, String color, String title) {
+        return new Intent(VlApplication.getInstance(), DisplayAccountActivity.class)
                 .putExtra(EXTRA_ACCOUNT_ID, accountId)
                 .putExtra(EXTRA_CATEGORY_COLOR, color)
                 .putExtra(EXTRA_ACCOUNT_TITLE, title);
+    }
+
+    public static Intent getEditAccountIntent(String accountId, String color) {
+        return new Intent(VlApplication.getInstance(), CreateAccountActivity.class)
+                .putExtra(EXTRA_ACCOUNT_ID, accountId)
+                .putExtra(EXTRA_CATEGORY_COLOR, color);
     }
 
     public static Intent getPasscodeIntent(Mode passcodeMode) {

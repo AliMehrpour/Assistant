@@ -39,7 +39,7 @@ public final class FloatingActionMenu extends ViewGroup {
     private int mType;
     private boolean mExpanded;
     private int mLabelsStyle;
-    private int mMenuSize;
+    private int mMenuSize = 0;
     private int mLabelsMargin;
     private int mLabelsVerticalOffset;
 
@@ -110,6 +110,10 @@ public final class FloatingActionMenu extends ViewGroup {
         mListener = listener;
     }
 
+    /**
+     * Add menu item
+     * @param menuItem The menu item
+     */
     public void addMenuItem(FloatingActionButton menuItem) {
         addView(menuItem, mMenuSize - 1);
         mMenuSize++;
@@ -119,10 +123,21 @@ public final class FloatingActionMenu extends ViewGroup {
         }
     }
 
+    /**
+     * Remove menu item
+     * @param menuItem The menu item
+     */
     public void removeMenuItem(FloatingActionButton menuItem) {
         removeView(menuItem.getLabelView());
         removeView(menuItem);
         mMenuSize--;
+    }
+
+    /**
+     * @return True if exist at least one menu item, otherwise false
+     */
+    public boolean hasMenuItems() {
+        return mMenuSize > 1; // one item for main button
     }
 
     /**
