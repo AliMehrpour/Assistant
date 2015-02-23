@@ -454,7 +454,7 @@ public class CreateAccountFragment extends AbstractFragment {
         mProgressLayout.setVisibility(View.GONE);
         mFieldLayout.setVisibility(View.GONE);
         Utils.showToast(mContentSource == ContentSource.BY_ACCOUNT ?
-                R.string.toast_account_load_failed : R.string.toast_field_load_failed);
+                R.string.toast_account_load_failed : R.string.toast_account_create_failed);
 
         final Activity activity = getActivity();
         if (activity != null) {

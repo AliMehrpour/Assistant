@@ -27,17 +27,14 @@ public class AccountManager {
         return (User) ParseUser.getCurrentUser();
     }
 
-    public void signin(String username, String password, final ParseManager.Listener listener) {
+    public void signin(String username, String password, final LogInCallback callback) {
         ParseUser.logInInBackground(username, password, new LogInCallback() {
             @Override
             public void done(ParseUser parseUser, ParseException e) {
                 if (e == null) {
                     broadcastLoginReset();
-                    listener.onResponse();
                 }
-                else {
-                    listener.onErrorResponse(e);
-                }
+                callback.done(parseUser, e);
             }
         });
     }
@@ -47,7 +44,7 @@ public class AccountManager {
         ParseUser.logOut();
     }
 
-    public void signup(String username, String name, String password, String email, final ParseManager.Listener listener) {
+    public void signup(String username, String name, String password, String email, final SignUpCallback callback) {
         final User user = new User();
         user.setUsername(username);
         user.setName(name);
@@ -59,11 +56,8 @@ public class AccountManager {
             public void done(ParseException e) {
                 if (e == null) {
                     broadcastLoginReset();
-                    listener.onResponse();
                 }
-                else {
-                    listener.onErrorResponse(e);
-                }
+                callback.done(e);
             }
         });
     }

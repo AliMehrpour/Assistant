@@ -35,18 +35,6 @@ public final class ParseManager {
 
     private ParseRequestManager mRequestManager;
 
-    public interface Listener {
-        /**
-         * Called when a successful response received
-         */
-        public void onResponse();
-
-        /**
-         * Called when an error has been occurred
-         */
-        public void onErrorResponse(ParseException e);
-    }
-
     public interface OnDataInitializationListener {
         public void onInitilize(boolean successful);
     }
