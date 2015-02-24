@@ -8,6 +8,8 @@ import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.SaveCallback;
 import com.volcano.assistant.backend.ParseManager;
+import com.volcano.assistant.security.SecurityUtils;
+import com.volcano.assistant.security.SecurityUtils.EncryptionAlgorithm;
 
 import java.util.List;
 
@@ -94,11 +96,11 @@ public class AccountFieldValue extends ParseObject {
     }
 
     public String getValue() {
-        return getString(VALUE);
+        return SecurityUtils.decrypt(EncryptionAlgorithm.AES_ECB, getString(VALUE));
     }
 
     public void setValue(String value) {
-        put(VALUE, value);
+        put(VALUE, SecurityUtils.encrypt(EncryptionAlgorithm.AES_ECB, value));
     }
 
     public void setOrder(int order) {
