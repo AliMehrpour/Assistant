@@ -1,6 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
+    <string name="app_bug_email_address">bugs@esecurebox.net</string>
+
+    <string name="label_about_dialog_content_link_website"><a href= "www.eSecureBox.net" target="_top">www.eSecureBox.net</a></string>
+    <string name="label_about_dialog_content_link_email"><a href= "support@eSecureBox.net" target="_top">support@eSecureBox.net</a></string>
+
+    <string name="preference_other_about_key">preference_other_about_key</string>
+    <string name="preference_other_rate_key">preference_other_rate_key</string>
+    <string name="preference_other_report_bug_key">preference_other_report_bug_key</string>
+    <string name="preference_other_share_key">preference_other_sharing_key</string>
     <string name="preference_passcode">preference_passcode</string>
     <string name="preference_passcode_enable_key">preference_passcode_enable_key</string>
     <string name="preference_passcode_change_key">preference_passcode_change_key</string>

@@ -2,6 +2,7 @@
 package com.volcano.assistant;
 
 import android.content.Intent;
+import android.net.Uri;
 
 import com.volcano.assistant.activity.CreateAccountActivity;
 import com.volcano.assistant.activity.DisplayAccountActivity;
@@ -62,6 +63,24 @@ public final class Intents {
         return new Intent(VlApplication.getInstance(), PasscodeActivity.class)
                .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
                .putExtra(Intents.EXTRA_MODE, passcodeMode);
+    }
+
+    public static Intent getEmailIntentSubjectTo(String subject, String[] to) {
+        Intent emailIntent = new Intent(Intent.ACTION_SENDTO);
+        emailIntent.setData(Uri.parse("mailto:")); // only email apps should handle this
+        emailIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK); // this will make such that when user returns to your app, your app is displayed, instead of the email app.
+        emailIntent.putExtra(Intent.EXTRA_EMAIL  ,to)
+        .putExtra(Intent.EXTRA_SUBJECT, subject);
+        return emailIntent;
+    }
+
+    public static Intent getEmailIntentSubjectBody(String subject, String shareBody) {
+        Intent sharingIntent = new Intent(android.content.Intent.ACTION_SEND);
+        sharingIntent.setType("text/plain");
+        sharingIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        sharingIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, subject)
+                .putExtra(android.content.Intent.EXTRA_TEXT, shareBody);
+        return sharingIntent;
     }
 
     public static Intent getSigninIntent() {

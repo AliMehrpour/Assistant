@@ -3,7 +3,9 @@
 
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    package="com.volcano.assistant">
+    package="com.volcano.assistant"
+    android:versionCode="1"
+    android:versionName="0.0.1">
 
     <uses-sdk
         android:minSdkVersion="16"

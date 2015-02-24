@@ -3,37 +3,6 @@
 
 <resources>
 
-    <style name="FrameworkRoot.Theme" parent="Theme.AppCompat.Light" />
-    <style name="FrameworkRoot.Widget" parent="Theme.AppCompat" />
-
-    <style name="Theme.Assistant" parent="Theme.Assistant.Base" />
-
-    <!-- Base application theme -->
-    <style name="Theme.Assistant.Base" parent="FrameworkRoot.Theme">
-
-        <item name="android:divider">#B6B6B6</item>
-        <item name="android:textColorPrimaryInverse">#FFCDD2</item>
-        <item name="android:textColorPrimary">#212121</item>
-        <item name="android:textColorSecondary">#727272</item>
-        <item name="android:textColor">#212121</item>
-
-        <item name="colorPrimary">@color/theme_primary</item> <!-- default Action Bar background (but not toolbar) -->
-        <item name="colorPrimaryDark">@color/theme_primary_dark</item><!-- Status Bar color -->
-        <item name="colorAccent">@color/theme_accent</item><!-- default value for colorControlActivated which is used to tint widgets -->
-
-        <item name="toolbarStyle">@style/Theme.Assistant.Toolbar</item>
-
-        <item name="windowActionBar">false</item>
-        <item name="android:windowNoTitle">true</item>
-
-    </style>
-
-    <style name="Theme.Assistant.Toolbar" parent="Widget.AppCompat.Toolbar">
-        <item name="contentInsetStart">0dp</item>
-    </style>
-
-
-
     <style name="ButtonFullWidth" parent="@android:style/TextAppearance.Holo">
         <item name="android:padding">@dimen/margin_16</item>
         <item name="android:textSize">@dimen/text_size_18</item>
@@ -62,6 +31,10 @@
         <item name="android:background">@drawable/fab_label_background</item>
     </style>
 
+    <style name="FrameworkRoot.Theme" parent="Theme.AppCompat.Light" />
+
+    <style name="FrameworkRoot.Widget" parent="Theme.AppCompat" />
+
     <style name="NavigationItem" parent="@android:style/TextAppearance.Holo">
         <item name="robotoTypeface">medium</item>
         <item name="android:textColor">@android:color/black</item>
@@ -71,15 +44,55 @@
         <item name="android:ellipsize">end</item>
     </style>
 
-    <style name="Text.RegularGrey12" parent="@android:style/TextAppearance.Holo">
+    <style name="Theme.Assistant" parent="Theme.Assistant.Base" />
+
+    <!-- Base application theme -->
+    <style name="Theme.Assistant.Base" parent="FrameworkRoot.Theme">
+
+        <item name="android:divider">#B6B6B6</item>
+        <item name="android:textColorPrimaryInverse">#FFCDD2</item>
+        <item name="android:textColorPrimary">#212121</item>
+        <item name="android:textColorSecondary">#727272</item>
+        <item name="android:textColor">#212121</item>
+
+        <item name="colorPrimary">@color/theme_primary</item> <!-- default Action Bar background (but not toolbar) -->
+        <item name="colorPrimaryDark">@color/theme_primary_dark</item><!-- Status Bar color -->
+        <item name="colorAccent">@color/theme_accent</item><!-- default value for colorControlActivated which is used to tint widgets -->
+
+        <item name="toolbarStyle">@style/Theme.Assistant.Toolbar</item>
+
+        <item name="windowActionBar">false</item>
+        <item name="android:windowNoTitle">true</item>
+
+    </style>
+
+    <style name="Theme.Assistant.Toolbar" parent="Widget.AppCompat.Toolbar">
+        <item name="contentInsetStart">0dp</item>
+    </style>
+
+    <style name="Text.Grey12" parent="@android:style/TextAppearance.Holo">
         <item name="android:textColor">@color/grey_1</item>
         <item name="android:textSize">@dimen/text_size_12</item>
         <item name="robotoTypeface">regular</item>
     </style>
-    
+
     <style name="Text.MediumGrey14" parent="@android:style/TextAppearance.Holo">
         <item name="android:textColor">@color/grey_3</item>
         <item name="android:textSize">@dimen/text_size_14</item>
+        <item name="robotoTypeface">medium</item>
+    </style>
+
+    <style name="Text.MediumGrey16" parent="@android:style/TextAppearance.Holo">
+        <item name="android:textSize">@dimen/text_size_16</item>
+        <item name="android:textColor">@color/grey_6</item>
+        <item name="android:textStyle">bold</item>
+        <item name="robotoTypeface">medium</item>
+    </style>
+
+    <style name="Text.MediumGreyDr14" parent="@android:style/TextAppearance.Holo">
+        <item name="android:textSize">@dimen/text_size_14</item>
+        <item name="android:textColor">@color/grey_6</item>
+        <item name="android:textStyle">bold</item>
         <item name="robotoTypeface">medium</item>
     </style>
 
@@ -87,6 +100,28 @@
         <item name="android:textSize">@dimen/text_size_14</item>
         <item name="android:textColor">@android:color/white</item>
         <item name="robotoTypeface">medium</item>
+    </style>
+
+    <style name="Text.PassCode" parent="@android:style/TextAppearance.Holo">
+        <item name="android:textColor">@color/grey_6</item>
+        <item name="android:textSize">@dimen/text_size_30</item>
+        <item name="robotoTypeface">medium</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:layout_width">@dimen/passcode_edit_width</item>
+        <item name="android:layout_height">@dimen/passcode_edit_height</item>
+        <item name="android:paddingLeft">@dimen/margin_8</item>
+        <item name="android:paddingRight">@dimen/margin_8</item>
+        <item name="android:gravity">center</item>
+        <item name="android:layout_marginRight">@dimen/margin_2</item>
+        <item name="android:inputType">numberPassword</item>
+        <item name="android:textCursorDrawable">@null</item>
+        <item name="android:maxLength">1</item>
+    </style>
+
+    <style name="Text.RegularGrey12" parent="@android:style/TextAppearance.Holo">
+        <item name="android:textColor">@color/grey_1</item>
+        <item name="android:textSize">@dimen/text_size_12</item>
+        <item name="robotoTypeface">regular</item>
     </style>
 
     <style name="Text.RegularRed13" parent="@android:style/TextAppearance.Holo">
@@ -112,31 +147,15 @@
         <item name="robotoTypeface">regular</item>
     </style>
 
-    <style name="Text.PassCode" parent="@android:style/TextAppearance.Holo">
-        <item name="android:textColor">@color/grey_6</item>
-        <item name="android:textSize">@dimen/text_size_30</item>
-        <item name="robotoTypeface">medium</item>
-        <item name="android:textStyle">bold</item>
-        <item name="android:layout_width">@dimen/passcode_edit_width</item>
-        <item name="android:layout_height">@dimen/passcode_edit_height</item>
-        <item name="android:paddingLeft">@dimen/margin_8</item>
-        <item name="android:paddingRight">@dimen/margin_8</item>
-        <item name="android:gravity">center</item>
-        <item name="android:layout_marginRight">@dimen/margin_2</item>
-        <item name="android:inputType">numberPassword</item>
-        <item name="android:textCursorDrawable">@null</item>
-        <item name="android:maxLength">1</item>
-    </style>
-
-    <style name="Text.Grey12" parent="@android:style/TextAppearance.Holo">
-        <item name="android:textColor">@color/grey_1</item>
-        <item name="android:textSize">@dimen/text_size_12</item>
-        <item name="robotoTypeface">regular</item>
-    </style>
-
     <style name="Text.RegularGrey14" parent="@android:style/TextAppearance.Holo">
         <item name="android:textColor">@color/grey_4</item>
         <item name="android:textSize">@dimen/text_size_14</item>
+        <item name="robotoTypeface">regular</item>
+    </style>
+
+    <style name="Text.RegularGrey16" parent="@android:style/TextAppearance.Holo">
+        <item name="android:textColor">@color/grey_4</item>
+        <item name="android:textSize">@dimen/text_size_16</item>
         <item name="robotoTypeface">regular</item>
     </style>
 

@@ -2,9 +2,11 @@
 package com.volcano.assistant.util;
 
 import android.content.Context;
+import android.content.pm.PackageManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Build;
+import android.util.Log;
 import android.widget.Toast;
 
 import com.volcano.assistant.VlApplication;
@@ -16,6 +18,23 @@ import java.util.Date;
  * Application-wide utilities
  */
 public class Utils {
+    private static final String TAG = LogUtils.makeLogTag(Utils.class);
+
+    /**
+     * @return Application version name
+     */
+    public static String getAppVersionName() {
+        try {
+            final VlApplication app = VlApplication.getInstance();
+            LogUtils.LogI(TAG, app.getPackageManager().getPackageInfo(app.getPackageName(), 0).versionName);
+            return app.getPackageManager().getPackageInfo(app.getPackageName(), 0).versionName;
+        }
+        catch (PackageManager.NameNotFoundException e) {
+            LogUtils.LogE(TAG, "Can't get package info");
+            throw new RuntimeException(e);
+        }
+    }
+
     /**
      * Return suitable format of Date
      * @param date The date
