@@ -18,12 +18,12 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 
+import com.volcano.assistant.ConfigManager;
 import com.volcano.assistant.Intents;
 import com.volcano.assistant.Managers;
 import com.volcano.assistant.R;
 import com.volcano.assistant.model.Category;
 import com.volcano.assistant.model.User;
-import com.volcano.assistant.ConfigManager;
 import com.volcano.assistant.util.PrefUtils;
 import com.volcano.assistant.widget.CircleDrawable;
 import com.volcano.assistant.widget.RobotoTextView;
@@ -66,7 +66,7 @@ public final class NavigationFragment extends AbstractFragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        mUserLearnNavigator = PrefUtils.wasUserLearnNavigator();
+        mUserLearnNavigator = PrefUtils.getPref(PrefUtils.PREF_NAVIGATOR_USER_LEARNED, false);
 
         if (savedInstanceState != null) {
             mCurrentSelectedPosition = savedInstanceState.getInt(Intents.KEY_POSITION);
@@ -110,11 +110,8 @@ public final class NavigationFragment extends AbstractFragment {
                 loadNavigationItems();
             }
         });
-        if (Managers.getAccountManager().isLoggedIn()) {
-            final User user = Managers.getAccountManager().getCurrentUser();
-            mUsernameText.setText(user.getName());
-            mEmailText.setText(user.getEmail());
-        }
+
+        showAccountInfo();
     }
 
     @Override
@@ -151,7 +148,7 @@ public final class NavigationFragment extends AbstractFragment {
 
                 if (!mUserLearnNavigator) {
                     mUserLearnNavigator = false;
-                    PrefUtils.markUserLearnNavigator();
+                    PrefUtils.setPref(PrefUtils.PREF_NAVIGATOR_USER_LEARNED, true);
                 }
             }
 
@@ -203,7 +200,7 @@ public final class NavigationFragment extends AbstractFragment {
                 final Category category = categories.get(i);
 
                 if (i == 0) {
-                    PrefUtils.setNavigatorLastCategory(category.getObjectId());
+                    PrefUtils.setPref(PrefUtils.PREF_NAVIGATOR_LAST_CATEGORY, category.getObjectId());
                 }
 
                 final NavigationItem item = new NavigationItem();
@@ -231,6 +228,17 @@ public final class NavigationFragment extends AbstractFragment {
                     }
                 }
             });
+        }
+    }
+
+    /**
+     * Show profile info if user is logged in
+     */
+    public void showAccountInfo() {
+        if (Managers.getAccountManager().isLoggedIn()) {
+            final User user = Managers.getAccountManager().getCurrentUser();
+            mUsernameText.setText(user.getName());
+            mEmailText.setText(user.getEmail());
         }
     }
 
