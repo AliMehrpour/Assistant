@@ -74,7 +74,7 @@ public class MainActivity extends AbstractActivity {
                 loadAccounts(savedInstanceState.getString(Intents.KEY_CATEGORY_ID));
             }
             else {
-                loadAccounts(PrefUtils.getNavigatorLastCategory());
+                loadAccounts(PrefUtils.getPref(PrefUtils.PREF_NAVIGATOR_LAST_CATEGORY, ""));
             }
             mNavigationFragment.loadNavigationItems();
             loadFloatingMenuCategories();
@@ -103,8 +103,9 @@ public class MainActivity extends AbstractActivity {
             @Override
             public void onReset() {
                 if (Managers.getAccountManager().isLoggedIn()) {
-                    loadAccounts(PrefUtils.getNavigatorLastCategory());
+                    mNavigationFragment.showAccountInfo();
                     mNavigationFragment.loadNavigationItems();
+                    loadAccounts(PrefUtils.getPref(PrefUtils.PREF_NAVIGATOR_LAST_CATEGORY, ""));
                     loadFloatingMenuCategories();
                 }
             }
