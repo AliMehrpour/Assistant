@@ -1,10 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!-- Copyright (c) 2015 Volcano. All rights reserved. -->
+
 <resources>
 
-    <string name="app_bug_email_address">bugs@esecurebox.net</string>
+    <string name="email_address_bug">bug@esecurebox.net</string>
 
-    <string name="label_about_dialog_content_link_website"><a href= "www.eSecureBox.net" target="_top">www.eSecureBox.net</a></string>
-    <string name="label_about_dialog_content_link_email"><a href= "support@eSecureBox.net" target="_top">support@eSecureBox.net</a></string>
+    <string name="link_website"><a href="www.eSecureBox.net" target="_top">www.eSecureBox.net</a></string>
+    <string name="link_email"><a href="support@eSecureBox.net" target="_top">support@eSecureBox.net</a></string>
 
     <string name="preference_other_about_key">preference_other_about_key</string>
     <string name="preference_other_rate_key">preference_other_rate_key</string>

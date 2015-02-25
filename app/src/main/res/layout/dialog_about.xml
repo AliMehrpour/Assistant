@@ -1,4 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!-- Copyright (c) 2015 Volcano. All rights reserved. -->
+
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:orientation="horizontal"
@@ -19,42 +21,42 @@
         android:layout_marginStart="@dimen/margin_10"
         android:orientation="vertical">
 
-        <TextView
+        <com.volcano.assistant.widget.RobotoTextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/app_name"
-            style="@style/Text.MediumGrey16"/>
+            style="@style/Text.MediumGrey16" />
 
-        <TextView
+        <com.volcano.assistant.widget.RobotoTextView
             android:id="@+id/text_app_version"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            style="@style/Text.MediumGreyDr14"/>
+            style="@style/Text.MediumGreyDr14" />
 
-        <TextView
+        <com.volcano.assistant.widget.RobotoTextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/margin_16"
             android:layout_marginBottom="@dimen/margin_16"
             android:text="@string/label_about_dialog_content_general"
-            style="@style/Text.RegularGrey16"/>
+            style="@style/Text.RegularGrey16" />
 
-        <TextView
+        <com.volcano.assistant.widget.RobotoTextView
             android:id="@+id/text_website_link"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:autoLink="web"
-            android:text="@string/label_about_dialog_content_link_website"
-            style="@style/Text.RegularGrey16"/>
+            android:text="@string/link_website"
+            style="@style/Text.RegularGrey16" />
 
-        <TextView
+        <com.volcano.assistant.widget.RobotoTextView
             android:id="@+id/text_email_link"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/margin_4"
             android:autoLink="email"
-            android:text="@string/label_about_dialog_content_link_email"
-            style="@style/Text.RegularGrey16"/>
+            android:text="@string/link_email"
+            style="@style/Text.RegularGrey16" />
 
     </LinearLayout>
 
