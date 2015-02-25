@@ -17,16 +17,13 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
-import com.nineoldandroids.view.animation.AnimatorProxy;
 import com.volcano.esecurebox.R;
-import com.volcano.esecurebox.util.LogUtils;
 import com.volcano.esecurebox.util.Utils;
 
 /**
- * Created by alimehrpour on 1/13/15.
+ * Floating label edit text
  */
 public class FloatingLabeledEditText extends LinearLayout {
-    private static final String TAG = LogUtils.makeLogTag(FloatingLabeledEditText.class);
 
     private ImageView mIndicatorImage;
     private RobotoTextView mHintTextView;
@@ -64,7 +61,7 @@ public class FloatingLabeledEditText extends LinearLayout {
                 setHintBackground(background);
             }
 
-            AnimatorProxy.wrap(mHintTextView).setAlpha(0);
+            mHintTextView.setAlpha(0);
             setHint(hint);
             setEditText(mEditText);
         }
@@ -73,12 +70,12 @@ public class FloatingLabeledEditText extends LinearLayout {
         }
     }
 
-    @SuppressWarnings("NewApi")
     private void setHintBackground(Drawable background) {
         if (Utils.hasJellyBeanApi()) {
             mHintTextView.setBackground(background);
         }
         else {
+            //noinspection deprecation
             mHintTextView.setBackgroundDrawable(background);
         }
     }
@@ -118,7 +115,7 @@ public class FloatingLabeledEditText extends LinearLayout {
             ObjectAnimator.ofFloat(mHintTextView, "alpha", 0.5f, 1f).start();
         }
         else if (mHintTextView.getVisibility() == VISIBLE) {
-            AnimatorProxy.wrap(mHintTextView).setAlpha(1f);
+            mHintTextView.setAlpha(1f);
             ObjectAnimator.ofFloat(mHintTextView, "alpha", 1f, 0.5f).start();
         }
     }
@@ -147,7 +144,7 @@ public class FloatingLabeledEditText extends LinearLayout {
              public void onAnimationEnd(Animator animation) {
                  super.onAnimationEnd(animation);
                  mHintTextView.setVisibility(show ? VISIBLE : INVISIBLE);
-                AnimatorProxy.wrap(mHintTextView).setAlpha(show ? 1 : 0);
+                mHintTextView.setAlpha(show ? 1 : 0);
              }
 
              @Override
