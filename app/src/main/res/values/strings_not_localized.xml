@@ -1,6 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!-- Copyright (c) 2015 Volcano. All rights reserved. -->
+
 <resources>
 
+    <string name="email_address_bug">bug@esecurebox.net</string>
+
+    <string name="link_website"><a href="www.eSecureBox.net" target="_top">www.eSecureBox.net</a></string>
+    <string name="link_email"><a href="support@eSecureBox.net" target="_top">support@eSecureBox.net</a></string>
+
+    <string name="preference_other_about_key">preference_other_about_key</string>
+    <string name="preference_other_rate_key">preference_other_rate_key</string>
+    <string name="preference_other_report_bug_key">preference_other_report_bug_key</string>
+    <string name="preference_other_share_key">preference_other_sharing_key</string>
     <string name="preference_passcode">preference_passcode</string>
     <string name="preference_passcode_enable_key">preference_passcode_enable_key</string>
     <string name="preference_passcode_change_key">preference_passcode_change_key</string>

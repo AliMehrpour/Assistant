@@ -8,8 +8,6 @@ android {
         applicationId "com.volcano.assistant"
         minSdkVersion 16
         targetSdkVersion 21
-        versionCode 1
-        versionName "1.0"
     }
     buildTypes {
         release {
