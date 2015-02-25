@@ -95,6 +95,4 @@ public class Category extends ParseObject {
     public String getColor() {
         return getString(COLOR);
     }
-
-
 }

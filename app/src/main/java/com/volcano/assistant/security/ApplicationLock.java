@@ -10,7 +10,7 @@ import com.volcano.assistant.R;
 import com.volcano.assistant.activity.PasscodeActivity;
 import com.volcano.assistant.fragment.PasscodeFragment.Mode;
 import com.volcano.assistant.util.PrefUtils;
-import com.volcano.assistant.util.SecurityUtils;
+import com.volcano.assistant.security.SecurityUtils.EncryptionAlgorithm;
 
 import java.util.Date;
 
@@ -18,10 +18,9 @@ import java.util.Date;
  * Application lock manager
  */
 public class ApplicationLock implements Application.ActivityLifecycleCallbacks {
-    private static final int DEFAULT_TIMEOUT                = 2 * 1000; // 2 Seconds
-    private static final int EXTENDED_TIMEOUT               = 60 * 1000; // 60 Seconds
-    private static final String PASSCODE_ENCRYPTION_SECRET  = "eSecureBoxEncryptionSecret"; // TODO: define in BuildConfig
-    private static final String PASSCODE_SALT               = "eScureBoxPasswordSalt";  // TODO: define in BuildConfig
+    private static final int DEFAULT_TIMEOUT    = 2 * 1000; // 2 Seconds
+    private static final int EXTENDED_TIMEOUT   = 60 * 1000; // 60 Seconds
+    private static final String SALT = "eScureBoxPasswordSalt";  // TODO: define in BuildConfig
 
     private Application mApplication;
     private Date mLostFocusDate;
@@ -63,8 +62,8 @@ public class ApplicationLock implements Application.ActivityLifecycleCallbacks {
             disable();
         }
         else {
-            passcode = PASSCODE_SALT + passcode + PASSCODE_SALT;
-            passcode = SecurityUtils.encrypt(PASSCODE_ENCRYPTION_SECRET, passcode);
+            passcode = SALT + passcode + SALT;
+            passcode = SecurityUtils.encrypt(EncryptionAlgorithm.DES, passcode);
             PrefUtils.setPref(mApplication.getString(R.string.preference_passcode), passcode);
             mLostFocusDate = new Date();
             enable();
@@ -80,8 +79,8 @@ public class ApplicationLock implements Application.ActivityLifecycleCallbacks {
 
         if (PrefUtils.exists(mApplication.getString(R.string.preference_passcode))) {
             storedPasscode = PrefUtils.getPref(mApplication.getString(R.string.preference_passcode), "");
-            storedPasscode = SecurityUtils.decrypt(PASSCODE_ENCRYPTION_SECRET, storedPasscode);
-            passcode = PASSCODE_SALT + passcode +  PASSCODE_SALT;
+            storedPasscode = SecurityUtils.decrypt(EncryptionAlgorithm.DES, storedPasscode);
+            passcode = SALT + passcode + SALT;
         }
 
         if (passcode.equalsIgnoreCase(storedPasscode)) {

@@ -9,11 +9,13 @@ import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 
+import com.parse.LogInCallback;
 import com.parse.ParseException;
+import com.parse.ParseUser;
 import com.volcano.assistant.Intents;
 import com.volcano.assistant.Managers;
 import com.volcano.assistant.R;
-import com.volcano.assistant.backend.ParseManager;
+import com.volcano.assistant.util.SoftKeyboardUtils;
 import com.volcano.assistant.util.Utils;
 
 /**
@@ -48,20 +50,21 @@ public class SigninActivity extends AbstractActivity {
                 if (isValid()) {
                     enable(false);
                     mProgressLayout.setVisibility(View.VISIBLE);
-                    Managers.getAccountManager().signin(mUsernameEdit.getText().toString(), mPasswordEdit.getText().toString(),
-                            new ParseManager.Listener() {
+                    Managers.getAccountManager().signin(mUsernameEdit.getText().toString(),
+                            mPasswordEdit.getText().toString(),
+                            new LogInCallback() {
                                 @Override
-                                public void onResponse() {
-                                    setResult(RESULT_OK);
-                                    mProgressLayout.setVisibility(View.GONE);
-                                    finish();
-                                }
-
-                                @Override
-                                public void onErrorResponse(ParseException e) {
-                                    enable(true);
-                                    mProgressLayout.setVisibility(View.GONE);
-                                    Utils.showToast(getResources().getString(R.string.toast_invalid_username_or_password));
+                                public void done(ParseUser parseUser, ParseException e) {
+                                    if (e == null) {
+                                        setResult(RESULT_OK);
+                                        mProgressLayout.setVisibility(View.GONE);
+                                        finish();
+                                    }
+                                    else {
+                                        enable(true);
+                                        mProgressLayout.setVisibility(View.GONE);
+                                        Utils.showToast(getResources().getString(R.string.toast_invalid_username_or_password));
+                                    }
                                 }
                             });
                 }
@@ -108,7 +111,7 @@ public class SigninActivity extends AbstractActivity {
 
     private void enable(boolean enable){
         if (!enable) {
-            Utils.hideKeyboard(this);
+            SoftKeyboardUtils.hideSoftKeyboard(this);
         }
 
         mUsernameEdit.setEnabled(enable);

@@ -51,8 +51,8 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginTop="@dimen/toolbar_extended_height"
-        android:name="com.volcano.assistant.fragment.EditAccountFragment"
-        tools:layout="@layout/fragment_edit_account" />
+        android:name="com.volcano.assistant.fragment.DisplayAccountFragment"
+        tools:layout="@layout/fragment_display_account" />
 
     <com.volcano.assistant.widget.FloatingActionButton
         android:id="@+id/button_edit"

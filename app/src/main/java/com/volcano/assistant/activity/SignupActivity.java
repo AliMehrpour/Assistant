@@ -9,10 +9,12 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.parse.ParseException;
+import com.parse.SignUpCallback;
 import com.volcano.assistant.Managers;
 import com.volcano.assistant.R;
 import com.volcano.assistant.backend.ParseManager;
 import com.volcano.assistant.util.LogUtils;
+import com.volcano.assistant.util.SoftKeyboardUtils;
 import com.volcano.assistant.util.Utils;
 
 /**
@@ -93,7 +95,7 @@ public class SignupActivity extends AbstractActivity {
 
     private void Signup() {
         if (isValid()) {
-            Utils.hideKeyboard(this);
+            SoftKeyboardUtils.hideSoftKeyboard(this);
             enable(false);
 
             final String username = mUsernameEdit.getText().toString();
@@ -102,36 +104,36 @@ public class SignupActivity extends AbstractActivity {
             final String email = mEmailEdit.getText().toString();
 
             Managers.getAccountManager().signup(username, name, password, email,
-                    new ParseManager.Listener() {
+                    new SignUpCallback() {
                         @Override
-                        public void onResponse() {
-                            LogUtils.LogI(TAG, "Sign up successful");
-                            InitializeData();
-                        }
-
-                        @Override
-                        public void onErrorResponse(ParseException e) {
-                            if (e.getCode() == ParseException.USERNAME_TAKEN) {
-                                mUsernameErrorText.setText(e.getMessage());
-                                mUsernameErrorText.setVisibility(View.VISIBLE);
-                                mUsernameEdit.requestFocus();
-                            }
-                            else if (e.getCode() == ParseException.EMAIL_TAKEN) {
-                                mEmailErrorText.setText(e.getMessage());
-                                mEmailErrorText.setVisibility(View.VISIBLE);
-                                mEmailEdit.requestFocus();
-                            }
-                            else if (e.getCode() == ParseException.INVALID_EMAIL_ADDRESS) {
-                                mEmailErrorText.setText(e.getMessage());
-                                mEmailErrorText.setVisibility(View.VISIBLE);
-                                mEmailEdit.requestFocus();
+                        public void done(ParseException e) {
+                            if (e == null) {
+                                LogUtils.LogI(TAG, "Sign up successful");
+                                InitializeData();
                             }
                             else {
-                                Utils.showToast(R.string.toast_signup_failed);
-                            }
+                                if (e.getCode() == ParseException.USERNAME_TAKEN) {
+                                    mUsernameErrorText.setText(e.getMessage());
+                                    mUsernameErrorText.setVisibility(View.VISIBLE);
+                                    mUsernameEdit.requestFocus();
+                                }
+                                else if (e.getCode() == ParseException.EMAIL_TAKEN) {
+                                    mEmailErrorText.setText(e.getMessage());
+                                    mEmailErrorText.setVisibility(View.VISIBLE);
+                                    mEmailEdit.requestFocus();
+                                }
+                                else if (e.getCode() == ParseException.INVALID_EMAIL_ADDRESS) {
+                                    mEmailErrorText.setText(e.getMessage());
+                                    mEmailErrorText.setVisibility(View.VISIBLE);
+                                    mEmailEdit.requestFocus();
+                                }
+                                else {
+                                    Utils.showToast(R.string.toast_signup_failed);
+                                }
 
-                            enable(true);
-                            LogUtils.LogE(TAG, "Sign up failed", e);
+                                enable(true);
+                                LogUtils.LogE(TAG, "Sign up failed", e);
+                            }
                         }
                     });
         }

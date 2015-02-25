@@ -4,6 +4,8 @@ package com.volcano.assistant.util;
 import android.support.v7.appcompat.BuildConfig;
 import android.util.Log;
 
+import com.volcano.assistant.ConfigManager;
+
 /**
  * Contains log utility methods
  */
@@ -28,13 +30,13 @@ public final class LogUtils {
     }
 
     public static void LogD(final String tag, String message) {
-        if (BuildConfig.DEBUG || Config.IS_DOGFOOD_BUILD || Log.isLoggable(tag, Log.DEBUG)) {
+        if (BuildConfig.DEBUG || ConfigManager.IS_DOGFOOD_BUILD || Log.isLoggable(tag, Log.DEBUG)) {
             Log.d(tag, message);
         }
     }
 
     public static void LogD(final String tag, String message, Throwable cause) {
-        if (BuildConfig.DEBUG || Config.IS_DOGFOOD_BUILD || Log.isLoggable(tag, Log.DEBUG)) {
+        if (BuildConfig.DEBUG || ConfigManager.IS_DOGFOOD_BUILD || Log.isLoggable(tag, Log.DEBUG)) {
             Log.d(tag, message, cause);
         }
     }

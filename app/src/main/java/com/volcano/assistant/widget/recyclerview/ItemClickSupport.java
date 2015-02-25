@@ -1,7 +1,6 @@
 // Copyright (c) 2015 Volcano. All rights reserved.
 package com.volcano.assistant.widget.recyclerview;
 
-import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
 import android.view.HapticFeedbackConstants;
 import android.view.SoundEffectConstants;
@@ -12,12 +11,11 @@ import com.volcano.assistant.util.LogUtils;
 
 /**
  * Handle item click actions on a RecyclerView.<br />
- * For changing clicked item background, don't use margin in definition of list item layout, instead
- * use padding
+ * Define a state list drawable for highlight selected row in list item, also don't use margin in
+ * definition of list item layout, instead use padding.
  */
 public class ItemClickSupport {
     private final static String TAG = LogUtils.makeLogTag(ItemClickSupport.class);
-    private final static int BACKGROUND_RESET_MILLIS    = 100;
 
     private final RecyclerView mRecyclerView;
     private final TouchListener mTouchListener;
@@ -140,13 +138,6 @@ public class ItemClickSupport {
         boolean performItemClick(RecyclerView parent, final View view, int position, long id) {
             if (mItemClickListener != null) {
                 view.playSoundEffect(SoundEffectConstants.CLICK);
-                view.setBackgroundColor(Color.LTGRAY);
-                view.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        view.setBackgroundColor(Color.TRANSPARENT);
-                    }
-                }, BACKGROUND_RESET_MILLIS);
                 mItemClickListener.onItemClick(parent, view, position, id);
                 return true;
             }

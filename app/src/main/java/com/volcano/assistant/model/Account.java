@@ -8,10 +8,12 @@ import com.parse.ParseClassName;
 import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
+import com.parse.ParseUser;
 import com.parse.SaveCallback;
 import com.volcano.assistant.backend.ParseManager;
+import com.volcano.assistant.security.SecurityUtils;
+import com.volcano.assistant.security.SecurityUtils.EncryptionAlgorithm;
 
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -20,8 +22,8 @@ import java.util.List;
 @ParseClassName("Account")
 public class Account extends ParseObject {
     private static final String TITLE           = "title";
-    private static final String CREATE_DATE     = "createDate";
     private static final String SUB_CATEGORY    = "subCategory";
+    private static final String USER            = "user";
 
     public static ParseQuery findInBackground(Category category, final FindCallback<Account> callback) {
         final ParseQuery<SubCategory> innerQuery = SubCategory.getQuery();
@@ -29,6 +31,7 @@ public class Account extends ParseObject {
 
         final ParseQuery<Account> query = getQuery();
         query.whereMatchesQuery(SUB_CATEGORY, innerQuery);
+        query.whereEqualTo(USER, ParseUser.getCurrentUser());
         query.findInBackground(new FindCallback<Account>() {
             @Override
             public void done(List<Account> accounts, ParseException e) {
@@ -79,32 +82,45 @@ public class Account extends ParseObject {
         }
     }
 
-    public void remove(final DeleteCallback callback) {
-        final DeleteCallback deleteCallback = new DeleteCallback() {
+    /**
+     * Remove this object and provided AccountFiledValue objects from cloud or database
+     * @param objects The AccountFieldValue objects
+     * @param callback The callback
+     */
+    public void remove(List<AccountFieldValue> objects, final DeleteCallback callback) {
+        AccountFieldValue.remove(objects, new DeleteCallback() {
             @Override
             public void done(ParseException e) {
-                callback.done(e);
+                if (e == null) {
+                    final DeleteCallback deleteCallback = new DeleteCallback() {
+                        @Override
+                        public void done(ParseException e) {
+                            callback.done(e);
+                        }
+                    };
+
+                    if (ParseManager.isLocalDatabaseActive()) {
+                        unpinInBackground(deleteCallback);
+                    }
+                    else {
+                        deleteInBackground(deleteCallback);
+                    }
+                }
+                else {
+                    callback.done(e);
+                }
             }
-        };
-
-        if (ParseManager.isLocalDatabaseActive()) {
-            unpinInBackground(deleteCallback);
-        }
-        else {
-            deleteInBackground(deleteCallback);
-        }
-
+        });
     }
 
     public String getTitle() {
-        return getString(TITLE);
+        return SecurityUtils.decrypt(EncryptionAlgorithm.AES_ECB, getString(TITLE));
     }
 
     public void setTitle(String title) {
-        put(TITLE, title);
+        put(TITLE, SecurityUtils.encrypt(EncryptionAlgorithm.AES_ECB, title));
     }
 
-    @SuppressWarnings("UnusedDeclaration")
     public SubCategory getSubCategory() {
         return (SubCategory) getParseObject(SUB_CATEGORY);
     }
@@ -113,14 +129,11 @@ public class Account extends ParseObject {
         put(SUB_CATEGORY, subCategory);
     }
 
-    public Date getCreateDate() {
-        //final SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy HH:mm");
-        //return sdf.format(get(CREATE_DATE));
-        return getDate(CREATE_DATE);
+    public User getUser() {
+        return (User) getParseUser(USER);
     }
 
-    public void setCreateDate(Date date) {
-        put(CREATE_DATE, date);
+    public void setUser(User user) {
+        put(USER, user);
     }
-
 }

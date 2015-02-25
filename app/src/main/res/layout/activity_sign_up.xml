@@ -31,7 +31,7 @@
             android:layout_marginTop="@dimen/margin_12"
             android:paddingTop="@dimen/margin_12"
             android:gravity="center_vertical"
-            android:inputType="text|textFilter"
+            android:inputType="text|textFilter|textCapWords"
             android:imeOptions="actionNext"
             android:hint="@string/hint_name"
             style="@style/Text.RegularDark16" />
@@ -103,7 +103,7 @@
             android:id="@+id/text_email"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:maxLines="2"
+            android:maxLines="3"
             android:gravity="center_vertical"
             style="@style/Text.RegularRed13"
             android:visibility="gone"/>

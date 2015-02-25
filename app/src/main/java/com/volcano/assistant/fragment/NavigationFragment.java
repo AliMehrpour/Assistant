@@ -18,8 +18,7 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 
-import com.parse.FindCallback;
-import com.parse.ParseException;
+import com.volcano.assistant.ConfigManager;
 import com.volcano.assistant.Intents;
 import com.volcano.assistant.Managers;
 import com.volcano.assistant.R;
@@ -30,21 +29,21 @@ import com.volcano.assistant.widget.CircleDrawable;
 import com.volcano.assistant.widget.RobotoTextView;
 
 import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Navigation layout shown in MainActivity
  */
 public final class NavigationFragment extends AbstractFragment {
 
+    private ActionBarDrawerToggle mDrawerToggle;
     private ListView mDrawerListView;
     private DrawerLayout mDrawerLayout;
     private View mFragmentContainer;
     private RobotoTextView mUsernameText;
     private RobotoTextView mEmailText;
-    private FrameLayout mEmptyView;
+    private RobotoTextView mEmptyView;
+    private FrameLayout mProgressLayout;
 
-    private ActionBarDrawerToggle mDrawerToggle;
     private int mCurrentSelectedPosition;
     private boolean mUserLearnNavigator;
 
@@ -67,7 +66,7 @@ public final class NavigationFragment extends AbstractFragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        mUserLearnNavigator = PrefUtils.wasUserLearnNavigator();
+        mUserLearnNavigator = PrefUtils.getPref(PrefUtils.PREF_NAVIGATOR_USER_LEARNED, false);
 
         if (savedInstanceState != null) {
             mCurrentSelectedPosition = savedInstanceState.getInt(Intents.KEY_POSITION);
@@ -83,7 +82,8 @@ public final class NavigationFragment extends AbstractFragment {
         mUsernameText = (RobotoTextView) view.findViewById(R.id.text_username);
         mEmailText = (RobotoTextView) view.findViewById(R.id.text_email);
         mDrawerListView = (ListView) view.findViewById(R.id.list_navigation);
-        mEmptyView = (FrameLayout) view.findViewById(android.R.id.empty);
+        mEmptyView = (RobotoTextView) view.findViewById(android.R.id.empty);
+        mProgressLayout = (FrameLayout) view.findViewById(R.id.layout_progress);
 
         return view;
     }
@@ -104,11 +104,14 @@ public final class NavigationFragment extends AbstractFragment {
         mAdapter = new NavigationAdapter();
         mDrawerListView.setAdapter(mAdapter);
 
-        if (Managers.getAccountManager().isLoggedIn()) {
-            final User user = Managers.getAccountManager().getCurrentUser();
-            mUsernameText.setText(user.getName());
-            mEmailText.setText(user.getEmail());
-        }
+        mEmptyView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                loadNavigationItems();
+            }
+        });
+
+        showAccountInfo();
     }
 
     @Override
@@ -145,15 +148,15 @@ public final class NavigationFragment extends AbstractFragment {
 
                 if (!mUserLearnNavigator) {
                     mUserLearnNavigator = false;
-                    PrefUtils.markUserLearnNavigator();
+                    PrefUtils.setPref(PrefUtils.PREF_NAVIGATOR_USER_LEARNED, true);
                 }
             }
 
             @Override
             public void onDrawerOpened(View drawerView) {
                 super.onDrawerOpened(drawerView);
-                if (!isAdded()) {
-                    return;
+                if (mNavigationItems.size() == 0) {
+                    loadNavigationItems();
                 }
             }
         };
@@ -186,31 +189,62 @@ public final class NavigationFragment extends AbstractFragment {
      * Load navigation items
      */
     public void loadNavigationItems() {
+        mProgressLayout.setVisibility(View.VISIBLE);
+        mEmptyView.setVisibility(View.GONE);
         mNavigationItems.clear();
-        addCancellingRequest(Category.findInBackground(new FindCallback<Category>() {
-            @Override
-            public void done(List<Category> categories, ParseException e) {
-                final int size = categories.size();
-                for (int i = 0; i < size; i++) {
-                    final Category category = categories.get(i);
 
-                    if (i == 0) {
-                        PrefUtils.setNavigatorLastCategory(category.getObjectId());
-                    }
+        final ArrayList<Category> categories = ConfigManager.getCategories();
+        final int size = categories.size();
+        if (size > 0) {
+            for (int i = 0; i < size; i++) {
+                final Category category = categories.get(i);
 
-                    final NavigationItem item = new NavigationItem();
-                    item.id = category.getObjectId();
-                    item.color = category.getColor();
-                    item.title = category.getName();
-                    item.counter = 0;
-
-                    mNavigationItems.add(item);
+                if (i == 0) {
+                    PrefUtils.setPref(PrefUtils.PREF_NAVIGATOR_LAST_CATEGORY, category.getObjectId());
                 }
 
-                mAdapter.notifyDataSetChanged();
-                selectItem(mCurrentSelectedPosition, false);
+                final NavigationItem item = new NavigationItem();
+                item.id = category.getObjectId();
+                item.color = category.getColor();
+                item.title = category.getName();
+                item.counter = 0;
+
+                mNavigationItems.add(item);
             }
-        }));
+
+            mProgressLayout.setVisibility(View.GONE);
+            mAdapter.notifyDataSetChanged();
+            selectItem(mCurrentSelectedPosition, false);
+        }
+        else {
+            ConfigManager.refreshCategories(new ConfigManager.RefreshCategoryCallback() {
+                @Override
+                public void onRefreshComplete(boolean isSuccessful) {
+                    if (isSuccessful) {
+                        loadNavigationItems();
+                    }
+                    else {
+                        setErrorState();
+                    }
+                }
+            });
+        }
+    }
+
+    /**
+     * Show profile info if user is logged in
+     */
+    public void showAccountInfo() {
+        if (Managers.getAccountManager().isLoggedIn()) {
+            final User user = Managers.getAccountManager().getCurrentUser();
+            mUsernameText.setText(user.getName());
+            mEmailText.setText(user.getEmail());
+        }
+    }
+
+    private void setErrorState() {
+        mProgressLayout.setVisibility(View.GONE);
+        mEmptyView.setVisibility(View.VISIBLE);
     }
 
     private void selectItem(int position, boolean close) {

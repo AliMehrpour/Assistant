@@ -61,7 +61,7 @@ public class AbstractActivity extends ActionBarActivity {
         }
 
         if (Utils.hasLollipopApi()) {
-            getWindow().setStatusBarColor(BitmapUtils.darkenColor(realColor, 0.8f));
+            getWindow().setStatusBarColor(BitmapUtils.getDarkenColor(realColor, 0.8f));
         }
     }
 
@@ -85,4 +85,5 @@ public class AbstractActivity extends ActionBarActivity {
     protected void addCancellingRequest(ParseQuery query) {
         Managers.getParseManager().getRequestManager().addRequest(this, query);
     }
+
 }

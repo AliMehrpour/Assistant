@@ -29,7 +29,7 @@ import java.util.List;
 /**
  * Edit account fragment
  */
-public class EditAccountFragment extends AbstractFragment {
+public class DisplayAccountFragment extends AbstractFragment {
 
     private LinearLayout mFieldLayout;
     private FrameLayout mProgress;
@@ -43,7 +43,7 @@ public class EditAccountFragment extends AbstractFragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        final View view = inflater.inflate(R.layout.fragment_edit_account, container, false);
+        final View view = inflater.inflate(R.layout.fragment_display_account, container, false);
         mFieldLayout = (LinearLayout) view.findViewById(R.id.layout_fields);
         mProgress = (FrameLayout) view.findViewById(android.R.id.empty);
         return view;
@@ -122,7 +122,7 @@ public class EditAccountFragment extends AbstractFragment {
         LogUtils.LogE(TAG, "Load account failed");
         mProgress.setVisibility(View.GONE);
         mFieldLayout.setVisibility(View.GONE);
-        Utils.showToast(R.string.toast_load_account_failed);
+        Utils.showToast(R.string.toast_account_load_failed);
 
         final Activity activity = getActivity();
         if (activity != null) {

@@ -35,18 +35,6 @@ public final class ParseManager {
 
     private ParseRequestManager mRequestManager;
 
-    public interface Listener {
-        /**
-         * Called when a successful response received
-         */
-        public void onResponse();
-
-        /**
-         * Called when an error has been occurred
-         */
-        public void onErrorResponse(ParseException e);
-    }
-
     public interface OnDataInitializationListener {
         public void onInitilize(boolean successful);
     }
@@ -62,85 +50,90 @@ public final class ParseManager {
         ParseObject.registerSubclass(Field.class);
         ParseObject.registerSubclass(Account.class);
         ParseObject.registerSubclass(AccountFieldValue.class);
-        Parse.enableLocalDatastore(VlApplication.getInstance());
         ParseCrashReporting.enable(VlApplication.getInstance());
+        Parse.enableLocalDatastore(VlApplication.getInstance());
         Parse.initialize(VlApplication.getInstance(), APPLICATION_ID, CLIENT_KEY);
 
         mRequestManager = new ParseRequestManager();
     }
 
     public static void InitializeData(final OnDataInitializationListener listener) {
-        final Date startTime = new Date();
-        // Pin categories
-        Category.pinAllInBackground(new FindCallback<Category>() {
-            @Override
-            public void done(List<Category> categories, ParseException e) {
-                isCategoriesPinned = e == null;
-            }
-        });
-
-        // Pin sub categories
-        SubCategory.pinAllInBackground(new FindCallback<SubCategory>() {
-            @Override
-            public void done(List<SubCategory> subCategories, ParseException e) {
-                LogUtils.LogI(TAG, "Pinning sub categories.");
-                isSubCategoriesPinned = e == null;
-            }
-        });
-
-        // Pin fields
-        Field.pinAllInBackground(new FindCallback<Field>() {
-            @Override
-            public void done(List<Field> fields, ParseException e) {
-                isFieldsPinned = e == null;
-            }
-        });
-
-        // Pin sub category fields
-        SubCategoryField.pinAllInBackground(new FindCallback<SubCategoryField>() {
-            @Override
-            public void done(List<SubCategoryField> subCategoryFields, ParseException e) {
-                isSubCategoryFieldsPinned = e == null;
-            }
-        });
-
-        // Pin current user
-        User.pinAllInBackground(new FindCallback<User>() {
-            @Override
-            public void done(List<User> users, ParseException e) {
-                isCurrentUserPinned = e == null;
-            }
-        });
-
-        // Check initialize has been done or not
-        final Runnable runnable = new Runnable() {
-            @Override
-            public void run() {
-                while (true) {
-                    final Date now = new Date();
-                    final long elapsedMillis = now.getTime() - startTime.getTime();
-                    final boolean result = isCategoriesPinned && isSubCategoriesPinned && isFieldsPinned &&
-                            isSubCategoryFieldsPinned && isCurrentUserPinned;
-
-                    if (result || elapsedMillis >= INITIALIZE_DATA_TIME_OUT_MILLIS) {
-                        final float elapsedSeconds = elapsedMillis / 1000;
-                        if (result) {
-                            LogUtils.LogI(TAG, "Initialization finished in " + elapsedSeconds + " seconds");
-                            listener.onInitilize(true);
-                            break;
-                        }
-                        else {
-                            LogUtils.LogI(TAG, "Initialization failed after " + elapsedSeconds + " seconds");
-                            listener.onInitilize(false);
-                            break;
-                        }
-                    }
-
+        if (isLocalDatabaseActive()) {
+            final Date startTime = new Date();
+            // Pin categories
+            Category.pinAllInBackground(new FindCallback<Category>() {
+                @Override
+                public void done(List<Category> categories, ParseException e) {
+                    isCategoriesPinned = e == null;
                 }
-            }
-        };
+            });
 
-        new Thread(runnable).start();
+            // Pin sub categories
+            SubCategory.pinAllInBackground(new FindCallback<SubCategory>() {
+                @Override
+                public void done(List<SubCategory> subCategories, ParseException e) {
+                    LogUtils.LogI(TAG, "Pinning sub categories.");
+                    isSubCategoriesPinned = e == null;
+                }
+            });
+
+            // Pin fields
+            Field.pinAllInBackground(new FindCallback<Field>() {
+                @Override
+                public void done(List<Field> fields, ParseException e) {
+                    isFieldsPinned = e == null;
+                }
+            });
+
+            // Pin sub category fields
+            SubCategoryField.pinAllInBackground(new FindCallback<SubCategoryField>() {
+                @Override
+                public void done(List<SubCategoryField> subCategoryFields, ParseException e) {
+                    isSubCategoryFieldsPinned = e == null;
+                }
+            });
+
+            // Pin current user
+            User.pinAllInBackground(new FindCallback<User>() {
+                @Override
+                public void done(List<User> users, ParseException e) {
+                    isCurrentUserPinned = e == null;
+                }
+            });
+
+            // Check initialize has been done or not
+            final Runnable runnable = new Runnable() {
+                @Override
+                public void run() {
+                    while (true) {
+                        final Date now = new Date();
+                        final long elapsedMillis = now.getTime() - startTime.getTime();
+                        final boolean result = isCategoriesPinned && isSubCategoriesPinned && isFieldsPinned &&
+                                isSubCategoryFieldsPinned && isCurrentUserPinned;
+
+                        if (result || elapsedMillis >= INITIALIZE_DATA_TIME_OUT_MILLIS) {
+                            final float elapsedSeconds = elapsedMillis / 1000;
+                            if (result) {
+                                LogUtils.LogI(TAG, "Initialization finished in " + elapsedSeconds + " seconds");
+                                listener.onInitilize(true);
+                                break;
+                            }
+                            else {
+                                LogUtils.LogI(TAG, "Initialization failed after " + elapsedSeconds + " seconds");
+                                listener.onInitilize(false);
+                                break;
+                            }
+                        }
+
+                    }
+                }
+            };
+
+            new Thread(runnable).start();
+        }
+        else {
+            listener.onInitilize(true);
+        }
     }
 
     /**

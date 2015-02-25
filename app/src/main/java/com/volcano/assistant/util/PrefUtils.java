@@ -14,22 +14,6 @@ public final class PrefUtils {
     public static String PREF_NAVIGATOR_LAST_CATEGORY   = "navigator_last_category";
     public static String PREF_NAVIGATOR_USER_LEARNED    = "navigator_user_learned";
 
-    public static void markUserLearnNavigator() {
-        setPref(PREF_NAVIGATOR_USER_LEARNED, true);
-    }
-
-    public static boolean wasUserLearnNavigator() {
-        return getPref(PREF_NAVIGATOR_USER_LEARNED, false);
-    }
-
-    public static void setNavigatorLastCategory(String categoryId) {
-        setPref(PREF_NAVIGATOR_LAST_CATEGORY, categoryId);
-    }
-
-    public static String getNavigatorLastCategory() {
-        return getPref(PREF_NAVIGATOR_LAST_CATEGORY, "");
-    }
-
     public static boolean exists(String key) {
         return getPrefs().contains(key);
     }
