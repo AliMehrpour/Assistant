@@ -126,7 +126,7 @@ public class Utils {
     public static void launchPlayStore() {
         Intent intent = new Intent(Intent.ACTION_VIEW)
                 .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-                .setData(Uri.parse(String.format("market://details?id=%s", "tv.clippit.android")));// VlApplication.getInstance().getPackageName())));
+                .setData(Uri.parse(String.format("market://details?id=%s", VlApplication.getInstance().getPackageName())));
 
         if (intent.resolveActivity(VlApplication.getInstance().getPackageManager()) != null) {
             VlApplication.getInstance().startActivity(intent);
