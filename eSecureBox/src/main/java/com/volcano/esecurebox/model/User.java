@@ -5,6 +5,8 @@ import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
+import com.parse.SaveCallback;
+import com.volcano.esecurebox.backend.ParseManager;
 import com.volcano.esecurebox.util.LogUtils;
 
 import java.util.List;
@@ -48,5 +50,21 @@ public final class User extends ParseUser {
 
     public String getName() {
         return getString(NAME);
+    }
+
+    public void save(final SaveCallback callback) {
+        final SaveCallback saveCallback = new SaveCallback() {
+            @Override
+            public void done(ParseException e) {
+                callback.done(e);
+            }
+        };
+
+        if (ParseManager.isLocalDatabaseActive()) {
+            pinInBackground(saveCallback);
+        }
+        else {
+            saveInBackground(saveCallback);
+        }
     }
 }
