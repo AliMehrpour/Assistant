@@ -3,6 +3,7 @@ package com.volcano.esecurebox.fragment;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.preference.Preference;
 import android.preference.PreferenceFragment;
@@ -13,6 +14,7 @@ import android.widget.TextView;
 import com.volcano.esecurebox.Intents;
 import com.volcano.esecurebox.Managers;
 import com.volcano.esecurebox.R;
+import com.volcano.esecurebox.activity.SignupActivity;
 import com.volcano.esecurebox.fragment.PasscodeFragment.Mode;
 import com.volcano.esecurebox.util.Utils;
 
@@ -24,6 +26,7 @@ import java.util.Collections;
 @SuppressWarnings("FieldCanBeLocal")
 public class SettingsFragment extends PreferenceFragment {
 
+    private Preference mEditProfile;
     private Preference mPasscodeEnablePref;
     private Preference mPasscodeChangePref;
     private Preference mAboutPref;
@@ -35,6 +38,15 @@ public class SettingsFragment extends PreferenceFragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         addPreferencesFromResource(R.xml.preferences);
+
+        mEditProfile = findPreference(getString(R.string.preference_general_profile_edit_key));
+        mEditProfile.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+            @Override
+            public boolean onPreferenceClick(Preference preference) {
+                startActivity(Intents.getSignupIntent(Intents.EXTRA_MODE , SignupActivity.MODE_UPDATE));
+                return false;
+            }
+        });
 
         mPasscodeEnablePref = findPreference(getString(R.string.preference_passcode_enable_key));
         mPasscodeEnablePref.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {

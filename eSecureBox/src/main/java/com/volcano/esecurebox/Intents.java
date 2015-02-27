@@ -68,7 +68,9 @@ public final class Intents {
         return new Intent(VlApplication.getInstance(), SigninActivity.class);
     }
 
-    public static Intent getSignupIntent() {
-        return new Intent(VlApplication.getInstance(), SignupActivity.class);
+    public static Intent getSignupIntent(String extraMode, int mode) {
+        Intent intent =new Intent(VlApplication.getInstance(), SignupActivity.class);
+        intent.putExtra(extraMode, mode);
+        return intent;
     }
 }

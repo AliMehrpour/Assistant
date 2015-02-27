@@ -8,6 +8,7 @@
     <string name="link_website"><a href="www.eSecureBox.net" target="_top">www.eSecureBox.net</a></string>
     <string name="link_email"><a href="support@eSecureBox.net" target="_top">support@eSecureBox.net</a></string>
 
+    <string name="preference_general_profile_edit_key">preference_general_profile_edit_key</string>
     <string name="preference_other_about_key">preference_other_about_key</string>
     <string name="preference_other_rate_key">preference_other_rate_key</string>
     <string name="preference_other_report_bug_key">preference_other_report_bug_key</string>

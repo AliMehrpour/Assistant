@@ -6,6 +6,15 @@
     android:layout_height="match_parent">
 
     <PreferenceCategory
+        android:title="@string/preference_general_category_title">
+
+        <Preference
+            android:key="@string/preference_general_profile_edit_key"
+            android:title="@string/preference_general_profile_edit_title"/>
+
+    </PreferenceCategory>
+
+    <PreferenceCategory
         android:title="@string/preference_passcode_category_title">
 
         <Preference
