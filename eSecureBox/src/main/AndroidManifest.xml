@@ -40,12 +40,10 @@
               android:screenOrientation="portrait"/>
 
         <activity android:name="com.volcano.esecurebox.activity.SigninActivity"
-            android:label="@string/label_sign_in"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateAlwaysHidden" />
 
         <activity android:name="com.volcano.esecurebox.activity.SignupActivity"
-            android:label="@string/label_sign_up"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateAlwaysHidden" />
 

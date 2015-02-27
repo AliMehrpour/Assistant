@@ -1,7 +1,6 @@
 // Copyright (c) 2015 Volcano. All rights reserved.
 package com.volcano.esecurebox.activity;
 
-import android.app.AlertDialog;
 import android.app.FragmentManager;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -12,6 +11,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
+import com.afollestad.materialdialogs.AlertDialogWrapper;
+import com.volcano.esecurebox.ConfigManager;
 import com.volcano.esecurebox.Intents;
 import com.volcano.esecurebox.Managers;
 import com.volcano.esecurebox.R;
@@ -22,7 +23,6 @@ import com.volcano.esecurebox.fragment.NavigationFragment;
 import com.volcano.esecurebox.fragment.NavigationFragment.NavigationListener;
 import com.volcano.esecurebox.model.Category;
 import com.volcano.esecurebox.util.BitmapUtils;
-import com.volcano.esecurebox.ConfigManager;
 import com.volcano.esecurebox.util.PrefUtils;
 import com.volcano.esecurebox.util.Utils;
 import com.volcano.esecurebox.widget.FloatingActionButton;
@@ -152,17 +152,17 @@ public class MainActivity extends AbstractActivity {
             return true;
         }
         else if (id == R.id.action_signout) {
-            new AlertDialog.Builder(this)
+            new AlertDialogWrapper.Builder(this)
                     .setMessage(R.string.alert_signout)
-                    .setNegativeButton(android.R.string.no, null)
-                    .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                    .setTitle(R.string.label_sign_out)
+                    .setNegativeButton(android.R.string.cancel, null)
+                    .setPositiveButton(R.string.label_yes_uppercase, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             Managers.getAccountManager().signout();
                             startActivityForResult(Intents.getSigninIntent(), Intents.REQUEST_CODE_SIGNIN);
                         }
-                    })
-                    .show();
+                    }).show();
             return true;
         }
 

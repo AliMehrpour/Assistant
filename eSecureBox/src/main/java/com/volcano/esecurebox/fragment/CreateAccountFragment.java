@@ -2,7 +2,6 @@
 package com.volcano.esecurebox.fragment;
 
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -16,6 +15,7 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.afollestad.materialdialogs.AlertDialogWrapper;
 import com.parse.DeleteCallback;
 import com.parse.FindCallback;
 import com.parse.GetCallback;
@@ -290,10 +290,11 @@ public class CreateAccountFragment extends AbstractFragment {
      */
     public void delete() {
         if (mAccount != null) {
-            new AlertDialog.Builder(getActivity())
+            new AlertDialogWrapper.Builder(getActivity())
+                    .setTitle(getString(R.string.label_delete))
                     .setMessage(R.string.alert_delete_account)
-                    .setNegativeButton(android.R.string.no, null)
-                    .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                    .setNegativeButton(android.R.string.cancel, null)
+                    .setPositiveButton(R.string.label_yes_uppercase, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             mProgressLayout.setVisibility(View.VISIBLE);

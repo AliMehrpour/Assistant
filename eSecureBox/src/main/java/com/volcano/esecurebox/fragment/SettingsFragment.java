@@ -1,7 +1,6 @@
 // Copyright (c) 2015 Volcano. All rights reserved.
 package com.volcano.esecurebox.fragment;
 
-import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.preference.Preference;
@@ -10,6 +9,7 @@ import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.afollestad.materialdialogs.AlertDialogWrapper;
 import com.volcano.esecurebox.Intents;
 import com.volcano.esecurebox.Managers;
 import com.volcano.esecurebox.R;
@@ -58,7 +58,7 @@ public class SettingsFragment extends PreferenceFragment {
                 final TextView textVersion = (TextView) layout.findViewById(R.id.text_app_version);
                 textVersion.setText(Utils.getAppVersionName());
 
-                new AlertDialog.Builder(getActivity())
+                new AlertDialogWrapper.Builder(getActivity())
                         .setTitle(getString(R.string.label_about_dialog_title))
                         .setView(layout)
                         .setNegativeButton(R.string.button_close, new DialogInterface.OnClickListener() {
@@ -66,7 +66,6 @@ public class SettingsFragment extends PreferenceFragment {
                                 dialog.dismiss();
                             }
                         })
-                        .create()
                         .show();
 
                 return false;
