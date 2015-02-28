@@ -34,21 +34,15 @@
 
     <declare-styleable name="FloatingLabeledEditText">
 
-        <attr name="floatTextAppearance" format="reference" />
-        <attr name="floatPadding" format="reference|dimension" />
-        <attr name="floatPaddingLeft" format="reference|dimension" />
-        <attr name="floatPaddingTop" format="reference|dimension" />
-        <attr name="floatPaddingRight" format="reference|dimension" />
-        <attr name="floatPaddingBottom" format="reference|dimension" />
-        <attr name="floatBackground" format="reference|color" />
-        <attr name="floatHint" format="reference|string" />
-
-    </declare-styleable>
-
-    <declare-styleable name="IconizedEditText">
-
-        <attr name="hint" format="string|reference" />
-        <attr name="showIcon" format="boolean" />
+        <attr name="fleBackground" format="reference|color" />
+        <attr name="fleHint" format="reference|string" />
+        <attr name="flePadding" format="reference|dimension" />
+        <attr name="flePaddingLeft" format="reference|dimension" />
+        <attr name="flePaddingTop" format="reference|dimension" />
+        <attr name="flePaddingRight" format="reference|dimension" />
+        <attr name="flePaddingBottom" format="reference|dimension" />
+        <attr name="fleShowIcon" format="boolean" />
+        <attr name="fleTextAppearance" format="reference" />
 
     </declare-styleable>
 

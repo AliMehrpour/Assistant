@@ -47,7 +47,6 @@ public class DisplayAccountActivity extends AbstractActivity {
         mEditButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                finish();
                 startActivity(Intents.getEditAccountIntent(accountId, color));
             }
         });

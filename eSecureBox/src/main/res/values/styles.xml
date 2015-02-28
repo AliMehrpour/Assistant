@@ -72,6 +72,20 @@
         <item name="android:ellipsize">end</item>
     </style>
 
+    <style name="Text.FullWidth" parent="@android:style/TextAppearance.Holo">
+        <item name="android:layout_height">@dimen/text_view_height</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:paddingLeft">@dimen/margin_16</item>
+        <item name="android:paddingRight">@dimen/margin_16</item>
+        <item name="android:paddingTop">@dimen/margin_20</item>
+        <item name="android:paddingBottom">@dimen/margin_20</item>
+        <item name="android:textSize">@dimen/text_size_16</item>
+        <item name="android:textColor">@color/grey_9</item>
+        <item name="android:inputType">textCapSentences</item>
+        <item name="robotoTypeface">regular</item>
+        <item name="android:background">@drawable/edittext_full_width</item>
+    </style>
+
     <style name="Text.Grey12" parent="@android:style/TextAppearance.Holo">
         <item name="android:textColor">@color/grey_1</item>
         <item name="android:textSize">@dimen/text_size_12</item>
@@ -137,6 +151,11 @@
         <item name="android:textColor">@color/grey_4</item>
         <item name="robotoTypeface">regular</item>
     </style>
+
+    <style name="Text.RegularDarker16" parent="Text.RegularDark16">
+        <item name="android:textColor">@color/grey_9</item>
+    </style>
+
 
     <style name="Text.RegularDark18" parent="@android:style/TextAppearance.Holo">
         <item name="android:textSize">@dimen/text_size_18</item>

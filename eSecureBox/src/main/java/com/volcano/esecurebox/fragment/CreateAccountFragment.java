@@ -33,7 +33,8 @@ import com.volcano.esecurebox.util.BitmapUtils;
 import com.volcano.esecurebox.util.LogUtils;
 import com.volcano.esecurebox.util.Utils;
 import com.volcano.esecurebox.widget.CircleDrawable;
-import com.volcano.esecurebox.widget.IconizedEditText;
+import com.volcano.esecurebox.widget.FloatingLabeledEditText;
+import com.volcano.esecurebox.widget.RobotoEditText;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -51,7 +52,7 @@ public class CreateAccountFragment extends AbstractFragment {
     private String mSelectedSubCategoryId;
     private int mSavedFieldCount = 0;
 
-    private IconizedEditText mAccountTitle;
+    private RobotoEditText mAccountTitle;
     private RelativeLayout mSubCategoryLayout;
     private TextView mSubCategoryText;
     private ImageView mSubCategoryImage;
@@ -75,7 +76,7 @@ public class CreateAccountFragment extends AbstractFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         final View view = inflater.inflate(R.layout.fragment_create_account, container, false);
 
-        mAccountTitle = (IconizedEditText) view.findViewById(R.id.text_account_title);
+        mAccountTitle = (RobotoEditText) view.findViewById(R.id.text_account_title);
         mFieldLayout = (LinearLayout) view.findViewById(R.id.layout_fields);
         mSubCategoryLayout = (RelativeLayout) view.findViewById(R.id.layout_sub_category);
         mSubCategoryText = (TextView) view.findViewById(R.id.text_sub_category);
@@ -201,13 +202,13 @@ public class CreateAccountFragment extends AbstractFragment {
                             mSavedFieldCount = 0;
                             final int size = mFields.size();
                             for (int i = 0; i < size; i++) {
-                                final IconizedEditText fieldEditText = (IconizedEditText) mFieldLayout.getChildAt(i);
+                                final FloatingLabeledEditText fieldEditText = (FloatingLabeledEditText) mFieldLayout.getChildAt(i);
 
                                 final AccountFieldValue value = new AccountFieldValue();
                                 final SubCategoryField field = mFields.get(i);
                                 value.setAccount(mAccount);
                                 value.setField(field.getField());
-                                value.setValue(fieldEditText.getText().toString());
+                                value.setValue(fieldEditText.getText());
                                 value.setOrder(field.getOrder());
                                 value.save(new SaveCallback() {
                                     @Override
@@ -248,10 +249,10 @@ public class CreateAccountFragment extends AbstractFragment {
                             mSavedFieldCount = 0;
                             final int size = mAccountFieldValues.size();
                             for (int i = 0; i < size; i++) {
-                                final IconizedEditText fieldEditText = (IconizedEditText) mFieldLayout.getChildAt(i);
+                                final FloatingLabeledEditText fieldEditText = (FloatingLabeledEditText) mFieldLayout.getChildAt(i);
 
                                 final AccountFieldValue value = mAccountFieldValues.get(i);
-                                value.setValue(fieldEditText.getText().toString());
+                                value.setValue(fieldEditText.getText());
                                 value.save(new SaveCallback() {
                                     @Override
                                     public void done(ParseException e) {
@@ -370,7 +371,7 @@ public class CreateAccountFragment extends AbstractFragment {
                             final int size = mFields.size();
                             for (int i = 0; i < size; i++) {
                                 final SubCategoryField field = mFields.get(i);
-                                final IconizedEditText fieldEditText = new IconizedEditText(getActivity());
+                                final FloatingLabeledEditText fieldEditText = new FloatingLabeledEditText(getActivity());
                                 final String iconName = field.getField().getIconName();
                                 if (iconName != null) {
                                     fieldEditText.setIcon(getResources().getDrawable(BitmapUtils.getDrawableIdentifier(getActivity(), iconName)));
@@ -383,6 +384,7 @@ public class CreateAccountFragment extends AbstractFragment {
                                     fieldEditText.setText(field.getDefaultValue());
                                 }
                                 fieldEditText.setHint(field.getField().getName());
+                                fieldEditText.setFormatType(field.getField().getType());
                                 mFieldLayout.addView(fieldEditText);
                             }
 
@@ -418,11 +420,12 @@ public class CreateAccountFragment extends AbstractFragment {
                                 final int size = mAccountFieldValues.size();
                                 for (int i = 0; i < size; i++) {
                                     final AccountFieldValue value = mAccountFieldValues.get(i);
-                                    final IconizedEditText fieldEditText = new IconizedEditText(getActivity());
+                                    final FloatingLabeledEditText fieldEditText = new FloatingLabeledEditText(getActivity());
                                     fieldEditText.setHint(value.getField().getName());
                                     fieldEditText.setText(value.getValue());
                                     fieldEditText.setIcon(new CircleDrawable(Color.TRANSPARENT, CircleDrawable.FILL,
                                             value.getField().getName().substring(0, 1), getResources().getColor(R.color.theme_primary)));
+                                    fieldEditText.setFormatType(value.getField().getType());
 
                                     mFieldLayout.addView(fieldEditText);
                                 }

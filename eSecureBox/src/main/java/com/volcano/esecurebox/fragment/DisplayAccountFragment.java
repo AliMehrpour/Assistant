@@ -91,10 +91,11 @@ public class DisplayAccountFragment extends AbstractFragment {
                                 for (int i = 0; i < size; i++) {
                                     final AccountFieldValue value = mFieldValues.get(i);
                                     final FloatingLabeledEditText fle = new FloatingLabeledEditText(getActivity());
-                                    fle.setDividerLineVisibility(View.INVISIBLE);
+                                    fle.setEnabled(false);
                                     fle.setHint(value.getField().getName());
                                     fle.setText(value.getValue());
-                                    fle.setEnabled(false);
+                                    fle.setDividerLineVisibility(View.INVISIBLE);
+                                    fle.setFormatType(value.getField().getType());
                                     fle.setIcon(new CircleDrawable(Color.TRANSPARENT, CircleDrawable.FILL,
                                             value.getField().getName().substring(0, 1), getResources().getColor(R.color.theme_primary)));
 

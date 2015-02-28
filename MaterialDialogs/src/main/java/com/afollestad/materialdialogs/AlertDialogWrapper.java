@@ -13,8 +13,6 @@ import android.support.annotation.StringRes;
 import android.view.View;
 import android.widget.ListAdapter;
 
-import com.afollestad.materialdialogs.MaterialDialog;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;

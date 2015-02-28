@@ -54,7 +54,7 @@ public class SubCategoryListFragment extends AbstractFragment {
         mListView = (ListView) view.findViewById(R.id.list_sub_category);
         mProgressLayout = (FrameLayout) view.findViewById(R.id.layout_progress);
 
-        return  view;
+        return view;
     }
 
     @Override
@@ -97,7 +97,9 @@ public class SubCategoryListFragment extends AbstractFragment {
     }
 
     private void loadSubCategories() {
-        mProgressLayout.setVisibility(View.VISIBLE);
+        if (mProgressLayout != null) {
+            mProgressLayout.setVisibility(View.VISIBLE);
+        }
         mSubCategories.clear();
         addCancellingRequest(Category.getInBackground(mCategoryId, new GetCallback<Category>() {
             @Override
@@ -107,7 +109,9 @@ public class SubCategoryListFragment extends AbstractFragment {
                         @Override
                         public void done(List<SubCategory> subCategories, ParseException e) {
                             if (e == null) {
-                                mProgressLayout.setVisibility(View.GONE);
+                                if (mProgressLayout != null) {
+                                    mProgressLayout.setVisibility(View.GONE);
+                                }
                                 if (subCategories.size() > 0) {
                                     mSubCategories.addAll(subCategories);
                                     mAdapter.notifyDataSetChanged();

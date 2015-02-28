@@ -3,6 +3,10 @@
 
 <resources>
 
+    <string-array name="array_field_actions">
+        <item>Copy</item>
+    </string-array>
+
     <string name="app_name">eSecureBox</string>
     <string name="app_url_store">https://play.google.com/store/apps/details?id=</string>
 
@@ -90,6 +94,7 @@
     <string name="toast_account_save_validation">Please fill required information</string>
     <string name="toast_account_update_failed">Update account failed</string>
     <string name="toast_category_for_create_account_unavailable">Creating account is unavailable, please check your network connection and try again</string>
+    <string name="toast_copy_to_clipboard">Copied to clipboard</string>
     <string name="toast_device_offline_message">Your device appears to be offline</string>
     <string name="toast_initialize_failed">Initialization failed</string>
     <string name="toast_invalid_username_or_password">Invalid username or password</string>

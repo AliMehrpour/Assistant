@@ -25,6 +25,7 @@
     <color name="grey_6">#3F3F3F</color>
     <color name="grey_7">#ECECEC</color>
     <color name="grey_8">#F2F2F2</color>
+    <color name="grey_9">#424242</color>
 
     <color name="navigation_selector">#B6B6B6</color>
     <color name="navigation_statusbar_color">#000000</color>
