@@ -9,9 +9,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.res.TypedArray;
 import android.graphics.drawable.Drawable;
-import android.text.Editable;
 import android.text.TextUtils;
-import android.text.TextWatcher;
 import android.util.AttributeSet;
 import android.view.HapticFeedbackConstants;
 import android.view.LayoutInflater;
@@ -21,6 +19,7 @@ import android.widget.LinearLayout;
 
 import com.afollestad.materialdialogs.AlertDialogWrapper;
 import com.volcano.esecurebox.R;
+import com.volcano.esecurebox.security.PasswordGenerator;
 import com.volcano.esecurebox.util.Utils;
 
 /**
@@ -32,6 +31,7 @@ public class FloatingLabeledEditText extends LinearLayout {
     private RobotoTextView mHintTextView;
     private FormattedEditText mEditText;
     private ImageView mEyeButton;
+    private ImageView mGeneratePasswordButton;
     private View mDividerLine;
 
     private boolean mVisiblePassword = false;
@@ -58,6 +58,7 @@ public class FloatingLabeledEditText extends LinearLayout {
         mHintTextView = (RobotoTextView) findViewById(R.id.text_hint);
         mEditText = (FormattedEditText) findViewById(R.id.edittext);
         mEyeButton = (ImageView) findViewById(R.id.button_eye);
+        mGeneratePasswordButton = (ImageView) findViewById(R.id.button_generate_password);
         mDividerLine = findViewById(R.id.divider_line);
 
         final TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.FloatingLabeledEditText);
@@ -88,6 +89,13 @@ public class FloatingLabeledEditText extends LinearLayout {
             @Override
             public void onClick(View v) {
                 toggleEyeButton();
+            }
+        });
+
+        mGeneratePasswordButton.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mEditText.setText(new PasswordGenerator().generate(10, true, true, true));
             }
         });
     }
@@ -131,6 +139,7 @@ public class FloatingLabeledEditText extends LinearLayout {
         mEditText.setFormatType(formatType);
         mFormatType = formatType;
         setEyeButtonVisibility();
+        setGeneratePasswordButtonVisibility();
     }
 
     /**
@@ -164,12 +173,10 @@ public class FloatingLabeledEditText extends LinearLayout {
 
     private void setEyeButtonVisibility() {
         if (mFormatType == FormattedEditText.FORMAT_PASSWORD) {
-            if (!mEditText.getText().toString().trim().isEmpty()) {
-                mEyeButton.setVisibility(VISIBLE);
-            }
-            else {
-                mEyeButton.setVisibility(GONE);
-            }
+            mEyeButton.setVisibility(VISIBLE);
+        }
+        else {
+            mEyeButton.setVisibility(GONE);
         }
     }
 
@@ -177,16 +184,25 @@ public class FloatingLabeledEditText extends LinearLayout {
         if (mVisiblePassword) {
             final int lastSelection = mEditText.getSelectionStart();
             mEditText.setFormatType(FormattedEditText.FORMAT_PASSWORD);
-            mEyeButton.setImageDrawable(getResources().getDrawable(R.drawable.icon_action_eye_open));
+            mEyeButton.setImageDrawable(getResources().getDrawable(R.drawable.icon_eye_open));
             mEditText.setSelection(lastSelection);
             mVisiblePassword = false;
         }
         else {
             final int lastSelection = mEditText.getSelectionStart();
             mEditText.setFormatType(FormattedEditText.FORMAT_STRING);
-            mEyeButton.setImageDrawable(getResources().getDrawable(R.drawable.icon_action_eye_closed));
+            mEyeButton.setImageDrawable(getResources().getDrawable(R.drawable.icon_eye_closed));
             mEditText.setSelection(lastSelection);
             mVisiblePassword = true;
+        }
+    }
+
+    private void setGeneratePasswordButtonVisibility() {
+        if (mFormatType == FormattedEditText.FORMAT_PASSWORD && mEditText.isFocusable()) {
+            mGeneratePasswordButton.setVisibility(VISIBLE);
+        }
+        else {
+            mGeneratePasswordButton.setVisibility(GONE);
         }
     }
 
@@ -216,6 +232,7 @@ public class FloatingLabeledEditText extends LinearLayout {
     private void setEditText(FormattedEditText editText) {
         mEditText = editText;
 
+        /*
         mEditText.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -227,12 +244,10 @@ public class FloatingLabeledEditText extends LinearLayout {
 
             @Override
             public void afterTextChanged(Editable s) {
-                //setShowHint(!TextUtils.isEmpty(s));
-                setEyeButtonVisibility();
+                setShowHint(!TextUtils.isEmpty(s));
             }
         });
 
-        /*
         if (!TextUtils.isEmpty(mEditText.getText())) {
             mHintTextView.setVisibility(VISIBLE);
         }

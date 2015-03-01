@@ -5,6 +5,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.support.v4.content.LocalBroadcastManager;
 
 import com.parse.LogInCallback;
 import com.parse.ParseException;
@@ -110,15 +111,15 @@ public class AccountManager {
     /**
      * Register a broadcast receiver to get notified when the login status of user has been changed
      */
-    public static Intent registerLoginResetReceiver(Context context, BroadcastReceiver receiver) {
+    public static void registerLoginResetReceiver(Context context, BroadcastReceiver receiver) {
         final IntentFilter filter = new IntentFilter(Intents.ACTION_LOGIN_RESET);
-        return context.registerReceiver(receiver, filter);
+        LocalBroadcastManager.getInstance(context).registerReceiver(receiver, filter);
     }
 
     /**
      * Used to send a broadcast when login status changed
      */
     private void broadcastLoginReset() {
-        VlApplication.getInstance().sendBroadcast(new Intent(Intents.ACTION_LOGIN_RESET));
+        LocalBroadcastManager.getInstance(VlApplication.getInstance()).sendBroadcast(new Intent(Intents.ACTION_LOGIN_RESET));
     }
 }
