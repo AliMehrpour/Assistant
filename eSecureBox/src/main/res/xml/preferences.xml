@@ -9,8 +9,12 @@
         android:title="@string/preference_general_category_title">
 
         <Preference
-            android:key="@string/preference_general_profile_edit_key"
+            android:key="@string/preference_general_edit_profile_key"
             android:title="@string/preference_general_profile_edit_title"/>
+
+        <Preference
+            android:key="@string/preference_general_change_password_key"
+            android:title="@string/preference_general_change_password_title"/>
 
     </PreferenceCategory>
 

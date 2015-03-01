@@ -10,11 +10,10 @@
 
     <include
         android:id="@+id/toolbar"
-        layout="@layout/toolbar"
         android:layout_height="wrap_content"
         android:layout_width="match_parent"
         android:layout_alignParentTop="true"
-        android:minHeight="?attr/actionBarSize" />
+        layout="@layout/toolbar" />
 
     <com.volcano.esecurebox.widget.RobotoTextView
         android:id="@+id/text_delete"

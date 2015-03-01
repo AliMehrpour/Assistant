@@ -89,7 +89,7 @@ public class SecurityUtils {
 
         try {
             if (algorithm == EncryptionAlgorithm.DES) {
-                mDESCipher.init(Cipher.ENCRYPT_MODE, mDESSecretKey);
+                mDESCipher.init(Cipher.DECRYPT_MODE, mDESSecretKey);
                 return new String(mDESCipher.doFinal(decodeToByte(encryptedText)));
             }
             else if (algorithm == EncryptionAlgorithm.AES_ECB) {

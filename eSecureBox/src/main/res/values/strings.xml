@@ -26,9 +26,11 @@
     <string name="button_7">7</string>
     <string name="button_8">8</string>
     <string name="button_9">9</string>
-    <string name="button_close">Close</string>
+    <string name="button_cancel">CANCEL</string>
+    <string name="button_close">CLOSE</string>
     <string name="button_del_uppercase">DEL</string>
     <string name="button_delete_uppercase">DELETE</string>
+    <string name="button_submit">SUBMIT</string>
     <string name="button_signin">SIGN IN</string>
     <string name="button_signup">SIGN UP</string>
     <string name="button_edit_profile">UPDATE</string>
@@ -39,6 +41,7 @@
     <string name="error_email_invalid">Email is not valid</string>
     <string name="error_email_not_empty">Email can not be empty</string>
     <string name="error_name_not_empty">Name can not be empty</string>
+    <string name="error_password_invalid">Invalid password</string>
     <string name="error_password_minimum_character">Password must be at least 6 characters</string>
     <string name="error_username_not_empty">Username can not be empty</string>
 
@@ -48,6 +51,8 @@
     <string name="hint_navigation_close">Close</string>
     <string name="hint_navigation_open">Open</string>
     <string name="hint_new_account">New Account</string>
+    <string name="hint_new_password">New password</string>
+    <string name="hint_old_password">Old password</string>
     <string name="hint_password">Password</string>
     <string name="hint_select_sub_category">Select Account Type</string>
     <string name="hint_username">Username</string>
@@ -56,6 +61,7 @@
     <string name="label_about_dialog_title">About</string>
     <string name="label_category">Category</string>
     <string name="label_delete">Delete</string>
+    <string name="label_change_password_dialog_title">Change password</string>
     <string name="label_edit_account">Edit Account</string>
     <string name="label_enter_passcode">Enter your passcode</string>
     <string name="label_enter_new_passcode">Enter your new passcode</string>
@@ -75,6 +81,7 @@
     <string name="menu_signout">Sign Out</string>
 
     <string name="preference_general_category_title">GENERAL</string>
+    <string name="preference_general_change_password_title">Change password</string>
     <string name="preference_general_profile_edit_title">Edit profile</string>
     <string name="preference_other_category_title">OTHER</string>
     <string name="preference_other_about_title">About</string>
@@ -97,8 +104,12 @@
     <string name="toast_account_save_validation">Please fill required information</string>
     <string name="toast_account_update_failed">Update account failed</string>
     <string name="toast_category_for_create_account_unavailable">Creating account is unavailable, please check your network connection and try again</string>
+    <string name="toast_change_password_successful">password changed successfully</string>
+    <string name="toast_change_password_failed">Change password failed</string>
     <string name="toast_copy_to_clipboard">Copied to clipboard</string>
     <string name="toast_device_offline_message">Your device appears to be offline</string>
+    <string name="toast_edit_profile_successful">Profile updated successfully</string>
+    <string name="toast_edit_profile_failed">Update profile failed</string>
     <string name="toast_initialize_failed">Initialization failed</string>
     <string name="toast_invalid_username_or_password">Invalid username or password</string>
     <string name="toast_load_category_failed">Load category failed</string>
@@ -111,6 +122,5 @@
     <string name="toast_passcode_not_matched">The Passcodes didn\'t match, pleas try again</string>
     <string name="toast_report_bug_email_client_unavailable">There are no email clients installed</string>
     <string name="toast_signup_failed">Signup failed</string>
-    <string name="toast_edit_profile_success">Successful update</string>
-    <string name="toast_edit_profile_unSuccess">UnSuccessful update</string>
+
 </resources>

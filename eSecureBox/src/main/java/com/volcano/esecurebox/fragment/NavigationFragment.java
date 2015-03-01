@@ -1,9 +1,12 @@
 // Copyright (c) 2015 Volcano. All rights reserved.
 package com.volcano.esecurebox.fragment;
 
+import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -22,6 +25,7 @@ import com.volcano.esecurebox.ConfigManager;
 import com.volcano.esecurebox.Intents;
 import com.volcano.esecurebox.Managers;
 import com.volcano.esecurebox.R;
+import com.volcano.esecurebox.backend.AccountManager;
 import com.volcano.esecurebox.model.Category;
 import com.volcano.esecurebox.model.User;
 import com.volcano.esecurebox.util.PrefUtils;
@@ -50,6 +54,8 @@ public final class NavigationFragment extends AbstractFragment {
     private final ArrayList<NavigationItem> mNavigationItems = new ArrayList<>();
     private NavigationAdapter mAdapter = new NavigationAdapter();
 
+    private BroadcastReceiver mLoginResetReceiver;
+
     private NavigationListener mListener;
 
     /**
@@ -70,6 +76,16 @@ public final class NavigationFragment extends AbstractFragment {
 
         if (savedInstanceState != null) {
             mCurrentSelectedPosition = savedInstanceState.getInt(Intents.KEY_POSITION);
+        }
+
+        if (mLoginResetReceiver == null) {
+            mLoginResetReceiver = new BroadcastReceiver() {
+                @Override
+                public void onReceive(Context context, Intent intent) {
+                    showAccountInfo();
+                }
+            };
+            AccountManager.registerLoginResetReceiver(getActivity(), mLoginResetReceiver);
         }
 
         selectItem(mCurrentSelectedPosition, true);
@@ -118,6 +134,15 @@ public final class NavigationFragment extends AbstractFragment {
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putInt(Intents.KEY_POSITION, mCurrentSelectedPosition);
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+
+        if (mLoginResetReceiver != null) {
+            LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(mLoginResetReceiver);
+        }
     }
 
     @Override

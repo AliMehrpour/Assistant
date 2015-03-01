@@ -2,6 +2,8 @@
 package com.volcano.esecurebox.activity;
 
 import android.app.FragmentManager;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -33,7 +35,7 @@ import java.util.ArrayList;
 
 public class MainActivity extends AbstractActivity {
 
-    private AccountManager.LoginResetReceiver mLoginResetReceiver;
+    private BroadcastReceiver mLoginResetReceiver;
     private FloatingActionMenu mCreateAccountMenu;
     private NavigationFragment mNavigationFragment;
     private AccountListFragment mAccountListFragment;
@@ -99,11 +101,10 @@ public class MainActivity extends AbstractActivity {
             }
         });
 
-        mLoginResetReceiver = new AccountManager.LoginResetReceiver() {
+        mLoginResetReceiver = new BroadcastReceiver() {
             @Override
-            public void onReset() {
+            public void onReceive(Context context, Intent intent) {
                 if (Managers.getAccountManager().isLoggedIn()) {
-                    mNavigationFragment.showAccountInfo();
                     mNavigationFragment.loadNavigationItems();
                     loadAccounts(PrefUtils.getPref(PrefUtils.PREF_NAVIGATOR_LAST_CATEGORY, ""));
                     loadFloatingMenuCategories();

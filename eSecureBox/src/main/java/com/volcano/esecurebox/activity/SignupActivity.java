@@ -21,7 +21,7 @@ import com.volcano.esecurebox.util.SoftKeyboardUtils;
 import com.volcano.esecurebox.util.Utils;
 
 /**
- * Sign up activity
+ * Create account or update current account activity
  */
 public class SignupActivity extends AbstractActivity {
 
@@ -38,6 +38,7 @@ public class SignupActivity extends AbstractActivity {
     private TextView mProfileSubmit;
     private EditText mUsernameEdit;
     private TextView mUsernameErrorText;
+
     private int mExtraMode;
     private User mUser ;
 
@@ -57,21 +58,15 @@ public class SignupActivity extends AbstractActivity {
         mProgressLayout = (LinearLayout) findViewById(R.id.layout_progress);
         mProfileSubmit = (TextView) findViewById(R.id.button_submit);
 
-        Bundle bundle = getIntent().getExtras();
-        if(bundle != null) {
+        final Bundle bundle = getIntent().getExtras();
+        if (bundle != null) {
             mExtraMode = bundle.getInt(Intents.EXTRA_MODE);
-            if(mExtraMode == MODE_CREATE) {
+            if (mExtraMode == MODE_CREATE) {
                 mProfileSubmit.setText(getString(R.string.button_signup));
             }
-            // Edit profile mode
             else {
                 mProfileSubmit.setText(getString(R.string.button_edit_profile));
-                mPasswordEdit.setVisibility(View.GONE);
-                mEmailEdit.setEnabled(false);
-                mUser = Managers.getAccountManager().getCurrentUser();
-                mNameEdit.setText(mUser.getName());
-                mUsernameEdit.setText(mUser.getUsername());
-                mEmailEdit.setText(mUser.getEmail());
+                loadProfile();
             }
         }
 
@@ -81,7 +76,6 @@ public class SignupActivity extends AbstractActivity {
                 if (mExtraMode == MODE_CREATE) {
                     Signup();
                 }
-                // Edit Profile mode
                 else {
                     update();
                 }
@@ -189,7 +183,6 @@ public class SignupActivity extends AbstractActivity {
         if (mExtraMode == MODE_CREATE) {
             return (isNameValid() && isUsernameValid() && isPasswordValid() && isEmailValid());
         }
-        // Edit profile mode
         else {
             return (isNameValid() && isUsernameValid());
         }
@@ -268,36 +261,48 @@ public class SignupActivity extends AbstractActivity {
         });
     }
 
+    private void loadProfile() {
+        mPasswordEdit.setVisibility(View.GONE);
+        mEmailEdit.setEnabled(false);
+
+        mUser = Managers.getAccountManager().getCurrentUser();
+        mNameEdit.setText(mUser.getName());
+        mNameEdit.setSelection(mUser.getName().length());
+        mUsernameEdit.setText(mUser.getUsername());
+        mEmailEdit.setText(mUser.getEmail());
+    }
+
     private void update() {
         if (isValid()) {
             SoftKeyboardUtils.hideSoftKeyboard(this);
             enable(false);
             mProgressLayout.setVisibility(View.VISIBLE);
 
-            mUser.setName(mNameEdit.getText().toString());
-            mUser.setUsername(mUsernameEdit.getText().toString());
-            mUser.save(new SaveCallback() {
-                @Override
-                public void done(ParseException e) {
-                    if (e == null) {
-                        LogUtils.LogI(TAG, "Update profile successful");
-                        Utils.showToast(getString(R.string.toast_edit_profile_success));
-                        finish();
-                    }
-                    else {
-                        if (e.getCode() == ParseException.USERNAME_TAKEN) {
-                            mUsernameErrorText.setText(e.getMessage());
-                            mUsernameErrorText.setVisibility(View.VISIBLE);
-                            mUsernameEdit.requestFocus();
+            Managers.getAccountManager().updateUser(mNameEdit.getText().toString().trim(), mUsernameEdit.getText().toString().trim(),
+                    new SaveCallback() {
+                        @Override
+                        public void done(ParseException e) {
+                            if (e == null) {
+                                LogUtils.LogI(TAG, "Update profile successful");
+                                Utils.showToast(getString(R.string.toast_edit_profile_successful));
+                                finish();
+                            }
+                            else {
+                                LogUtils.LogI(TAG, "Update profile failed");
+                                mProgressLayout.setVisibility(View.GONE);
+                                enable(true);
+
+                                if (e.getCode() == ParseException.USERNAME_TAKEN) {
+                                    mUsernameErrorText.setText(e.getMessage());
+                                    mUsernameErrorText.setVisibility(View.VISIBLE);
+                                    mUsernameEdit.requestFocus();
+                                }
+                                else {
+                                    Utils.showToast(getString(R.string.toast_edit_profile_failed));
+                                }
+                            }
                         }
-                        else {
-                            Utils.showToast(getString(R.string.toast_edit_profile_unSuccess));
-                        }
-                        mProgressLayout.setVisibility(View.GONE);
-                        enable(true);
-                    }
-                }
-            });
+                    });
         }
     }
 }

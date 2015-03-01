@@ -92,7 +92,7 @@ public class SigninActivity extends AbstractActivity {
         mSignupText.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivityForResult(Intents.getSignupIntent(Intents.EXTRA_MODE , SignupActivity.MODE_CREATE), Intents.REQUEST_CODE_SIGNUP);
+                startActivityForResult(Intents.getSignupIntent(SignupActivity.MODE_CREATE), Intents.REQUEST_CODE_SIGNUP);
             }
         });
     }

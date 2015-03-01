@@ -9,8 +9,10 @@ import android.content.IntentFilter;
 import com.parse.LogInCallback;
 import com.parse.ParseException;
 import com.parse.ParseUser;
+import com.parse.SaveCallback;
 import com.parse.SignUpCallback;
 import com.volcano.esecurebox.Intents;
+import com.volcano.esecurebox.Managers;
 import com.volcano.esecurebox.VlApplication;
 import com.volcano.esecurebox.model.User;
 
@@ -62,10 +64,53 @@ public class AccountManager {
         });
     }
 
+    public void changePassword(String oldPassword, final String newPassword, final SaveCallback callback) {
+        final User user = getCurrentUser();
+        Managers.getAccountManager().signin(user.getUsername(),
+                oldPassword,
+                new LogInCallback() {
+                    @Override
+                    public void done(ParseUser parseUser, ParseException e) {
+                        if (e == null) {
+                            user.setPassword(newPassword);
+                            user.save(new SaveCallback() {
+                                @Override
+                                public void done(ParseException e) {
+                                    callback.done(e);
+                                }
+                            });
+                        }
+                        else {
+                            callback.done(new ParseException(ParseException.PASSWORD_MISSING, ""));
+                        }
+                    }
+                });
+    }
+
+    public void updateUser(String name, String username, final SaveCallback callback) {
+        final User user = getCurrentUser();
+        if (user.getName().equals(name) && user.getUsername().equals(username)) {
+            callback.done(null);
+        }
+        else {
+            user.setName(name);
+            user.setUsername(username);
+            user.save(new SaveCallback() {
+                @Override
+                public void done(ParseException e) {
+                    if (e == null) {
+                        broadcastLoginReset();
+                    }
+                    callback.done(e);
+                }
+            });
+        }
+    }
+
     /**
      * Register a broadcast receiver to get notified when the login status of user has been changed
      */
-    public static Intent registerLoginResetReceiver(Context context, LoginResetReceiver receiver) {
+    public static Intent registerLoginResetReceiver(Context context, BroadcastReceiver receiver) {
         final IntentFilter filter = new IntentFilter(Intents.ACTION_LOGIN_RESET);
         return context.registerReceiver(receiver, filter);
     }
@@ -73,20 +118,7 @@ public class AccountManager {
     /**
      * Used to send a broadcast when login status changed
      */
-    public void broadcastLoginReset() {
+    private void broadcastLoginReset() {
         VlApplication.getInstance().sendBroadcast(new Intent(Intents.ACTION_LOGIN_RESET));
     }
-
-    /**
-     * Abstract class that handle unparceling of login reset broadcast
-     */
-    public static abstract class LoginResetReceiver extends BroadcastReceiver {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            onReset();
-        }
-
-        public abstract void onReset();
-    }
-
 }
