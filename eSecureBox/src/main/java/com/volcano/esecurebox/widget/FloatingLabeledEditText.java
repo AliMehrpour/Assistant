@@ -95,7 +95,12 @@ public class FloatingLabeledEditText extends LinearLayout {
         mGeneratePasswordButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                mEditText.setText(new PasswordGenerator().generate(10, true, true, true));
+                final boolean isPassword = mFormatType == FormattedEditText.FORMAT_PASSWORD;
+                final boolean isNumberPassword = mFormatType == FormattedEditText.FORMAT_PASSWORD_NUMBER;
+
+                mEditText.setText(new PasswordGenerator().generate(
+                        isPassword ? PasswordGenerator.PASSWORD_LENGTH_DEFAULT : PasswordGenerator.PASSWORD_LENGTH_NUMBER,
+                        isPassword || isNumberPassword, isPassword, isPassword));
             }
         });
     }
@@ -172,7 +177,7 @@ public class FloatingLabeledEditText extends LinearLayout {
     }
 
     private void setEyeButtonVisibility() {
-        if (mFormatType == FormattedEditText.FORMAT_PASSWORD) {
+        if (mFormatType == FormattedEditText.FORMAT_PASSWORD || mFormatType == FormattedEditText.FORMAT_PASSWORD_NUMBER) {
             mEyeButton.setVisibility(VISIBLE);
         }
         else {
@@ -198,7 +203,8 @@ public class FloatingLabeledEditText extends LinearLayout {
     }
 
     private void setGeneratePasswordButtonVisibility() {
-        if (mFormatType == FormattedEditText.FORMAT_PASSWORD && mEditText.isFocusable()) {
+        if ((mFormatType == FormattedEditText.FORMAT_PASSWORD ||
+                mFormatType == FormattedEditText.FORMAT_PASSWORD_NUMBER) && mEditText.isFocusable()) {
             mGeneratePasswordButton.setVisibility(VISIBLE);
         }
         else {

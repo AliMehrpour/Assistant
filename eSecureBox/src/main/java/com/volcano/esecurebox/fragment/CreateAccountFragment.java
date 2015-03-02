@@ -384,7 +384,7 @@ public class CreateAccountFragment extends AbstractFragment {
                                     fieldEditText.setText(field.getDefaultValue());
                                 }
                                 fieldEditText.setHint(field.getField().getName());
-                                fieldEditText.setFormatType(field.getField().getType());
+                                fieldEditText.setFormatType(field.getField().getFormat());
                                 mFieldLayout.addView(fieldEditText);
                             }
 
@@ -425,7 +425,7 @@ public class CreateAccountFragment extends AbstractFragment {
                                     fieldEditText.setText(value.getValue());
                                     fieldEditText.setIcon(new CircleDrawable(Color.TRANSPARENT, CircleDrawable.FILL,
                                             value.getField().getName().substring(0, 1), getResources().getColor(R.color.theme_primary)));
-                                    fieldEditText.setFormatType(value.getField().getType());
+                                    fieldEditText.setFormatType(value.getField().getFormat());
 
                                     mFieldLayout.addView(fieldEditText);
                                 }

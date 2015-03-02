@@ -14,11 +14,13 @@ public final class FormattedEditText extends RobotoEditText {
     public final static int FORMAT_STRING             = 1;
     public final static int FORMAT_STRING_MULTILINE   = 2;
     public final static int FORMAT_DATE               = 3;
-    public final static int FORMAT_TIME               = 4;
+    public final static int FORMAT_PASSWORD_NUMBER    = 4;   // like Pin
     public final static int FORMAT_PASSWORD           = 5;
     public final static int FORMAT_URL                = 6;
     public final static int FORMAT_PHONE              = 7;
     public final static int FORMAT_ENUM               = 8;
+    public final static int FORMAT_EMAIL              = 9;
+    public final static int FORMAT_NUMBER             = 10;
 
     private int mFormatType = FORMAT_STRING;
 
@@ -62,6 +64,7 @@ public final class FormattedEditText extends RobotoEditText {
                 break;
 
             case FORMAT_PASSWORD:
+            case FORMAT_PASSWORD_NUMBER:
                 setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
                 setMaxLines(1);
                 break;

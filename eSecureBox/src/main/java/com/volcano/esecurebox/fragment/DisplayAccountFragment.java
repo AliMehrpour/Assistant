@@ -95,7 +95,7 @@ public class DisplayAccountFragment extends AbstractFragment {
                                     fle.setHint(value.getField().getName());
                                     fle.setText(value.getValue());
                                     fle.setDividerLineVisibility(View.INVISIBLE);
-                                    fle.setFormatType(value.getField().getType());
+                                    fle.setFormatType(value.getField().getFormat());
                                     fle.setIcon(new CircleDrawable(Color.TRANSPARENT, CircleDrawable.FILL,
                                             value.getField().getName().substring(0, 1), getResources().getColor(R.color.theme_primary)));
 

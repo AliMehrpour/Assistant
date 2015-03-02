@@ -9,10 +9,13 @@ import java.util.Random;
  * A password generator
  */
 public final class PasswordGenerator {
-    private final static String sLetters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";;
-    private final static String sNumbers = "0123456789";
-    private final static String sSpecials = "!@#$%&*";
-    private final static Random random = new Random();
+    private static final String sLetters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";;
+    private static final String sNumbers = "0123456789";
+    private static final String sSpecials = "!@#$%&*";
+    private static final Random random = new Random();
+
+    public static final int PASSWORD_LENGTH_DEFAULT = 10;
+    public static final int PASSWORD_LENGTH_NUMBER  = 4;
 
     /**
      * Generate a random password
