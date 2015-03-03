@@ -22,20 +22,29 @@ import com.volcano.esecurebox.R;
 import com.volcano.esecurebox.security.PasswordGenerator;
 import com.volcano.esecurebox.util.Utils;
 
+import java.util.ArrayList;
+
 /**
- * Floating label edit text
+ * Floating label edit text with two action button
  */
 public class FloatingLabeledEditText extends LinearLayout {
+
+    private static final int ACTION_GENERATE_PASSWORD = 1;
+    private static final int ACTION_SHOW_LIST         = 2;
+    private static final int ACTION_VISIBLE_PASSWORD  = 3;
 
     private ImageView mIcon;
     private RobotoTextView mHintTextView;
     private FormattedEditText mEditText;
-    private ImageView mEyeButton;
-    private ImageView mGeneratePasswordButton;
+    private ImageView mAction1Button;
+    private ImageView mAction2Button;
     private View mDividerLine;
 
+    private ArrayList<String> mValues = new ArrayList<>();
     private boolean mVisiblePassword = false;
     private int mFormatType;
+    private int mAction1;
+    private int mAction2;
 
     public FloatingLabeledEditText(Context context) {
         this(context, null);
@@ -57,8 +66,8 @@ public class FloatingLabeledEditText extends LinearLayout {
         mIcon = (ImageView) findViewById(R.id.icon);
         mHintTextView = (RobotoTextView) findViewById(R.id.text_hint);
         mEditText = (FormattedEditText) findViewById(R.id.edittext);
-        mEyeButton = (ImageView) findViewById(R.id.button_eye);
-        mGeneratePasswordButton = (ImageView) findViewById(R.id.button_generate_password);
+        mAction1Button = (ImageView) findViewById(R.id.button_action_1);
+        mAction2Button = (ImageView) findViewById(R.id.button_action_2);
         mDividerLine = findViewById(R.id.divider_line);
 
         final TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.FloatingLabeledEditText);
@@ -85,22 +94,36 @@ public class FloatingLabeledEditText extends LinearLayout {
             a.recycle();
         }
 
-        mEyeButton.setOnClickListener(new OnClickListener() {
+        mAction1Button.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                toggleEyeButton();
+                if (mAction1 == ACTION_VISIBLE_PASSWORD) {
+                    toggleEyeButton();
+                }
+                else if (mAction1 == ACTION_SHOW_LIST && mValues.size() > 0) {
+                    new AlertDialogWrapper.Builder(getContext())
+                            .setItems( mValues.toArray(new CharSequence[mValues.size()]), new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    mEditText.setText(mValues.get(which));
+                                }
+                            })
+                            .show();
+                }
             }
         });
 
-        mGeneratePasswordButton.setOnClickListener(new OnClickListener() {
+        mAction2Button.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                final boolean isPassword = mFormatType == FormattedEditText.FORMAT_PASSWORD;
-                final boolean isNumberPassword = mFormatType == FormattedEditText.FORMAT_PASSWORD_NUMBER;
+                if (mAction2 == ACTION_GENERATE_PASSWORD) {
+                    final boolean isPassword = mFormatType == FormattedEditText.FORMAT_PASSWORD;
+                    final boolean isNumberPassword = mFormatType == FormattedEditText.FORMAT_PASSWORD_NUMBER;
 
-                mEditText.setText(new PasswordGenerator().generate(
-                        isPassword ? PasswordGenerator.PASSWORD_LENGTH_DEFAULT : PasswordGenerator.PASSWORD_LENGTH_NUMBER,
-                        isPassword || isNumberPassword, isPassword, isPassword));
+                    mEditText.setText(new PasswordGenerator().generate(
+                            isPassword ? PasswordGenerator.PASSWORD_LENGTH_DEFAULT : PasswordGenerator.PASSWORD_LENGTH_NUMBER,
+                            isPassword || isNumberPassword, isPassword, isPassword));
+                }
             }
         });
     }
@@ -143,8 +166,9 @@ public class FloatingLabeledEditText extends LinearLayout {
     public void setFormatType(int formatType) {
         mEditText.setFormatType(formatType);
         mFormatType = formatType;
-        setEyeButtonVisibility();
-        setGeneratePasswordButtonVisibility();
+        setEyeAction();
+        setGeneratePasswordAction();
+        setListAction();
     }
 
     /**
@@ -154,6 +178,14 @@ public class FloatingLabeledEditText extends LinearLayout {
      */
     public void setDividerLineVisibility(int visibility) {
         mDividerLine.setVisibility(visibility);
+    }
+
+    /**
+     * Set values for FORMAT_ENUM data types
+     * @param values The values
+     */
+    public void setPossibleValues(ArrayList<String> values) {
+        mValues = values;
     }
 
     private void setHintBackground(Drawable background) {
@@ -176,12 +208,11 @@ public class FloatingLabeledEditText extends LinearLayout {
         }
     }
 
-    private void setEyeButtonVisibility() {
+    private void setEyeAction() {
         if (mFormatType == FormattedEditText.FORMAT_PASSWORD || mFormatType == FormattedEditText.FORMAT_PASSWORD_NUMBER) {
-            mEyeButton.setVisibility(VISIBLE);
-        }
-        else {
-            mEyeButton.setVisibility(GONE);
+            mAction1Button.setImageDrawable(getResources().getDrawable(R.drawable.icon_eye_open));
+            mAction1Button.setVisibility(VISIBLE);
+            mAction1 = ACTION_VISIBLE_PASSWORD;
         }
     }
 
@@ -189,26 +220,33 @@ public class FloatingLabeledEditText extends LinearLayout {
         if (mVisiblePassword) {
             final int lastSelection = mEditText.getSelectionStart();
             mEditText.setFormatType(FormattedEditText.FORMAT_PASSWORD);
-            mEyeButton.setImageDrawable(getResources().getDrawable(R.drawable.icon_eye_open));
+            mAction1Button.setImageDrawable(getResources().getDrawable(R.drawable.icon_eye_open));
             mEditText.setSelection(lastSelection);
             mVisiblePassword = false;
         }
         else {
             final int lastSelection = mEditText.getSelectionStart();
             mEditText.setFormatType(FormattedEditText.FORMAT_STRING);
-            mEyeButton.setImageDrawable(getResources().getDrawable(R.drawable.icon_eye_closed));
+            mAction1Button.setImageDrawable(getResources().getDrawable(R.drawable.icon_eye_closed));
             mEditText.setSelection(lastSelection);
             mVisiblePassword = true;
         }
     }
 
-    private void setGeneratePasswordButtonVisibility() {
+    private void setGeneratePasswordAction() {
         if ((mFormatType == FormattedEditText.FORMAT_PASSWORD ||
                 mFormatType == FormattedEditText.FORMAT_PASSWORD_NUMBER) && mEditText.isFocusable()) {
-            mGeneratePasswordButton.setVisibility(VISIBLE);
+            mAction2Button.setImageDrawable(getResources().getDrawable(R.drawable.icon_generate_password));
+            mAction2Button.setVisibility(VISIBLE);
+            mAction2 = ACTION_GENERATE_PASSWORD;
         }
-        else {
-            mGeneratePasswordButton.setVisibility(GONE);
+    }
+
+    private void setListAction() {
+        if (mFormatType == FormattedEditText.FORMAT_ENUM && mEditText.isFocusable()) {
+            mAction1Button.setImageDrawable(getResources().getDrawable(R.drawable.icon_list));
+            mAction1Button.setVisibility(VISIBLE);
+            mAction1 = ACTION_SHOW_LIST;
         }
     }
 

@@ -81,7 +81,7 @@
         <item name="android:paddingBottom">@dimen/margin_20</item>
         <item name="android:textSize">@dimen/text_size_16</item>
         <item name="android:textColor">@color/grey_9</item>
-        <item name="android:inputType">textCapSentences</item>
+        <item name="android:inputType">textCapWords</item>
         <item name="robotoTypeface">regular</item>
         <item name="android:background">@drawable/edittext_full_width</item>
     </style>

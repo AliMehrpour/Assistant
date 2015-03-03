@@ -10,6 +10,8 @@
     <string name="app_name">eSecureBox</string>
     <string name="app_url_store">https://play.google.com/store/apps/details?id=</string>
 
+    <string name="alert_cancel_create_account">Are you sure you want to discard this account?</string>
+    <string name="alert_cancel_edit_account">Are you sure you want to discard changes to this account?</string>
     <string name="alert_delete_account">Are you sure you want to delete account?</string>
     <string name="alert_load_accounts">Your accounts is unavailable\n please check your network connection and tap to try again</string>
     <string name="alert_load_categories">Categories is unavailable\n please check your network connection and tap to try again</string>
@@ -30,10 +32,12 @@
     <string name="button_close">CLOSE</string>
     <string name="button_del_uppercase">DEL</string>
     <string name="button_delete_uppercase">DELETE</string>
+    <string name="button_discard">Discard</string>
+    <string name="button_edit_profile">UPDATE</string>
+    <string name="button_keep_editing">Keep Editing</string>
     <string name="button_submit">SUBMIT</string>
     <string name="button_signin">SIGN IN</string>
     <string name="button_signup">SIGN UP</string>
-    <string name="button_edit_profile">UPDATE</string>
 
     <string name="email_subject_bug_report" formatted="false">%s (version %s)</string>
     <string name="email_choose_app_title">Send email via…</string>
@@ -59,6 +63,7 @@
 
     <string name="label_about_dialog_content_general">A secure and reliable box for save your important information.\nCopyright © 2015 Volcano.</string>
     <string name="label_about_dialog_title">About</string>
+    <string name="label_cancel">Cancel</string>
     <string name="label_category">Category</string>
     <string name="label_delete">Delete</string>
     <string name="label_change_password_dialog_title">Change password</string>

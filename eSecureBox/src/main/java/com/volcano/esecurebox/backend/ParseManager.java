@@ -11,6 +11,7 @@ import com.volcano.esecurebox.model.Account;
 import com.volcano.esecurebox.model.AccountFieldValue;
 import com.volcano.esecurebox.model.Category;
 import com.volcano.esecurebox.model.Field;
+import com.volcano.esecurebox.model.FieldTypeValue;
 import com.volcano.esecurebox.model.SubCategory;
 import com.volcano.esecurebox.model.SubCategoryField;
 import com.volcano.esecurebox.model.User;
@@ -48,6 +49,7 @@ public final class ParseManager {
         ParseObject.registerSubclass(SubCategory.class);
         ParseObject.registerSubclass(SubCategoryField.class);
         ParseObject.registerSubclass(Field.class);
+        ParseObject.registerSubclass(FieldTypeValue.class);
         ParseObject.registerSubclass(Account.class);
         ParseObject.registerSubclass(AccountFieldValue.class);
         ParseCrashReporting.enable(VlApplication.getInstance());

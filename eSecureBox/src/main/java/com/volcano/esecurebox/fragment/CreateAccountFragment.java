@@ -27,6 +27,8 @@ import com.volcano.esecurebox.Managers;
 import com.volcano.esecurebox.R;
 import com.volcano.esecurebox.model.Account;
 import com.volcano.esecurebox.model.AccountFieldValue;
+import com.volcano.esecurebox.model.Field;
+import com.volcano.esecurebox.model.FieldTypeValue;
 import com.volcano.esecurebox.model.SubCategory;
 import com.volcano.esecurebox.model.SubCategoryField;
 import com.volcano.esecurebox.util.BitmapUtils;
@@ -137,7 +139,7 @@ public class CreateAccountFragment extends AbstractFragment {
             }));
 
             mAccountTitle.setVisibility(View.VISIBLE);
-
+            mSubCategoryText.setVisibility(View.VISIBLE);
             // TODO: do restore state of load account
         }
     }
@@ -385,6 +387,23 @@ public class CreateAccountFragment extends AbstractFragment {
                                 }
                                 fieldEditText.setHint(field.getField().getName());
                                 fieldEditText.setFormatType(field.getField().getFormat());
+                                if (field.getField().getFormat() == Field.FORMAT_ENUM) {
+                                    addCancellingRequest(FieldTypeValue.getValueByField(field.getField(), new FindCallback<FieldTypeValue>() {
+                                        @Override
+                                        public void done(List<FieldTypeValue> fieldTypeValues, ParseException e) {
+                                            if (e == null) {
+                                                final ArrayList<String> values = new ArrayList<>();
+                                                for (FieldTypeValue value : fieldTypeValues) {
+                                                    values.add(value.getValue());
+                                                }
+                                                fieldEditText.setPossibleValues(values);
+                                            }
+                                            else {
+                                                LogUtils.LogE(TAG, "Load field values failed");
+                                            }
+                                        }
+                                    }));
+                                }
                                 mFieldLayout.addView(fieldEditText);
                             }
 

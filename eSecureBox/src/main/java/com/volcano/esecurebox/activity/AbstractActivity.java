@@ -6,6 +6,7 @@ import android.graphics.Color;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.KeyEvent;
 import android.view.MenuItem;
 
 import com.parse.ParseQuery;
@@ -45,7 +46,9 @@ public class AbstractActivity extends ActionBarActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
-                finish();
+                if (askToFinish()) {
+                    finish();
+                }
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -86,4 +89,16 @@ public class AbstractActivity extends ActionBarActivity {
         Managers.getParseManager().getRequestManager().addRequest(this, query);
     }
 
+    /**
+     * @return True if activity can be finished by Home Up button on Toolbar or Back key
+     */
+    protected boolean askToFinish() {
+        return true;
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        return !(keyCode == KeyEvent.KEYCODE_BACK && askToFinish()) || super.onKeyDown(keyCode, event);
+
+    }
 }

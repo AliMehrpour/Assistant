@@ -1,6 +1,7 @@
 // Copyright (c) 2015 Volcano. All rights reserved.
 package com.volcano.esecurebox.activity;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.drawable.StateListDrawable;
 import android.os.Bundle;
@@ -10,6 +11,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 
+import com.afollestad.materialdialogs.AlertDialogWrapper;
 import com.volcano.esecurebox.Intents;
 import com.volcano.esecurebox.R;
 import com.volcano.esecurebox.fragment.CreateAccountFragment;
@@ -25,6 +27,8 @@ public class CreateAccountActivity extends AbstractActivity {
     private CreateAccountFragment mFragment;
     private MenuItem mSaveMenu;
 
+    private String mAccountId;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -36,10 +40,11 @@ public class CreateAccountActivity extends AbstractActivity {
         final Intent intent = getIntent();
         final String categoryColor = intent.getStringExtra(Intents.EXTRA_CATEGORY_COLOR);
         final String categoryId = intent.getStringExtra(Intents.EXTRA_CATEGORY_ID);
-        final String accountId = intent.getStringExtra(Intents.EXTRA_ACCOUNT_ID);
+        mAccountId = intent.getStringExtra(Intents.EXTRA_ACCOUNT_ID);
 
         setToolbarColor(categoryColor);
         final RobotoTextView deleteText = (RobotoTextView) findViewById(R.id.text_delete);
+        deleteText.setVisibility(mAccountId != null ? View.VISIBLE : View.GONE);
         deleteText.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -64,7 +69,7 @@ public class CreateAccountActivity extends AbstractActivity {
                 deleteText.setVisibility(View.GONE);
             }
             else {
-                mFragment.setAccountId(accountId);
+                mFragment.setAccountId(mAccountId);
                 setTitle(R.string.label_edit_account);
                 deleteText.setVisibility(View.VISIBLE);
 
@@ -112,5 +117,22 @@ public class CreateAccountActivity extends AbstractActivity {
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+
+    @Override
+    protected boolean askToFinish() {
+        new AlertDialogWrapper.Builder(this)
+                .setMessage(mAccountId == null ? R.string.alert_cancel_create_account : R.string.alert_cancel_edit_account)
+                .setTitle(R.string.label_cancel)
+                .setNegativeButton(R.string.button_discard, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        finish();
+                    }
+                })
+                .setPositiveButton(R.string.button_keep_editing, null).show();
+
+        return false;
     }
 }
