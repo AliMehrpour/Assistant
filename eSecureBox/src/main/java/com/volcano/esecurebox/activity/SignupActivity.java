@@ -62,10 +62,10 @@ public class SignupActivity extends AbstractActivity {
         if (bundle != null) {
             mExtraMode = bundle.getInt(Intents.EXTRA_MODE);
             if (mExtraMode == MODE_CREATE) {
-                mProfileSubmit.setText(getString(R.string.button_signup));
+                mProfileSubmit.setText(getString(R.string.button_signup_uppercase));
             }
             else {
-                mProfileSubmit.setText(getString(R.string.button_edit_profile));
+                mProfileSubmit.setText(getString(R.string.button_edit_profile_uppercase));
                 loadProfile();
             }
         }

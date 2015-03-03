@@ -71,7 +71,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/margin_40"
             android:gravity="center_horizontal|center_vertical"
-            android:text="@string/button_signin"
+            android:text="@string/button_signin_uppercase"
             android:background="@drawable/button_full_width_red"
             style="@style/ButtonFullWidth" />
 
@@ -81,7 +81,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/margin_10"
             android:gravity="center_horizontal|center_vertical"
-            android:text="@string/button_signup"
+            android:text="@string/button_signup_uppercase"
             android:background="@drawable/button_full_width_teal"
             style="@style/ButtonFullWidth" />
 

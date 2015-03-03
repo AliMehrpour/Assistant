@@ -10,13 +10,13 @@
     <string name="app_name">eSecureBox</string>
     <string name="app_url_store">https://play.google.com/store/apps/details?id=</string>
 
-    <string name="alert_cancel_create_account">Are you sure you want to discard this account?</string>
-    <string name="alert_cancel_edit_account">Are you sure you want to discard changes to this account?</string>
-    <string name="alert_delete_account">Are you sure you want to delete account?</string>
+    <string name="alert_cancel_create_account">Discard this account?</string>
+    <string name="alert_cancel_edit_account">Discard changes to this account?</string>
+    <string name="alert_delete_account">Delete this account?</string>
     <string name="alert_load_accounts">Your accounts is unavailable\n please check your network connection and tap to try again</string>
     <string name="alert_load_categories">Categories is unavailable\n please check your network connection and tap to try again</string>
     <string name="alert_no_account">No account!\nUse + button to create new one.</string>
-    <string name="alert_signout">Are you sure you want to sign out?</string>
+    <string name="alert_signout">Are you sure to sign out?</string>
 
     <string name="button_0">0</string>
     <string name="button_1">1</string>
@@ -28,16 +28,16 @@
     <string name="button_7">7</string>
     <string name="button_8">8</string>
     <string name="button_9">9</string>
-    <string name="button_cancel">CANCEL</string>
-    <string name="button_close">CLOSE</string>
+    <string name="button_cancel_uppercase">CANCEL</string>
+    <string name="button_close_uppercase">CLOSE</string>
     <string name="button_del_uppercase">DEL</string>
     <string name="button_delete_uppercase">DELETE</string>
-    <string name="button_discard">Discard</string>
-    <string name="button_edit_profile">UPDATE</string>
-    <string name="button_keep_editing">Keep Editing</string>
-    <string name="button_submit">SUBMIT</string>
-    <string name="button_signin">SIGN IN</string>
-    <string name="button_signup">SIGN UP</string>
+    <string name="button_discard_uppercase">DISCARD</string>
+    <string name="button_edit_profile_uppercase">UPDATE</string>
+    <string name="button_submit_uppercase">SUBMIT</string>
+    <string name="button_signin_uppercase">SIGN IN</string>
+    <string name="button_signout_uppercase">SIGN OUT</string>
+    <string name="button_signup_uppercase">SIGN UP</string>
 
     <string name="email_subject_bug_report" formatted="false">%s (version %s)</string>
     <string name="email_choose_app_title">Send email via…</string>
@@ -72,7 +72,6 @@
     <string name="label_enter_new_passcode">Enter your new passcode</string>
     <string name="label_enter_old_passcode">Enter your old passcode</string>
     <string name="label_initialize_data">Initializing for first time\n Be patient! It takes less than a minute…</string>
-    <string name="label_yes_uppercase">YES</string>
     <string name="label_new_account">New Account</string>
     <string name="label_ninety_nine_plus">99+</string>
     <string name="label_re_enter_passcode">Re-enter your passcode</string>

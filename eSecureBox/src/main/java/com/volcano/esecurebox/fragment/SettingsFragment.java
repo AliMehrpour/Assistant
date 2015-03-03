@@ -73,13 +73,13 @@ public class SettingsFragment extends PreferenceFragment {
                         .setTitle(getString(R.string.label_change_password_dialog_title))
                         .setView(layout)
                         .autoDismiss(false)
-                        .setNegativeButton(R.string.button_cancel, new DialogInterface.OnClickListener() {
+                        .setNegativeButton(R.string.button_cancel_uppercase, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 mChangePasswordDialog.dismiss();
                             }
                         })
-                        .setPositiveButton(R.string.button_submit, new DialogInterface.OnClickListener() {
+                        .setPositiveButton(R.string.button_submit_uppercase, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 oldPasswordErrorText.setVisibility(View.GONE);
@@ -175,7 +175,7 @@ public class SettingsFragment extends PreferenceFragment {
                 new AlertDialogWrapper.Builder(getActivity())
                         .setTitle(getString(R.string.label_about_dialog_title))
                         .setView(layout)
-                        .setNegativeButton(R.string.button_close, new DialogInterface.OnClickListener() {
+                        .setNegativeButton(R.string.button_close_uppercase, new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
                                 dialog.dismiss();
                             }

@@ -8,8 +8,8 @@
 
     <ImageView
         android:id="@+id/icon"
-        android:layout_width="@dimen/iconed_edittext_size"
-        android:layout_height="@dimen/iconed_edittext_size"
+        android:layout_width="@dimen/floating_edit_text_icon_size"
+        android:layout_height="@dimen/floating_edit_text_icon_size"
         android:layout_marginLeft="@dimen/margin_20"
         android:layout_marginRight="@dimen/margin_25"
         android:layout_marginTop="@dimen/margin_16"
@@ -32,6 +32,7 @@
         android:layout_alignParentRight="true"
         android:layout_centerVertical="true"
         android:layout_marginRight="@dimen/margin_16"
+        android:src="@drawable/icon_generate_password"
         android:visibility="gone"
         tools:ignore="ContentDescription" />
 

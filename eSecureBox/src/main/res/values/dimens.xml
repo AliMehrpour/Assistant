@@ -24,7 +24,7 @@
     <dimen name="height_56">56dp</dimen>
     <dimen name="height_72">72dp</dimen>
 
-    <dimen name="iconed_edittext_size">24dp</dimen>
+    <dimen name="floating_edit_text_icon_size">24dp</dimen>
 
     <dimen name="margin_2">2dp</dimen>
     <dimen name="margin_4">4dp</dimen>

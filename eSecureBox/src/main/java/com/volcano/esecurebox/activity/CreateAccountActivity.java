@@ -124,14 +124,14 @@ public class CreateAccountActivity extends AbstractActivity {
     protected boolean askToFinish() {
         new AlertDialogWrapper.Builder(this)
                 .setMessage(mAccountId == null ? R.string.alert_cancel_create_account : R.string.alert_cancel_edit_account)
-                .setTitle(R.string.label_cancel)
-                .setNegativeButton(R.string.button_discard, new DialogInterface.OnClickListener() {
+                .setNegativeButton(R.string.button_cancel_uppercase, null)
+                .setPositiveButton(R.string.button_discard_uppercase, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         finish();
                     }
                 })
-                .setPositiveButton(R.string.button_keep_editing, null).show();
+                .show();
 
         return false;
     }

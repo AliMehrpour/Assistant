@@ -3,7 +3,6 @@ package com.volcano.esecurebox.fragment;
 
 import android.app.Activity;
 import android.content.DialogInterface;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -294,10 +293,9 @@ public class CreateAccountFragment extends AbstractFragment {
     public void delete() {
         if (mAccount != null) {
             new AlertDialogWrapper.Builder(getActivity())
-                    .setTitle(getString(R.string.label_delete))
                     .setMessage(R.string.alert_delete_account)
                     .setNegativeButton(android.R.string.cancel, null)
-                    .setPositiveButton(R.string.label_yes_uppercase, new DialogInterface.OnClickListener() {
+                    .setPositiveButton(R.string.button_delete_uppercase, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             mProgressLayout.setVisibility(View.VISIBLE);
@@ -375,16 +373,8 @@ public class CreateAccountFragment extends AbstractFragment {
                                 final SubCategoryField field = mFields.get(i);
                                 final FloatingLabeledEditText fieldEditText = new FloatingLabeledEditText(getActivity());
                                 final String iconName = field.getField().getIconName();
-                                if (iconName != null) {
-                                    fieldEditText.setIcon(getResources().getDrawable(BitmapUtils.getDrawableIdentifier(getActivity(), iconName)));
-                                }
-                                else {
-                                    fieldEditText.setIcon(new CircleDrawable(Color.TRANSPARENT, CircleDrawable.FILL,
-                                            field.getField().getName().substring(0, 1), getResources().getColor(R.color.theme_primary)));
-                                }
-                                if (!TextUtils.isEmpty(field.getDefaultValue())) {
-                                    fieldEditText.setText(field.getDefaultValue());
-                                }
+                                fieldEditText.setIcon(iconName, field.getField().getName().charAt(0), getResources().getColor(R.color.theme_primary));
+                                fieldEditText.setText(field.getDefaultValue());
                                 fieldEditText.setHint(field.getField().getName());
                                 fieldEditText.setFormatType(field.getField().getFormat());
                                 if (field.getField().getFormat() == Field.FORMAT_ENUM) {
@@ -442,10 +432,8 @@ public class CreateAccountFragment extends AbstractFragment {
                                     final FloatingLabeledEditText fieldEditText = new FloatingLabeledEditText(getActivity());
                                     fieldEditText.setHint(value.getField().getName());
                                     fieldEditText.setText(value.getValue());
-                                    fieldEditText.setIcon(new CircleDrawable(Color.TRANSPARENT, CircleDrawable.FILL,
-                                            value.getField().getName().substring(0, 1), getResources().getColor(R.color.theme_primary)));
+                                    fieldEditText.setIcon(value.getField().getIconName(), value.getField().getName().charAt(0), getResources().getColor(R.color.theme_primary));
                                     fieldEditText.setFormatType(value.getField().getFormat());
-
                                     mFieldLayout.addView(fieldEditText);
                                 }
 

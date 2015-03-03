@@ -18,7 +18,7 @@ public class FieldTypeValue extends ParseObject {
 
     private final static String FIELD   = "field";
     private final static String VALUE   = "value";
-    private final static String ORDER    = "order";
+    private final static String ORDER   = "order";
 
     public static ParseQuery getValueByField(Field field, final FindCallback<FieldTypeValue> callback) {
         final ParseQuery<FieldTypeValue> query = getQuery().whereEqualTo(FIELD, field)

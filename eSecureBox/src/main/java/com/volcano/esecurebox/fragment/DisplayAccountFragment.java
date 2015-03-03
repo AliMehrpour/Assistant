@@ -2,7 +2,6 @@
 package com.volcano.esecurebox.fragment;
 
 import android.app.Activity;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,7 +19,6 @@ import com.volcano.esecurebox.model.SubCategory;
 import com.volcano.esecurebox.util.BitmapUtils;
 import com.volcano.esecurebox.util.LogUtils;
 import com.volcano.esecurebox.util.Utils;
-import com.volcano.esecurebox.widget.CircleDrawable;
 import com.volcano.esecurebox.widget.FloatingLabeledEditText;
 
 import java.util.ArrayList;
@@ -72,12 +70,7 @@ public class DisplayAccountFragment extends AbstractFragment {
                     fle.setEnabled(false);
                     fle.setHint(getResources().getString(R.string.label_category));
                     fle.setText(subCategory.getName());
-                    if (subCategory.hasIcon()) {
-                        fle.setIcon(getResources().getDrawable(BitmapUtils.getDrawableIdentifier(getActivity(), subCategory.getIconName())));
-                    }
-                    else {
-                        fle.setIcon(new CircleDrawable(subCategory.getCategory().getColor(), CircleDrawable.FILL));
-                    }
+                    fle.setIcon(subCategory.getIconName(), null, BitmapUtils.getColor(subCategory.getCategory().getColor()));
                     mFieldLayout.addView(fle);
 
                     addCancellingRequest(AccountFieldValue.findInBackground(account, new FindCallback<AccountFieldValue>() {
@@ -96,9 +89,7 @@ public class DisplayAccountFragment extends AbstractFragment {
                                     fle.setText(value.getValue());
                                     fle.setDividerLineVisibility(View.INVISIBLE);
                                     fle.setFormatType(value.getField().getFormat());
-                                    fle.setIcon(new CircleDrawable(Color.TRANSPARENT, CircleDrawable.FILL,
-                                            value.getField().getName().substring(0, 1), getResources().getColor(R.color.theme_primary)));
-
+                                    fle.setIcon(value.getField().getIconName(), value.getField().getName().charAt(0), getResources().getColor(R.color.theme_primary));
                                     mFieldLayout.addView(fle);
                                 }
 

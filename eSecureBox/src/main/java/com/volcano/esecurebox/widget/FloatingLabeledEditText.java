@@ -8,6 +8,7 @@ import android.animation.ObjectAnimator;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.res.TypedArray;
+import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.text.TextUtils;
 import android.util.AttributeSet;
@@ -20,6 +21,7 @@ import android.widget.LinearLayout;
 import com.afollestad.materialdialogs.AlertDialogWrapper;
 import com.volcano.esecurebox.R;
 import com.volcano.esecurebox.security.PasswordGenerator;
+import com.volcano.esecurebox.util.BitmapUtils;
 import com.volcano.esecurebox.util.Utils;
 
 import java.util.ArrayList;
@@ -102,6 +104,7 @@ public class FloatingLabeledEditText extends LinearLayout {
                 }
                 else if (mAction1 == ACTION_SHOW_LIST && mValues.size() > 0) {
                     new AlertDialogWrapper.Builder(getContext())
+                            .setTitle(mHintTextView.getText())
                             .setItems( mValues.toArray(new CharSequence[mValues.size()]), new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
@@ -142,7 +145,9 @@ public class FloatingLabeledEditText extends LinearLayout {
     }
 
     public void setText(String text) {
-        mEditText.setText(text);
+        if (!TextUtils.isEmpty(text)) {
+            mEditText.setText(text);
+        }
     }
 
     public void setHint(String hint) {
@@ -157,6 +162,23 @@ public class FloatingLabeledEditText extends LinearLayout {
     public void setIcon(Drawable drawable) {
         mIcon.setVisibility(View.VISIBLE);
         mIcon.setImageDrawable(drawable);
+    }
+
+    public void setIcon(String iconName, Character ch, int color) {
+        int resourceId = 0;
+        if (iconName != null) {
+            resourceId = BitmapUtils.getDrawableIdentifier(getContext(), iconName);
+        }
+
+        if (resourceId != 0) {
+            setIcon(getResources().getDrawable(resourceId));
+        }
+        else if (ch != null) {
+            setIcon(new CircleDrawable(Color.TRANSPARENT, CircleDrawable.FILL, ch.toString(), color));
+        }
+        else {
+            setIcon(new CircleDrawable(color, CircleDrawable.FILL));
+        }
     }
 
     /**
@@ -209,7 +231,10 @@ public class FloatingLabeledEditText extends LinearLayout {
     }
 
     private void setEyeAction() {
-        if (mFormatType == FormattedEditText.FORMAT_PASSWORD || mFormatType == FormattedEditText.FORMAT_PASSWORD_NUMBER) {
+        final boolean isFocusable = mEditText.isFocusable();
+        final boolean isEmpty = TextUtils.isEmpty(mEditText.getText());
+        final boolean isPassword = mFormatType == FormattedEditText.FORMAT_PASSWORD || mFormatType == FormattedEditText.FORMAT_PASSWORD_NUMBER;
+        if (isPassword && (isFocusable || !isEmpty)) {
             mAction1Button.setImageDrawable(getResources().getDrawable(R.drawable.icon_eye_open));
             mAction1Button.setVisibility(VISIBLE);
             mAction1 = ACTION_VISIBLE_PASSWORD;
@@ -219,14 +244,14 @@ public class FloatingLabeledEditText extends LinearLayout {
     private void toggleEyeButton() {
         if (mVisiblePassword) {
             final int lastSelection = mEditText.getSelectionStart();
-            mEditText.setFormatType(FormattedEditText.FORMAT_PASSWORD);
+            mEditText.setFormatType(mFormatType);
             mAction1Button.setImageDrawable(getResources().getDrawable(R.drawable.icon_eye_open));
             mEditText.setSelection(lastSelection);
             mVisiblePassword = false;
         }
         else {
             final int lastSelection = mEditText.getSelectionStart();
-            mEditText.setFormatType(FormattedEditText.FORMAT_STRING);
+            mEditText.setFormatType(mEditText.reverseFormatType(mFormatType));
             mAction1Button.setImageDrawable(getResources().getDrawable(R.drawable.icon_eye_closed));
             mEditText.setSelection(lastSelection);
             mVisiblePassword = true;

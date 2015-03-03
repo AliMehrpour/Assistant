@@ -11,16 +11,18 @@ import android.util.AttributeSet;
  */
 public final class FormattedEditText extends RobotoEditText {
 
-    public final static int FORMAT_STRING             = 1;
-    public final static int FORMAT_STRING_MULTILINE   = 2;
-    public final static int FORMAT_DATE               = 3;
-    public final static int FORMAT_PASSWORD_NUMBER    = 4;   // like Pin
-    public final static int FORMAT_PASSWORD           = 5;
-    public final static int FORMAT_URL                = 6;
-    public final static int FORMAT_PHONE              = 7;
-    public final static int FORMAT_ENUM               = 8;
-    public final static int FORMAT_EMAIL              = 9;
-    public final static int FORMAT_NUMBER             = 10;
+    public final static int FORMAT_STRING                   = 1;
+    public final static int FORMAT_STRING_MULTILINE         = 2;
+    public final static int FORMAT_DATE                     = 3;
+    public final static int FORMAT_PASSWORD_NUMBER          = 4;   // like Pin
+    public final static int FORMAT_PASSWORD                 = 5;
+    public final static int FORMAT_URL                      = 6;
+    public final static int FORMAT_PHONE                    = 7;
+    public final static int FORMAT_ENUM                     = 8;
+    public final static int FORMAT_EMAIL                    = 9;
+    public final static int FORMAT_NUMBER                   = 10;
+    public final static int FORMAT_PASSWORD_NUMBER_VISIBLE  = 11;   // like Pin
+    public final static int FORMAT_PASSWORD_VISIBLE         = 12;
 
     private int mFormatType = FORMAT_STRING;
 
@@ -52,6 +54,16 @@ public final class FormattedEditText extends RobotoEditText {
         applyFormatType();
     }
 
+    public int reverseFormatType(int formatType) {
+        if (formatType == FORMAT_PASSWORD) {
+            return FORMAT_PASSWORD_VISIBLE;
+        }
+        else if (formatType == FORMAT_PASSWORD_NUMBER) {
+            return FORMAT_PASSWORD_NUMBER_VISIBLE;
+        }
+        return FORMAT_STRING;
+    }
+
     private void applyFormatType() {
         switch (mFormatType) {
             case FORMAT_STRING:
@@ -66,8 +78,16 @@ public final class FormattedEditText extends RobotoEditText {
                 setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
                 break;
 
+            case FORMAT_PASSWORD_VISIBLE:
+                setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
+                break;
+
             case FORMAT_PASSWORD_NUMBER:
-                setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD | InputType.TYPE_CLASS_NUMBER);
+                setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_VARIATION_PASSWORD);
+                break;
+
+            case FORMAT_PASSWORD_NUMBER_VISIBLE:
+                setInputType(InputType.TYPE_CLASS_NUMBER);
                 break;
 
             case FORMAT_URL:
@@ -86,7 +106,7 @@ public final class FormattedEditText extends RobotoEditText {
                 break;
 
             case FORMAT_NUMBER:
-                setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_CLASS_NUMBER);
+                setInputType(InputType.TYPE_CLASS_NUMBER);
                 break;
 
             default:

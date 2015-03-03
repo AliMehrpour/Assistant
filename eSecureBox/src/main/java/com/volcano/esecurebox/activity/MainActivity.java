@@ -158,7 +158,7 @@ public class MainActivity extends AbstractActivity {
                     .setMessage(R.string.alert_signout)
                     .setTitle(R.string.label_sign_out)
                     .setNegativeButton(android.R.string.cancel, null)
-                    .setPositiveButton(R.string.label_yes_uppercase, new DialogInterface.OnClickListener() {
+                    .setPositiveButton(R.string.button_signout_uppercase, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             Managers.getAccountManager().signout();
