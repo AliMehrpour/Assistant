@@ -156,14 +156,20 @@ public class FloatingLabeledEditText extends LinearLayout {
     }
 
     /**
-     * Set icon
-     * @param drawable The darwable
+     * Set the icon
+     * @param drawable The drawable
      */
     public void setIcon(Drawable drawable) {
         mIcon.setVisibility(View.VISIBLE);
         mIcon.setImageDrawable(drawable);
     }
 
+    /**
+     * Set the icon
+     * @param iconName The icon name
+     * @param ch The character to be used id iconName is null
+     * @param color The color of character or fill color
+     */
     public void setIcon(String iconName, Character ch, int color) {
         int resourceId = 0;
         if (iconName != null) {
@@ -279,9 +285,7 @@ public class FloatingLabeledEditText extends LinearLayout {
         mEditText.setOnLongClickListener(new OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
-                if (isEnabled() && !TextUtils.isEmpty(mEditText.getText())) {
-                    v.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP);
-
+                if (!mEditText.isFocusable() && !TextUtils.isEmpty(mEditText.getText())) {
                     new AlertDialogWrapper.Builder(getContext())
                             .setItems(R.array.array_field_actions, new DialogInterface.OnClickListener() {
                                 @Override

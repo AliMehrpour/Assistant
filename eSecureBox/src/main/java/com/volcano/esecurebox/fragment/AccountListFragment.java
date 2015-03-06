@@ -35,7 +35,8 @@ import java.util.List;
 public class AccountListFragment extends AbstractFragment {
 
     private RefreshingRecyclerView mRecyclerView;
-    private TextView mEmptyLayout;
+    private FrameLayout mEmptyLayout;
+    private RobotoTextView mEmptyText;
     private FrameLayout mProgressLayout;
 
     private boolean mInitialized;
@@ -48,7 +49,8 @@ public class AccountListFragment extends AbstractFragment {
         final View view = inflater.inflate(R.layout.fragment_account_list, container, false);
 
         mRecyclerView = (RefreshingRecyclerView) view.findViewById(R.id.list_account);
-        mEmptyLayout = (TextView) view.findViewById(android.R.id.empty);
+        mEmptyLayout = (FrameLayout) view.findViewById(android.R.id.empty);
+        mEmptyText = (RobotoTextView) view.findViewById(R.id.text_empty);
         mProgressLayout = (FrameLayout) view.findViewById(R.id.layout_progress);
 
         return view;
@@ -139,7 +141,9 @@ public class AccountListFragment extends AbstractFragment {
     private void setErrorState() {
         mProgressLayout.setVisibility(View.GONE);
         mEmptyLayout.setVisibility(View.VISIBLE);
-        mEmptyLayout.setText(mInitialized ? R.string.alert_no_account : R.string.alert_load_accounts);
+        mEmptyText.setText(mInitialized ? R.string.alert_no_account : R.string.alert_load_accounts);
+        mEmptyText.setCompoundDrawablesWithIntrinsicBounds(0,
+                mInitialized ? R.drawable.icon_account_list_empty : R.drawable.icon_no_network_large, 0, 0);
     }
 
     private class AccountAdapter extends RecyclerView.Adapter<AccountViewHolder> {

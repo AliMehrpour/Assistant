@@ -45,7 +45,7 @@ public final class NavigationFragment extends AbstractFragment {
     private View mFragmentContainer;
     private RobotoTextView mUsernameText;
     private RobotoTextView mEmailText;
-    private RobotoTextView mEmptyView;
+    private FrameLayout mEmptyView;
     private FrameLayout mProgressLayout;
 
     private int mCurrentSelectedPosition;
@@ -98,7 +98,7 @@ public final class NavigationFragment extends AbstractFragment {
         mUsernameText = (RobotoTextView) view.findViewById(R.id.text_username);
         mEmailText = (RobotoTextView) view.findViewById(R.id.text_email);
         mDrawerListView = (ListView) view.findViewById(R.id.list_navigation);
-        mEmptyView = (RobotoTextView) view.findViewById(android.R.id.empty);
+        mEmptyView = (FrameLayout) view.findViewById(android.R.id.empty);
         mProgressLayout = (FrameLayout) view.findViewById(R.id.layout_progress);
 
         return view;

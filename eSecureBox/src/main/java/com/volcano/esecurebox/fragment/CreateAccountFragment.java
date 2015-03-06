@@ -39,6 +39,7 @@ import com.volcano.esecurebox.widget.RobotoEditText;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Queue;
 
 /**
  * Create account fragment
@@ -282,9 +283,6 @@ public class CreateAccountFragment extends AbstractFragment {
 
             }
         }
-        else {
-            Utils.showToast(R.string.toast_account_save_validation);
-        }
     }
 
     /**
@@ -340,17 +338,32 @@ public class CreateAccountFragment extends AbstractFragment {
         mSelectedSubCategoryId = subCategory.getObjectId();
         mSubCategoryText.setText(mSelectedSubCategory.getName());
 
-        if (mSelectedSubCategory.hasIcon()) {
-            mSubCategoryImage.setImageDrawable(getResources().getDrawable(BitmapUtils.getDrawableIdentifier(getActivity(), subCategory.getIconName())));
+        boolean hasIcon = false;
+        if (subCategory.hasIcon()) {
+            final int resourceId = BitmapUtils.getDrawableIdentifier(getActivity(), subCategory.getIconName());
+            if (resourceId != 0) {
+                mSubCategoryImage.setImageDrawable(getResources().getDrawable(resourceId));
+                hasIcon = true;
+            }
         }
-        else {
+        if (!hasIcon) {
             mSubCategoryImage.setImageDrawable(new CircleDrawable(subCategory.getCategory().getColor(), CircleDrawable.FILL));
         }
     }
 
     private boolean valid() {
-        return !TextUtils.isEmpty(mAccountTitle.getText()) &&
-                (mContentSource == ContentSource.BY_CATEGORY ? mFields.size() > 0 : mAccountFieldValues.size() > 0);
+        boolean valid = true;
+
+        if (TextUtils.isEmpty(mAccountTitle.getText())) {
+            valid = false;
+            Utils.showToast(R.string.toast_account_save_validation_title_empty);
+        }
+        else if ((mContentSource == ContentSource.BY_CATEGORY ? mFields.size() : mAccountFieldValues.size()) == 0) {
+            valid = false;
+            Utils.showToast(R.string.toast_account_save_validation_no_field);
+        }
+
+        return valid;
     }
 
     private void loadFieldsBySubCategory() {
@@ -373,7 +386,7 @@ public class CreateAccountFragment extends AbstractFragment {
                                 final SubCategoryField field = mFields.get(i);
                                 final FloatingLabeledEditText fieldEditText = new FloatingLabeledEditText(getActivity());
                                 final String iconName = field.getField().getIconName();
-                                fieldEditText.setIcon(iconName, field.getField().getName().charAt(0), getResources().getColor(R.color.theme_primary));
+                                fieldEditText.setIcon(iconName, field.getField().getName().charAt(0), getResources().getColor(R.color.grey_1));
                                 fieldEditText.setText(field.getDefaultValue());
                                 fieldEditText.setHint(field.getField().getName());
                                 fieldEditText.setFormatType(field.getField().getFormat());
@@ -432,8 +445,25 @@ public class CreateAccountFragment extends AbstractFragment {
                                     final FloatingLabeledEditText fieldEditText = new FloatingLabeledEditText(getActivity());
                                     fieldEditText.setHint(value.getField().getName());
                                     fieldEditText.setText(value.getValue());
-                                    fieldEditText.setIcon(value.getField().getIconName(), value.getField().getName().charAt(0), getResources().getColor(R.color.theme_primary));
+                                    fieldEditText.setIcon(value.getField().getIconName(), value.getField().getName().charAt(0), getResources().getColor(R.color.grey_1));
                                     fieldEditText.setFormatType(value.getField().getFormat());
+                                    if (value.getField().getFormat() == Field.FORMAT_ENUM) {
+                                        addCancellingRequest(FieldTypeValue.getValueByField(value.getField(), new FindCallback<FieldTypeValue>() {
+                                            @Override
+                                            public void done(List<FieldTypeValue> fieldTypeValues, ParseException e) {
+                                                if (e == null) {
+                                                    final ArrayList<String> values = new ArrayList<>();
+                                                    for (FieldTypeValue value : fieldTypeValues) {
+                                                        values.add(value.getValue());
+                                                    }
+                                                    fieldEditText.setPossibleValues(values);
+                                                }
+                                                else {
+                                                    LogUtils.LogE(TAG, "Load field values failed");
+                                                }
+                                            }
+                                        }));
+                                    }
                                     mFieldLayout.addView(fieldEditText);
                                 }
 

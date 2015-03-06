@@ -26,12 +26,14 @@ public class Account extends ParseObject {
     private static final String USER            = "user";
 
     public static ParseQuery findInBackground(Category category, final FindCallback<Account> callback) {
-        final ParseQuery<SubCategory> innerQuery = SubCategory.getQuery();
-        innerQuery.whereEqualTo(SubCategory.CATEGORY, category);
+        final ParseQuery<SubCategory> innerQuery = SubCategory.getQuery()
+                .whereEqualTo(SubCategory.CATEGORY, category);
 
-        final ParseQuery<Account> query = getQuery();
-        query.whereMatchesQuery(SUB_CATEGORY, innerQuery);
-        query.whereEqualTo(USER, ParseUser.getCurrentUser());
+        final ParseQuery<Account> query = getQuery()
+            .whereMatchesQuery(SUB_CATEGORY, innerQuery)
+            .whereEqualTo(USER, ParseUser.getCurrentUser())
+            .orderByAscending(TITLE);
+
         query.findInBackground(new FindCallback<Account>() {
             @Override
             public void done(List<Account> accounts, ParseException e) {
@@ -114,11 +116,11 @@ public class Account extends ParseObject {
     }
 
     public String getTitle() {
-        return SecurityUtils.decrypt(EncryptionAlgorithm.AES_ECB, getString(TITLE));
+        return getString(TITLE);
     }
 
     public void setTitle(String title) {
-        put(TITLE, SecurityUtils.encrypt(EncryptionAlgorithm.AES_ECB, title));
+        put(TITLE, title);
     }
 
     public SubCategory getSubCategory() {

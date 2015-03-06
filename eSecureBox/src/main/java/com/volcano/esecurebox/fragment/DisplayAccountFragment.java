@@ -89,7 +89,7 @@ public class DisplayAccountFragment extends AbstractFragment {
                                     fle.setText(value.getValue());
                                     fle.setDividerLineVisibility(View.INVISIBLE);
                                     fle.setFormatType(value.getField().getFormat());
-                                    fle.setIcon(value.getField().getIconName(), value.getField().getName().charAt(0), getResources().getColor(R.color.theme_primary));
+                                    fle.setIcon(value.getField().getIconName(), value.getField().getName().charAt(0), getResources().getColor(R.color.grey_1));
                                     mFieldLayout.addView(fle);
                                 }
 

@@ -44,7 +44,6 @@ public class CreateAccountActivity extends AbstractActivity {
 
         setToolbarColor(categoryColor);
         final RobotoTextView deleteText = (RobotoTextView) findViewById(R.id.text_delete);
-        deleteText.setVisibility(mAccountId != null ? View.VISIBLE : View.GONE);
         deleteText.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -79,25 +78,21 @@ public class CreateAccountActivity extends AbstractActivity {
                 stateListDrawable.addState(new int[] { android.R.attr.state_pressed }, BitmapUtils.getColorDrawablr(BitmapUtils.getLightenColor(normalColor, .2f)));
                 stateListDrawable.addState(new int[] { }, BitmapUtils.getColorDrawablr(normalColor));
                 deleteText.setBackground(stateListDrawable);
+
+                final SoftKeyboardUtils softKeyboardHelper = new SoftKeyboardUtils(findViewById(R.id.root));
+                softKeyboardHelper.addSoftKeyboardStateListener(new SoftKeyboardUtils.OnSoftKeyboardStateListener() {
+                    @Override
+                    public void onSoftKeyboardOpened(int keyboardHeight) {
+                        deleteText.setVisibility(View.GONE);
+                    }
+
+                    @Override
+                    public void onSoftKeyboardClosed() {
+                        deleteText.setVisibility(View.VISIBLE);
+                    }
+                });
             }
         }
-
-        final SoftKeyboardUtils softKeyboardHelper = new SoftKeyboardUtils(findViewById(R.id.root));
-        softKeyboardHelper.addSoftKeyboardStateListener(new SoftKeyboardUtils.OnSoftKeyboardStateListener() {
-            @Override
-            public void onSoftKeyboardOpened(int keyboardHeight) {
-                if (categoryId == null) {
-                    deleteText.setVisibility(View.GONE);
-                }
-            }
-
-            @Override
-            public void onSoftKeyboardClosed() {
-                if (categoryId == null) {
-                    deleteText.setVisibility(View.VISIBLE);
-                }
-            }
-        });
     }
 
     @Override
@@ -124,13 +119,13 @@ public class CreateAccountActivity extends AbstractActivity {
     protected boolean askToFinish() {
         new AlertDialogWrapper.Builder(this)
                 .setMessage(mAccountId == null ? R.string.alert_cancel_create_account : R.string.alert_cancel_edit_account)
-                .setNegativeButton(R.string.button_cancel_uppercase, null)
-                .setPositiveButton(R.string.button_discard_uppercase, new DialogInterface.OnClickListener() {
+                .setNegativeButton(R.string.button_discard_uppercase, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         finish();
                     }
                 })
+                .setPositiveButton(R.string.button_keep_editing_uppercase, null)
                 .show();
 
         return false;

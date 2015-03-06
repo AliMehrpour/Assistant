@@ -22,69 +22,71 @@
 
     </FrameLayout>
 
-    <LinearLayout
-        android:orientation="vertical"
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:fillViewport="true">
 
-        <com.volcano.esecurebox.widget.RobotoEditText
-            android:id="@+id/text_account_title"
-            android:hint="@string/hint_account_name"
-            android:visibility="gone"
-            style="@style/Text.FullWidth"/>
-
-        <RelativeLayout
-            android:id="@+id/layout_sub_category"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/height_56"
-            android:visibility="gone">
-
-            <ImageView
-                android:id="@+id/image_sub_category"
-                android:layout_width="@dimen/floating_edit_text_icon_size"
-                android:layout_height="@dimen/floating_edit_text_icon_size"
-                android:layout_marginLeft="@dimen/margin_20"
-                android:layout_marginRight="@dimen/margin_25"
-                android:layout_alignParentLeft="true"
-                android:layout_centerVertical="true"
-                tools:ignore="contentDescription" />
-
-            <com.volcano.esecurebox.widget.RobotoTextView
-                android:id="@+id/text_sub_category"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginRight="@dimen/margin_16"
-                android:layout_centerVertical="true"
-                android:layout_toRightOf="@id/image_sub_category"
-                android:hint="@string/hint_select_sub_category"
-                style="@style/Text.RegularDarker16" />
-
-            <View
-                android:layout_alignParentBottom="true"
-                android:layout_toRightOf="@+id/image_sub_category"
-                android:layout_toEndOf="@+id/image_sub_category"
-                style="@style/Divider" />
-
-        </RelativeLayout>
-
-        <FrameLayout
-            android:id="@+id/layout_sub_category_list"
+        <LinearLayout
+            android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:visibility="gone">
+            android:scrollbars="vertical">
 
-            <fragment
-                android:id="@+id/fragment_sub_category_list"
+            <com.volcano.esecurebox.widget.RobotoEditText
+                android:id="@+id/text_account_title"
+                android:hint="@string/hint_account_name"
+                android:visibility="gone"
+                style="@style/Text.FullWidth"/>
+
+            <RelativeLayout
+                android:id="@+id/layout_sub_category"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/height_56"
+                android:visibility="gone">
+
+                <ImageView
+                    android:id="@+id/image_sub_category"
+                    android:layout_width="@dimen/circle_drawable_size"
+                    android:layout_height="@dimen/circle_drawable_size"
+                    android:layout_marginLeft="@dimen/margin_20"
+                    android:layout_marginRight="@dimen/margin_25"
+                    android:layout_alignParentLeft="true"
+                    android:layout_centerVertical="true"
+                    tools:ignore="contentDescription" />
+
+                <com.volcano.esecurebox.widget.RobotoTextView
+                    android:id="@+id/text_sub_category"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="@dimen/margin_16"
+                    android:layout_centerVertical="true"
+                    android:layout_toRightOf="@id/image_sub_category"
+                    android:hint="@string/hint_select_sub_category"
+                    style="@style/Text.RegularDarker16" />
+
+                <View
+                    android:layout_alignParentBottom="true"
+                    android:layout_toRightOf="@+id/image_sub_category"
+                    android:layout_toEndOf="@+id/image_sub_category"
+                    style="@style/Divider" />
+
+            </RelativeLayout>
+
+            <FrameLayout
+                android:id="@+id/layout_sub_category_list"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:name="com.volcano.esecurebox.fragment.SubCategoryListFragment"
-                tools:layout="@layout/fragment_sub_category_list"/>
+                android:visibility="gone">
 
-        </FrameLayout>
+                <fragment
+                    android:id="@+id/fragment_sub_category_list"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:name="com.volcano.esecurebox.fragment.SubCategoryListFragment"
+                    tools:layout="@layout/fragment_sub_category_list"/>
 
-        <ScrollView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            </FrameLayout>
 
             <LinearLayout
                 android:id="@+id/layout_fields"
@@ -93,8 +95,8 @@
                 android:orientation="vertical"
                 android:scrollbars="vertical" />
 
-        </ScrollView>
+        </LinearLayout>
 
-    </LinearLayout>
+    </ScrollView>
 
 </FrameLayout>

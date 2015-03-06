@@ -13,9 +13,9 @@
     <string name="alert_cancel_create_account">Discard this account?</string>
     <string name="alert_cancel_edit_account">Discard changes to this account?</string>
     <string name="alert_delete_account">Delete this account?</string>
-    <string name="alert_load_accounts">Your accounts is unavailable\n please check your network connection and tap to try again</string>
-    <string name="alert_load_categories">Categories is unavailable\n please check your network connection and tap to try again</string>
-    <string name="alert_no_account">No account!\nUse + button to create new one.</string>
+    <string name="alert_load_accounts">Your box is not available\nCheck network connection and tap to try again</string>
+    <string name="alert_load_categories">Your box is not available\nCheck network connection and tap to try again</string>
+    <string name="alert_no_account">Box is Empty!\nUse + to add item in your box</string>
     <string name="alert_signout">Are you sure to sign out?</string>
 
     <string name="button_0">0</string>
@@ -34,6 +34,7 @@
     <string name="button_delete_uppercase">DELETE</string>
     <string name="button_discard_uppercase">DISCARD</string>
     <string name="button_edit_profile_uppercase">UPDATE</string>
+    <string name="button_keep_editing_uppercase">KEEP EDITTING</string>
     <string name="button_submit_uppercase">SUBMIT</string>
     <string name="button_signin_uppercase">SIGN IN</string>
     <string name="button_signout_uppercase">SIGN OUT</string>
@@ -100,15 +101,16 @@
     <string name="share_subject">eSecureBox App</string>
     <string name="share_body">\neSecureBox is an awesome app, you can save all of your accounts, login and important information in one safe place. Download it and enjoy!\n\n http://www.eSecureBox.net</string>
 
-    <string name="toast_account_create_failed">Create new account failed</string>
-    <string name="toast_account_delete_successful">Account deleted successfully</string>
-    <string name="toast_account_delete_failed">Delete account failed</string>
-    <string name="toast_account_load_failed">Load account failed</string>
-    <string name="toast_account_save_failed">Save account failed</string>
-    <string name="toast_account_save_validation">Please fill required information</string>
-    <string name="toast_account_update_failed">Update account failed</string>
-    <string name="toast_category_for_create_account_unavailable">Creating account is unavailable, please check your network connection and try again</string>
-    <string name="toast_change_password_successful">password changed successfully</string>
+    <string name="toast_account_create_failed">Create new item failed</string>
+    <string name="toast_account_delete_successful">Item deleted successfully</string>
+    <string name="toast_account_delete_failed">Delete item failed</string>
+    <string name="toast_account_load_failed">Load item failed</string>
+    <string name="toast_account_save_failed">Save item failed</string>
+    <string name="toast_account_save_validation_no_field">No information for save, please try again</string>
+    <string name="toast_account_save_validation_title_empty">Title can not be empty</string>
+    <string name="toast_account_update_failed">Update item failed</string>
+    <string name="toast_category_for_create_account_unavailable">Creating item is not available, Check your network connection and try again</string>
+    <string name="toast_change_password_successful">Password changed successfully</string>
     <string name="toast_change_password_failed">Change password failed</string>
     <string name="toast_copy_to_clipboard">Copied to clipboard</string>
     <string name="toast_device_offline_message">Your device appears to be offline</string>
@@ -124,7 +126,6 @@
     <string name="toast_passcode_enabled">Passcode enabled</string>
     <string name="toast_passcode_invalid">Wrong passcode, please try again</string>
     <string name="toast_passcode_not_matched">The Passcodes didn\'t match, pleas try again</string>
-    <string name="toast_report_bug_email_client_unavailable">There are no email clients installed</string>
     <string name="toast_signup_failed">Signup failed</string>
 
 </resources>

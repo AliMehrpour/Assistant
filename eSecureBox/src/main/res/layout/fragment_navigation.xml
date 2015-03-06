@@ -51,13 +51,22 @@
             android:cacheColorHint="@android:color/transparent"
             android:fitsSystemWindows="true" />
 
-        <com.volcano.esecurebox.widget.RobotoTextView
+        <FrameLayout
             android:id="@android:id/empty"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:gravity="center"
-            android:text="@string/alert_load_categories"
-            style="@style/Text.RegularGrey18" />
+            android:layout_height="match_parent">
+
+            <com.volcano.esecurebox.widget.RobotoTextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:drawablePadding="@dimen/margin_10"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:text="@string/alert_load_categories"
+                android:drawableTop="@drawable/icon_no_network_small"
+                style="@style/Text.RegularGrey16" />
+
+        </FrameLayout>
 
         <FrameLayout
             android:id="@+id/layout_progress"

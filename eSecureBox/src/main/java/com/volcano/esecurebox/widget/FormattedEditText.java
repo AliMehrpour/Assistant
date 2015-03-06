@@ -65,21 +65,22 @@ public final class FormattedEditText extends RobotoEditText {
     }
 
     private void applyFormatType() {
+        final int defaultInputType = InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS;
         switch (mFormatType) {
             case FORMAT_STRING:
-                setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_CAP_SENTENCES);
+                setInputType(defaultInputType | InputType.TYPE_TEXT_FLAG_CAP_SENTENCES);
                 break;
 
             case FORMAT_STRING_MULTILINE:
-                setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_CAP_SENTENCES | InputType.TYPE_TEXT_FLAG_MULTI_LINE);
+                setInputType(defaultInputType | InputType.TYPE_TEXT_FLAG_CAP_SENTENCES | InputType.TYPE_TEXT_FLAG_MULTI_LINE);
                 break;
 
             case FORMAT_PASSWORD:
-                setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
+                setInputType(defaultInputType | InputType.TYPE_TEXT_VARIATION_PASSWORD);
                 break;
 
             case FORMAT_PASSWORD_VISIBLE:
-                setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
+                setInputType(defaultInputType | InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
                 break;
 
             case FORMAT_PASSWORD_NUMBER:
@@ -91,18 +92,18 @@ public final class FormattedEditText extends RobotoEditText {
                 break;
 
             case FORMAT_URL:
-                setInputType(InputType.TYPE_CLASS_TEXT);
+                setInputType(defaultInputType);
                 if (!isFocusable()) {
                     Linkify.addLinks(this, Linkify.WEB_URLS);
                 }
                 break;
 
             case FORMAT_PHONE:
-                setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_CLASS_PHONE);
+                setInputType(defaultInputType | InputType.TYPE_CLASS_PHONE);
                 break;
 
             case FORMAT_EMAIL:
-                setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS);
+                setInputType(defaultInputType | InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS);
                 break;
 
             case FORMAT_NUMBER:

@@ -40,6 +40,7 @@
         <item name="android:textSize">@dimen/text_size_18</item>
         <item name="android:textColor">@android:color/white</item>
         <item name="robotoTypeface">medium</item>
+        <item name="android:gravity">center_horizontal|center_vertical</item>
     </style>
 
     <style name="ButtonPasscode" parent="@android:style/TextAppearance">
@@ -79,10 +80,11 @@
         <item name="android:paddingRight">@dimen/margin_16</item>
         <item name="android:paddingTop">@dimen/margin_20</item>
         <item name="android:paddingBottom">@dimen/margin_20</item>
-        <item name="android:textSize">@dimen/text_size_16</item>
+        <item name="android:textSize">@dimen/text_size_18</item>
         <item name="android:textColor">@color/grey_9</item>
-        <item name="android:inputType">textCapWords</item>
-        <item name="robotoTypeface">regular</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:inputType">textCapWords|textFilter</item>
+        <item name="robotoTypeface">medium</item>
         <item name="android:background">@drawable/edittext_full_width</item>
     </style>
 
@@ -175,14 +177,14 @@
     </style>
 
     <style name="Text.RegularGrey16" parent="@android:style/TextAppearance.Holo">
-        <item name="android:textColor">@color/grey_4</item>
+        <item name="android:textColor">@color/grey_3</item>
         <item name="android:textSize">@dimen/text_size_16</item>
         <item name="robotoTypeface">regular</item>
     </style>
 
-    <style name="Text.RegularGrey18" parent="@android:style/TextAppearance.Holo">
-        <item name="android:textColor">@color/grey_3</item>
-        <item name="android:textSize">@dimen/text_size_18</item>
+    <style name="Text.RegularGreyDarker16" parent="@android:style/TextAppearance.Holo">
+        <item name="android:textColor">@color/grey_4</item>
+        <item name="android:textSize">@dimen/text_size_16</item>
         <item name="robotoTypeface">regular</item>
     </style>
 

@@ -49,10 +49,6 @@ public class CircleDrawable extends Drawable {
         this(BitmapUtils.getColor(color), style, text, Color.WHITE);
     }
 
-    public CircleDrawable(String color, int style, String text, String textColor) {
-        this(BitmapUtils.getColor(color), style, text, BitmapUtils.getColor(textColor));
-    }
-
     public CircleDrawable(int color, int style, String text, int textColor) {
         mTextColor = textColor;
         mColor = color;
