@@ -224,8 +224,9 @@ public final class NavigationFragment extends AbstractFragment {
             for (int i = 0; i < size; i++) {
                 final Category category = categories.get(i);
 
-                if (i == 0) {
+                if (i == 0 && PrefUtils.getPref(PrefUtils.PREF_NAVIGATOR_LAST_CATEGORY, "").equals("")) {
                     PrefUtils.setPref(PrefUtils.PREF_NAVIGATOR_LAST_CATEGORY, category.getObjectId());
+                    mListener.onCategorySelected(category.getObjectId(), category.getName());
                 }
 
                 final NavigationItem item = new NavigationItem();
