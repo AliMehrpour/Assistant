@@ -18,6 +18,7 @@ import com.volcano.esecurebox.Intents;
 import com.volcano.esecurebox.Managers;
 import com.volcano.esecurebox.R;
 import com.volcano.esecurebox.activity.SignupActivity;
+import com.volcano.esecurebox.analytics.MixpanelManager;
 import com.volcano.esecurebox.fragment.PasscodeFragment.Mode;
 import com.volcano.esecurebox.util.SoftKeyboardUtils;
 import com.volcano.esecurebox.util.Utils;
@@ -210,6 +211,8 @@ public class SettingsFragment extends PreferenceFragment {
         mSharePref.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             @Override
             public boolean onPreferenceClick(Preference preference) {
+                Managers.getMixpanelManager().track(MixpanelManager.EVENT_SHARE_APP);
+
                 Utils.launchShareClient(getActivity(),
                         String.format(getString(R.string.share_subject), getString(R.string.app_name), Utils.getAppVersionName()),
                         getString(R.string.share_body));

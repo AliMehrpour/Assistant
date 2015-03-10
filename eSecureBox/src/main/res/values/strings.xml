@@ -62,7 +62,7 @@
     <string name="hint_select_sub_category">Select Account Type</string>
     <string name="hint_username">Username</string>
 
-    <string name="label_about_dialog_content_general">A secure and reliable box for save your important information.\nCopyright © 2015 Volcano.</string>
+    <string name="label_about_dialog_content_general">A secure and reliable box to save your important information.\nCopyright © 2015 Volcano.</string>
     <string name="label_about_dialog_title">About</string>
     <string name="label_cancel">Cancel</string>
     <string name="label_category">Category</string>

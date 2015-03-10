@@ -12,14 +12,15 @@ import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.text.TextUtils;
 import android.util.AttributeSet;
-import android.view.HapticFeedbackConstants;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
 import com.afollestad.materialdialogs.AlertDialogWrapper;
+import com.volcano.esecurebox.Managers;
 import com.volcano.esecurebox.R;
+import com.volcano.esecurebox.analytics.MixpanelManager;
 import com.volcano.esecurebox.security.PasswordGenerator;
 import com.volcano.esecurebox.util.BitmapUtils;
 import com.volcano.esecurebox.util.Utils;
@@ -120,6 +121,8 @@ public class FloatingLabeledEditText extends LinearLayout {
             @Override
             public void onClick(View v) {
                 if (mAction2 == ACTION_GENERATE_PASSWORD) {
+                    Managers.getMixpanelManager().track(MixpanelManager.EVENT_GENERATE_PASSWORD);
+
                     final boolean isPassword = mFormatType == FormattedEditText.FORMAT_PASSWORD;
                     final boolean isNumberPassword = mFormatType == FormattedEditText.FORMAT_PASSWORD_NUMBER;
 

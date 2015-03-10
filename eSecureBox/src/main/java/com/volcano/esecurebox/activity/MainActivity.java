@@ -175,6 +175,8 @@ public class MainActivity extends AbstractActivity {
     protected void onDestroy() {
         super.onDestroy();
 
+        Managers.getMixpanelManager().flush();
+
         if (mLoginResetReceiver != null) {
             LocalBroadcastManager.getInstance(this).unregisterReceiver(mLoginResetReceiver);
         }
@@ -198,6 +200,7 @@ public class MainActivity extends AbstractActivity {
                             mCreateAccountMenu.toggle();
 
                             final Category category = (Category) menu.getTag(R.id.category);
+                            Managers.getMixpanelManager().trackCreateItemEvent(category.getName());
                             startActivity(Intents.getCreateAccountIntent(category.getObjectId(), category.getColor()));
                         }
                     });
