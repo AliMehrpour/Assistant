@@ -83,6 +83,7 @@ public class MainActivity extends AbstractActivity {
             loadFloatingMenuCategories();
         }
 
+        mCreateAccountMenu.collapse();
         mCreateAccountMenu.setOnFloatingActionsMenuUpdateListener(new OnFloatingActionsMenuUpdateListener() {
             @Override
             public void onMenuExpanded() {
@@ -96,7 +97,6 @@ public class MainActivity extends AbstractActivity {
 
             @Override
             public void onMenuIsEmptyOnExpanding() {
-                mCreateAccountMenu.collapse();
                 loadFloatingMenuCategories();
                 Utils.showToast(R.string.toast_category_for_create_account_unavailable);
             }
@@ -210,9 +210,6 @@ public class MainActivity extends AbstractActivity {
                     public void onRefreshComplete(boolean isSuccessful) {
                         if (isSuccessful) {
                             loadFloatingMenuCategories();
-                        }
-                        else {
-                            Utils.showToast(R.string.toast_category_for_create_account_unavailable);
                         }
                     }
                 });

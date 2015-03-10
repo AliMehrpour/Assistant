@@ -82,6 +82,7 @@ public class SubCategoryListFragment extends AbstractFragment {
         mListener = l;
     }
 
+    @SuppressWarnings("UnusedDeclaration")
     public void setSubSelectedCategory(SubCategory subCategory) {
         mSelectedSubCategory = subCategory;
         mAdapter.notifyDataSetChanged();
@@ -101,11 +102,11 @@ public class SubCategoryListFragment extends AbstractFragment {
             mProgressLayout.setVisibility(View.VISIBLE);
         }
         mSubCategories.clear();
-        addCancellingRequest(Category.getInBackground(mCategoryId, new GetCallback<Category>() {
+        Category.getInBackground(this, mCategoryId, new GetCallback<Category>() {
             @Override
             public void done(Category category, ParseException e) {
                 if (e == null) {
-                    addCancellingRequest(SubCategory.findInBackground(category, new FindCallback<SubCategory>() {
+                    SubCategory.findInBackground(THIS, category, new FindCallback<SubCategory>() {
                         @Override
                         public void done(List<SubCategory> subCategories, ParseException e) {
                             if (e == null) {
@@ -124,13 +125,13 @@ public class SubCategoryListFragment extends AbstractFragment {
                                 mListener.onSubCategoriesLoadFailed();
                             }
                         }
-                    }));
+                    });
                 }
                 else {
                     mListener.onSubCategoriesLoadFailed();
                 }
             }
-        }));
+        });
     }
 
     private class SubCategoryAdapter extends BaseAdapter {

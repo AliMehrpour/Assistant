@@ -5,12 +5,14 @@ import android.support.v7.appcompat.BuildConfig;
 import android.util.Log;
 
 import com.volcano.esecurebox.ConfigManager;
+import com.volcano.esecurebox.R;
+import com.volcano.esecurebox.VlApplication;
 
 /**
  * Contains log utility methods
  */
 public final class LogUtils {
-    private static final String LOG_PREFIX = "assistant_";
+    private static final String LOG_PREFIX = VlApplication.getInstance().getString(R.string.app_name) + ".";
     private static final int LOG_PREFIX_LENGTH = LOG_PREFIX.length();
     private static final int MAX_LOG_TAG_LENGTH = 23;
 
@@ -30,9 +32,9 @@ public final class LogUtils {
     }
 
     public static void LogD(final String tag, String message) {
-        if (BuildConfig.DEBUG || ConfigManager.IS_DOGFOOD_BUILD || Log.isLoggable(tag, Log.DEBUG)) {
+        //if (BuildConfig.DEBUG || ConfigManager.IS_DOGFOOD_BUILD || Log.isLoggable(tag, Log.DEBUG)) {
             Log.d(tag, message);
-        }
+        //}
     }
 
     public static void LogD(final String tag, String message, Throwable cause) {

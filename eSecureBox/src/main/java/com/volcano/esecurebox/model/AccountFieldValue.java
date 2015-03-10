@@ -8,6 +8,7 @@ import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.SaveCallback;
 import com.volcano.esecurebox.backend.ParseManager;
+import com.volcano.esecurebox.backend.TimedoutQuery;
 import com.volcano.esecurebox.security.SecurityUtils;
 import com.volcano.esecurebox.security.SecurityUtils.EncryptionAlgorithm;
 
@@ -23,12 +24,12 @@ public class AccountFieldValue extends ParseObject {
     private static final String VALUE       = "value";
     private static final String ORDER       = "order";
 
-    public static ParseQuery findInBackground(Account account, final FindCallback<AccountFieldValue> callback) {
+    public static ParseQuery findInBackground(Object tag, Account account, final FindCallback<AccountFieldValue> callback) {
         final ParseQuery<AccountFieldValue> query = getQuery();
         query.whereEqualTo(ACCOUNT, account);
         query.include(FIELD);
         query.orderByAscending(ORDER);
-        query.findInBackground(new FindCallback<AccountFieldValue>() {
+        new TimedoutQuery<>(query).findInBackground(tag, new FindCallback<AccountFieldValue>() {
             @Override
             public void done(List<AccountFieldValue> accountFieldValues, ParseException e) {
                 callback.done(accountFieldValues, e);

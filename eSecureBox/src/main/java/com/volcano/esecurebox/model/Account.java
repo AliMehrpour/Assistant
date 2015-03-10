@@ -11,8 +11,7 @@ import com.parse.ParseQuery;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
 import com.volcano.esecurebox.backend.ParseManager;
-import com.volcano.esecurebox.security.SecurityUtils;
-import com.volcano.esecurebox.security.SecurityUtils.EncryptionAlgorithm;
+import com.volcano.esecurebox.backend.TimedoutQuery;
 
 import java.util.List;
 
@@ -25,7 +24,7 @@ public class Account extends ParseObject {
     private static final String SUB_CATEGORY    = "subCategory";
     private static final String USER            = "user";
 
-    public static ParseQuery findInBackground(Category category, final FindCallback<Account> callback) {
+    public static ParseQuery findInBackground(Object tag, Category category, final FindCallback<Account> callback) {
         final ParseQuery<SubCategory> innerQuery = SubCategory.getQuery()
                 .whereEqualTo(SubCategory.CATEGORY, category);
 
@@ -34,7 +33,7 @@ public class Account extends ParseObject {
             .whereEqualTo(USER, ParseUser.getCurrentUser())
             .orderByAscending(TITLE);
 
-        query.findInBackground(new FindCallback<Account>() {
+        new TimedoutQuery<>(query).findInBackground(tag, new FindCallback<Account>() {
             @Override
             public void done(List<Account> accounts, ParseException e) {
                 callback.done(accounts, e);
@@ -44,10 +43,11 @@ public class Account extends ParseObject {
         return query;
     }
 
-    public static ParseQuery getFirstInBackground(String accountId, final GetCallback<Account> callback) {
+    public static ParseQuery getFirstInBackground(Object tag, String accountId, final GetCallback<Account> callback) {
         final ParseQuery<Account> query = getQuery()
                 .whereEqualTo("objectId", accountId);
-        query.getFirstInBackground(new GetCallback<Account>() {
+
+        new TimedoutQuery<>(query).getInBackground(tag, new GetCallback<Account>() {
             @Override
             public void done(Account account, ParseException e) {
                 callback.done(account, e);

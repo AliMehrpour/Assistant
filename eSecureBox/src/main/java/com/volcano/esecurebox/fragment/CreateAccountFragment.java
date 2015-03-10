@@ -39,7 +39,6 @@ import com.volcano.esecurebox.widget.RobotoEditText;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Queue;
 
 /**
  * Create account fragment
@@ -125,7 +124,7 @@ public class CreateAccountFragment extends AbstractFragment {
 
         if (savedInstanceState != null) {
             mSelectedSubCategoryId = savedInstanceState.getString(Intents.KEY_SUB_CATEGORY_ID);
-            addCancellingRequest(SubCategory.getInBackground(mSelectedSubCategoryId, new GetCallback<SubCategory>() {
+            SubCategory.getInBackground(this, mSelectedSubCategoryId, new GetCallback<SubCategory>() {
                 @Override
                 public void done(SubCategory subCategory, ParseException e) {
                     if (e == null) {
@@ -136,7 +135,7 @@ public class CreateAccountFragment extends AbstractFragment {
                         setErrorState();
                     }
                 }
-            }));
+            });
 
             mAccountTitle.setVisibility(View.VISIBLE);
             mSubCategoryText.setVisibility(View.VISIBLE);
@@ -391,7 +390,7 @@ public class CreateAccountFragment extends AbstractFragment {
                                 fieldEditText.setHint(field.getField().getName());
                                 fieldEditText.setFormatType(field.getField().getFormat());
                                 if (field.getField().getFormat() == Field.FORMAT_ENUM) {
-                                    addCancellingRequest(FieldTypeValue.getValueByField(field.getField(), new FindCallback<FieldTypeValue>() {
+                                    FieldTypeValue.getValueByField(THIS, field.getField(), new FindCallback<FieldTypeValue>() {
                                         @Override
                                         public void done(List<FieldTypeValue> fieldTypeValues, ParseException e) {
                                             if (e == null) {
@@ -405,7 +404,7 @@ public class CreateAccountFragment extends AbstractFragment {
                                                 LogUtils.LogE(TAG, "Load field values failed");
                                             }
                                         }
-                                    }));
+                                    });
                                 }
                                 mFieldLayout.addView(fieldEditText);
                             }
@@ -425,14 +424,14 @@ public class CreateAccountFragment extends AbstractFragment {
     private void loadFieldsByAccount(String accountId) {
         mProgressLayout.setVisibility(View.VISIBLE);
         mListener.OnEnableActions(false);
-        addCancellingRequest(Account.getFirstInBackground(accountId, new GetCallback<Account>() {
+        Account.getFirstInBackground(this, accountId, new GetCallback<Account>() {
             @Override
             public void done(Account account, ParseException e) {
                 if (e == null) {
                     mAccount = account;
                     setSubCategory(account.getSubCategory());
                     mAccountTitle.setText(account.getTitle());
-                    addCancellingRequest(AccountFieldValue.findInBackground(account, new FindCallback<AccountFieldValue>() {
+                    AccountFieldValue.findInBackground(this, account, new FindCallback<AccountFieldValue>() {
                         @Override
                         public void done(List<AccountFieldValue> accountFieldValues, ParseException e) {
                             if (e == null) {
@@ -448,7 +447,7 @@ public class CreateAccountFragment extends AbstractFragment {
                                     fieldEditText.setIcon(value.getField().getIconName(), value.getField().getName().charAt(0), getResources().getColor(R.color.grey_1));
                                     fieldEditText.setFormatType(value.getField().getFormat());
                                     if (value.getField().getFormat() == Field.FORMAT_ENUM) {
-                                        addCancellingRequest(FieldTypeValue.getValueByField(value.getField(), new FindCallback<FieldTypeValue>() {
+                                        FieldTypeValue.getValueByField(THIS, value.getField(), new FindCallback<FieldTypeValue>() {
                                             @Override
                                             public void done(List<FieldTypeValue> fieldTypeValues, ParseException e) {
                                                 if (e == null) {
@@ -462,7 +461,7 @@ public class CreateAccountFragment extends AbstractFragment {
                                                     LogUtils.LogE(TAG, "Load field values failed");
                                                 }
                                             }
-                                        }));
+                                        });
                                     }
                                     mFieldLayout.addView(fieldEditText);
                                 }
@@ -477,13 +476,13 @@ public class CreateAccountFragment extends AbstractFragment {
                                 setErrorState();
                             }
                         }
-                    }));
+                    });
                 }
                 else {
                     setErrorState();
                 }
             }
-        }));
+        });
     }
 
     private void emptyFields() {

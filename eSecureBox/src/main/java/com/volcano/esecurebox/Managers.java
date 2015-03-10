@@ -13,11 +13,13 @@ public final class Managers {
     private static ParseManager sParseManager;
     private static AccountManager sAccountManager;
     private static ApplicationLockManager sApplicationLockManager;
+    private static ConfigManager sConfigManager;
 
     public static void initalize() {
         sParseManager = new ParseManager();
         sAccountManager = new AccountManager();
         sApplicationLockManager = new ApplicationLockManager();
+        sConfigManager = new ConfigManager();
     }
 
     public static ParseManager getParseManager() {
@@ -31,4 +33,9 @@ public final class Managers {
     public static ApplicationLockManager getApplicationLockManager() {
         return sApplicationLockManager ;
     }
+
+    public static ConfigManager getConfigManager() {
+        return sConfigManager;
+    }
+
 }

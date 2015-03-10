@@ -60,7 +60,7 @@ public class DisplayAccountFragment extends AbstractFragment {
         mFieldLayout.setVisibility(View.GONE);
         mListener.onEnableEdit(false);
 
-        addCancellingRequest(Account.getFirstInBackground(accountId, new GetCallback<Account>() {
+        Account.getFirstInBackground(this, accountId, new GetCallback<Account>() {
             @Override
             public void done(Account account, ParseException e) {
                 if (e == null) {
@@ -73,7 +73,7 @@ public class DisplayAccountFragment extends AbstractFragment {
                     fle.setIcon(subCategory.getIconName(), null, BitmapUtils.getColor(subCategory.getCategory().getColor()));
                     mFieldLayout.addView(fle);
 
-                    addCancellingRequest(AccountFieldValue.findInBackground(account, new FindCallback<AccountFieldValue>() {
+                    AccountFieldValue.findInBackground(THIS, account, new FindCallback<AccountFieldValue>() {
                         @Override
                         public void done(List<AccountFieldValue> accountFieldValues, ParseException e) {
                             if (e == null) {
@@ -101,13 +101,13 @@ public class DisplayAccountFragment extends AbstractFragment {
                                 setErrorState();
                             }
                         }
-                    }));
+                    });
                 }
                 else {
                     setErrorState();
                 }
             }
-        }));
+        });
     }
 
     private void setErrorState() {

@@ -7,6 +7,7 @@ import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.volcano.esecurebox.backend.ParseManager;
+import com.volcano.esecurebox.backend.TimedoutQuery;
 
 import java.util.List;
 
@@ -20,10 +21,10 @@ public class FieldTypeValue extends ParseObject {
     private final static String VALUE   = "value";
     private final static String ORDER   = "order";
 
-    public static ParseQuery getValueByField(Field field, final FindCallback<FieldTypeValue> callback) {
+    public static ParseQuery getValueByField(Object tag, Field field, final FindCallback<FieldTypeValue> callback) {
         final ParseQuery<FieldTypeValue> query = getQuery().whereEqualTo(FIELD, field)
                 .orderByAscending(ORDER);
-        query.findInBackground(new FindCallback<FieldTypeValue>() {
+        new TimedoutQuery<>(query).findInBackground(tag, new FindCallback<FieldTypeValue>() {
             @Override
             public void done(List<FieldTypeValue> fieldTypeValues, ParseException e) {
                 callback.done(fieldTypeValues, e);

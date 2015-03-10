@@ -9,7 +9,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
-import android.widget.TextView;
 
 import com.parse.FindCallback;
 import com.parse.GetCallback;
@@ -106,11 +105,11 @@ public class AccountListFragment extends AbstractFragment {
         mAdapter.notifyDataSetChanged();
         mProgressLayout.setVisibility(View.VISIBLE);
         mEmptyLayout.setVisibility(View.GONE);
-        addCancellingRequest(Category.getInBackground(categoryId, new GetCallback<Category>() {
+        Category.getInBackground(this, categoryId, new GetCallback<Category>() {
             @Override
             public void done(Category category, ParseException e) {
                 if (e == null) {
-                    addCancellingRequest(Account.findInBackground(category, new FindCallback<Account>() {
+                    Account.findInBackground(THIS, category, new FindCallback<Account>() {
                         @Override
                         public void done(List<Account> accounts, ParseException e) {
                             if (e == null) {
@@ -129,13 +128,13 @@ public class AccountListFragment extends AbstractFragment {
                                 setErrorState();
                             }
                         }
-                    }));
+                    });
                 }
                 else {
                     setErrorState();
                 }
             }
-        }));
+        });
     }
 
     private void setErrorState() {
