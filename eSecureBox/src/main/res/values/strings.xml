@@ -109,7 +109,8 @@
     <string name="toast_account_save_validation_no_field">No information for save, please try again</string>
     <string name="toast_account_save_validation_title_empty">Title can not be empty</string>
     <string name="toast_account_update_failed">Update item failed</string>
-    <string name="toast_category_for_create_account_unavailable">Please check network connection and try again</string>
+    <string name="toast_category_try_get_category">Try preparing creating items…</string>
+    <string name="toast_category_create_account_unavailable">Please check network connection and try again</string>
     <string name="toast_change_password_successful">Password changed successfully</string>
     <string name="toast_change_password_failed">Change password failed</string>
     <string name="toast_copy_to_clipboard">Copied to clipboard</string>

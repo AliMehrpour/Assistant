@@ -98,7 +98,12 @@ public class MainActivity extends AbstractActivity {
             @Override
             public void onMenuIsEmptyOnExpanding() {
                 loadFloatingMenuCategories();
-                Utils.showToast(R.string.toast_category_for_create_account_unavailable);
+                if (ConfigManager.getCategories().size() == 0) {
+                    Utils.showToast(R.string.toast_category_try_get_category);
+                }
+                else {
+                    mCreateAccountMenu.expand();
+                }
             }
         });
 
@@ -213,6 +218,9 @@ public class MainActivity extends AbstractActivity {
                     public void onRefreshComplete(boolean isSuccessful) {
                         if (isSuccessful) {
                             loadFloatingMenuCategories();
+                        }
+                        else {
+                            Utils.showToast(R.string.toast_category_create_account_unavailable);
                         }
                     }
                 });
