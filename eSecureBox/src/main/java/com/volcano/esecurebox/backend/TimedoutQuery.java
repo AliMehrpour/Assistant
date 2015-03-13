@@ -66,7 +66,7 @@ public final class TimedoutQuery<T extends ParseObject> {
             @Override
             public void done(List<T> ts, ParseException e) {
                 synchronized (mLock) {
-                    successQuery();
+                    finishQuery(e != null);
                     mFindCallback.done(ts, e);
                 }
             }
@@ -90,7 +90,7 @@ public final class TimedoutQuery<T extends ParseObject> {
             @Override
             public void done(T t, ParseException e) {
                 synchronized (mLock) {
-                    successQuery();
+                    finishQuery(e != null);
                     callback.done(t, e);
                 }
             }
@@ -102,7 +102,11 @@ public final class TimedoutQuery<T extends ParseObject> {
     private void cancelQuery() {
         synchronized (mLock) {
             if (mQuery != null) {
-                LogUtils.LogD(TAG, String.format("Query timeout: %d ms [X] %s", (System.currentTimeMillis() - mStartTime.getTime()), mQuery.toString()));
+                final long diff = (System.currentTimeMillis() - mStartTime.getTime());
+                Managers.getMixpanelManager().trackFailContactServerEvent(Managers.getConfigManager().isConnected(), mQuery.getClassName(),
+                        diff, Managers.getConfigManager().getNetworkInfo());
+                LogUtils.LogD(TAG, String.format("Query timeout: %d ms [X] %s", diff, mQuery.getClassName() + "@" + mQuery.hashCode()));
+                Managers.getParseManager().getRequestManager().remove(mQuery);
 
                 mQuery.cancel();
                 mQuery = null;
@@ -119,9 +123,10 @@ public final class TimedoutQuery<T extends ParseObject> {
         }
     }
 
-    private void successQuery() {
+    private void finishQuery(boolean error) {
         if (mQuery != null) {
-            LogUtils.LogD(TAG, String.format("Query finish: %d ms [X] %s", (System.currentTimeMillis() - mStartTime.getTime()), mQuery.toString()));
+            LogUtils.LogD(TAG, String.format("Query finish" + (error ? " with error" : "") + ": %d ms [X] %s", (System.currentTimeMillis() - mStartTime.getTime()), mQuery.getClassName() + "@" + mQuery.hashCode()));
+            Managers.getParseManager().getRequestManager().remove(mQuery);
 
             mThread.interrupt();
             mQuery = null;

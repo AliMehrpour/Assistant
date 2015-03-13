@@ -27,7 +27,7 @@ public class ConfigManager {
 
     // Assume connected to a mobile network of unknown type
     private final ConnectivityManager mConnMgr;
-    private boolean mConnected = true;
+    private boolean mConnected;
     private int mConnectionType = ConnectivityManager.TYPE_MOBILE;
     private int mMobileNetworkType = TelephonyManager.NETWORK_TYPE_UNKNOWN;
 
@@ -108,8 +108,18 @@ public class ConfigManager {
         return isFast;
     }
 
+    /**
+     * @return Return last connected network info.
+     */
+    public String getNetworkInfo() {
+        return String.format("Network Info: Connected = %b, Type = %s, Subtype = %s", mConnected, mConnectionType, mMobileNetworkType);
+    }
+
+    /**
+     * @return The query time out of Parse Queries
+     */
     public int getQueryTimeOut() {
-        return isNetworkFast() ? 5000 : 10000;
+        return !mConnected || isNetworkFast() ? 5000 : 10000;
     }
 
     private class ConnectivityReceiver extends BroadcastReceiver {

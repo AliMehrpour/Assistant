@@ -21,7 +21,7 @@ public class ParseRequestManager {
      * @param query Tah query
      */
     public void addRequest(Object tag, ParseQuery query) {
-        LogUtils.LogD(TAG, String.format("Add query: %d [X] %s", mRequestQueue.size(), query));
+        LogUtils.LogD(TAG, String.format("Add query: %d [X] %s", mRequestQueue.size(), query.getClassName() + "@" + query.hashCode()));
         mRequestQueue.add(new MyParseQuery(query, tag));
     }
 
@@ -37,13 +37,12 @@ public class ParseRequestManager {
             final MyParseQuery query = mRequestQueue.get(i);
             if (query.tag.equals(tag)) {
                 deleteCandidates.add(query);
-                LogUtils.LogD(TAG, String.format("Cancel query: %d [X] %s", i, query.query));
+                LogUtils.LogD(TAG, String.format("Cancel query: %d [X] %s", i, query.query.getClassName() + "@" + query.query.hashCode()));
             }
         }
 
         for (final MyParseQuery query : deleteCandidates) {
             mRequestQueue.remove(query);
-
             new Thread(new Runnable() {
                 @Override
                 public void run() {
@@ -52,6 +51,22 @@ public class ParseRequestManager {
                     query.query.cancel();
                 }
             }).start();
+        }
+    }
+
+    /**
+     * Remove query from queue
+     * @param removedQuery The query
+     */
+    public void remove(ParseQuery removedQuery) {
+
+        final int size = mRequestQueue.size();
+        for (int i = 0; i < size; i++) {
+            final MyParseQuery query = mRequestQueue.get(i);
+            if (query.query == removedQuery) {
+                mRequestQueue.remove(query);
+                LogUtils.LogD(TAG, String.format("Remove query: %d [X] %s", i, query.query.getClassName() + "@" + query.query.hashCode()));
+            }
         }
     }
 

@@ -368,10 +368,7 @@ public class CreateAccountFragment extends AbstractFragment {
     private void loadFieldsBySubCategory() {
         mProgressLayout.setVisibility(View.VISIBLE);
         mListener.OnEnableActions(false);
-        final ParseQuery query = SubCategoryField.getFieldBySubCategory(mSelectedSubCategory);
-        addCancellingRequest(query);
-        //noinspection unchecked
-        query.findInBackground(
+        final ParseQuery<SubCategoryField> query = SubCategoryField.getFieldBySubCategory(this, mSelectedSubCategory,
                 new FindCallback<SubCategoryField>() {
                     @Override
                     public void done(List<SubCategoryField> subCategoryFields, ParseException e) {
