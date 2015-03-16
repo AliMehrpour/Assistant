@@ -4,6 +4,9 @@ package com.volcano.esecurebox.util;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.ActivityNotFoundException;
+import android.content.ClipData;
+import android.content.ClipboardManager;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
@@ -63,6 +66,17 @@ public class Utils {
         }
 
         return dateFormatted;
+    }
+
+    /**
+     * Copy a text to clipboard
+     * @param label The label
+     * @param text The text
+     */
+    public static void copyToClipboard(String label, String text) {
+        final ClipboardManager clipboard = (ClipboardManager) VlApplication.getInstance().getSystemService(Context.CLIPBOARD_SERVICE);
+        final ClipData clip = ClipData.newPlainText(label, text);
+        clipboard.setPrimaryClip(clip);
     }
 
     /**

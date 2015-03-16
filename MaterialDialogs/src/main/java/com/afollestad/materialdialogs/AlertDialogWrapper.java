@@ -13,8 +13,6 @@ import android.support.annotation.StringRes;
 import android.view.View;
 import android.widget.ListAdapter;
 
-import com.afollestad.materialdialogs.MaterialDialog;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -36,6 +34,11 @@ public class AlertDialogWrapper {
 
         public Builder(@NonNull Context context) {
             builder = new MaterialDialog.Builder(context);
+        }
+
+        public Builder autoDismiss(boolean dismiss) {
+            builder.autoDismiss(dismiss);
+            return this;
         }
 
         public Builder setMessage(@StringRes int messageId) {

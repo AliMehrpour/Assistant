@@ -39,7 +39,7 @@ public class SubCategoryListFragment extends AbstractFragment {
     private OnSubCategoryListener mListener;
     private SubCategory mSelectedSubCategory;
     private String mCategoryId;
-    private int mDefaultColorStyle = CircleDrawable.FILL;
+    private int mColorStyle = CircleDrawable.FILL;
 
     public interface OnSubCategoryListener {
         public void onSubCategoriesLoadFailed();
@@ -54,7 +54,7 @@ public class SubCategoryListFragment extends AbstractFragment {
         mListView = (ListView) view.findViewById(R.id.list_sub_category);
         mProgressLayout = (FrameLayout) view.findViewById(R.id.layout_progress);
 
-        return  view;
+        return view;
     }
 
     @Override
@@ -82,6 +82,7 @@ public class SubCategoryListFragment extends AbstractFragment {
         mListener = l;
     }
 
+    @SuppressWarnings("UnusedDeclaration")
     public void setSubSelectedCategory(SubCategory subCategory) {
         mSelectedSubCategory = subCategory;
         mAdapter.notifyDataSetChanged();
@@ -93,21 +94,25 @@ public class SubCategoryListFragment extends AbstractFragment {
      *              {@link com.volcano.esecurebox.widget.CircleDrawable#STROKE} values
      */
     public void setDefaultColorStyle(int style) {
-        mDefaultColorStyle = style;
+        mColorStyle = style;
     }
 
     private void loadSubCategories() {
-        mProgressLayout.setVisibility(View.VISIBLE);
+        if (mProgressLayout != null) {
+            mProgressLayout.setVisibility(View.VISIBLE);
+        }
         mSubCategories.clear();
-        addCancellingRequest(Category.getInBackground(mCategoryId, new GetCallback<Category>() {
+        Category.getInBackground(this, mCategoryId, new GetCallback<Category>() {
             @Override
             public void done(Category category, ParseException e) {
                 if (e == null) {
-                    addCancellingRequest(SubCategory.findInBackground(category, new FindCallback<SubCategory>() {
+                    SubCategory.findInBackground(THIS, category, new FindCallback<SubCategory>() {
                         @Override
                         public void done(List<SubCategory> subCategories, ParseException e) {
                             if (e == null) {
-                                mProgressLayout.setVisibility(View.GONE);
+                                if (mProgressLayout != null) {
+                                    mProgressLayout.setVisibility(View.GONE);
+                                }
                                 if (subCategories.size() > 0) {
                                     mSubCategories.addAll(subCategories);
                                     mAdapter.notifyDataSetChanged();
@@ -120,13 +125,13 @@ public class SubCategoryListFragment extends AbstractFragment {
                                 mListener.onSubCategoriesLoadFailed();
                             }
                         }
-                    }));
+                    });
                 }
                 else {
                     mListener.onSubCategoriesLoadFailed();
                 }
             }
-        }));
+        });
     }
 
     private class SubCategoryAdapter extends BaseAdapter {
@@ -186,13 +191,20 @@ public class SubCategoryListFragment extends AbstractFragment {
             mCheckImage.setVisibility(selected ? View.VISIBLE : View.INVISIBLE);
 
             mNameText.setText(subCategory.getName());
+
+            boolean hasIcon = false;
             if (subCategory.hasIcon()) {
-                mCategoryImage.setImageDrawable(getResources().getDrawable(BitmapUtils.getDrawableIdentifier(getActivity(), subCategory.getIconName())));
+                final int resourceId = BitmapUtils.getDrawableIdentifier(getActivity(), subCategory.getIconName());
+                if (resourceId != 0) {
+                    mCategoryImage.setImageDrawable(getResources().getDrawable(resourceId));
+                    hasIcon = true;
+                }
             }
-            else {
+
+            if (!hasIcon) {
                 final CircleDrawable drawable = new CircleDrawable();
                 drawable.setColor(subCategory.getCategory().getColor());
-                drawable.setStyle(selected || mDefaultColorStyle == CircleDrawable.FILL ? CircleDrawable.FILL : CircleDrawable.STROKE);
+                drawable.setStyle(selected || mColorStyle == CircleDrawable.FILL ? CircleDrawable.FILL : CircleDrawable.STROKE);
                 mCategoryImage.setImageDrawable(drawable);
             }
         }

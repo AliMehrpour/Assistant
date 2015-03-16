@@ -10,10 +10,10 @@ import java.util.LinkedList;
 /**
  * Manage Parse requests
  */
-public class ParseRequestManager {
+public final class ParseRequestManager {
     private static final String TAG = LogUtils.makeLogTag(ParseRequestManager.class);
 
-    private final LimitedQueue<MyParseQuery> mRequestQueue = new LimitedQueue<>(20);
+    private final LimitedQueue<CancelableQuery> mRequestQueue = new LimitedQueue<>(20);
 
     /**
      * Add a {@link com.parse.ParseQuery} to queue with specified tag
@@ -21,8 +21,8 @@ public class ParseRequestManager {
      * @param query Tah query
      */
     public void addRequest(Object tag, ParseQuery query) {
-        LogUtils.LogI(TAG, String.format("Add MyParseQuery: %d", mRequestQueue.size()));
-        mRequestQueue.add(new MyParseQuery(query, tag));
+        LogUtils.LogD(TAG, String.format("Add query: %d [X] %s", mRequestQueue.size(), query.getClassName() + "@" + query.hashCode()));
+        mRequestQueue.add(new CancelableQuery(query, tag));
     }
 
     /**
@@ -30,18 +30,19 @@ public class ParseRequestManager {
      * @param tag The tag
      */
     public void cancelAll(final Object tag) {
-        final ArrayList<MyParseQuery> deleteCandidates = new ArrayList<>();
+        final ArrayList<CancelableQuery> deleteCandidates = new ArrayList<>();
 
         final int size = mRequestQueue.size();
         for (int i = 0; i < size; i++) {
-            final MyParseQuery query = mRequestQueue.get(i);
-            if (query.tag.equals(tag)) {
-                deleteCandidates.add(query);
-                LogUtils.LogI(TAG, String.format("Cancel MyParseQuery: %d", i));
+            final CancelableQuery cancelableQuery = mRequestQueue.get(i);
+            if (cancelableQuery.tag.equals(tag)) {
+                deleteCandidates.add(cancelableQuery);
+                LogUtils.LogD(TAG, String.format("Cancel query: %d [X] %s", i, cancelableQuery.query.getClassName() + "@" + cancelableQuery.query.hashCode()));
             }
         }
 
-        for (final MyParseQuery query : deleteCandidates) {
+        for (final CancelableQuery query : deleteCandidates) {
+            mRequestQueue.remove(query);
             new Thread(new Runnable() {
                 @Override
                 public void run() {
@@ -50,23 +51,36 @@ public class ParseRequestManager {
                     query.query.cancel();
                 }
             }).start();
-
-            mRequestQueue.remove(query);
         }
-
     }
 
-    private static class MyParseQuery {
+    /**
+     * Remove query from queue
+     * @param removedQuery The query
+     */
+    public void remove(ParseQuery removedQuery) {
+
+        final int size = mRequestQueue.size();
+        for (int i = 0; i < size; i++) {
+            final CancelableQuery cancelableQuery = mRequestQueue.get(i);
+            if (cancelableQuery.query == removedQuery) {
+                mRequestQueue.remove(cancelableQuery);
+                LogUtils.LogD(TAG, String.format("Remove query: %d [X] %s", i, cancelableQuery.query.getClassName() + "@" + cancelableQuery.query.hashCode()));
+            }
+        }
+    }
+
+    private static class CancelableQuery {
         public final ParseQuery query;
         public final Object tag;
 
-        public MyParseQuery(ParseQuery query, Object tag) {
+        public CancelableQuery(ParseQuery query, Object tag) {
             this.query = query;
             this.tag = tag;
         }
     }
 
-    public class LimitedQueue<E> extends LinkedList<E> {
+    private static class LimitedQueue<E> extends LinkedList<E> {
         private int limit;
 
         public LimitedQueue(int limit) {

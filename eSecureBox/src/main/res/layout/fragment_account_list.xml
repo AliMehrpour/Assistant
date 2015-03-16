@@ -13,12 +13,21 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>
 
-    <com.volcano.esecurebox.widget.RobotoTextView
+    <FrameLayout
         android:id="@android:id/empty"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:gravity="center"
-        style="@style/Text.RegularGrey18" />
+        android:layout_height="match_parent">
+
+        <com.volcano.esecurebox.widget.RobotoTextView
+            android:id="@+id/text_empty"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:drawablePadding="@dimen/margin_10"
+            android:layout_gravity="center"
+            android:gravity="center"
+            style="@style/Text.RegularGrey16" />
+
+    </FrameLayout>
 
     <FrameLayout
         android:id="@+id/layout_progress"

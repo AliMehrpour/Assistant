@@ -4,6 +4,9 @@ package com.volcano.esecurebox.util;
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.Drawable;
+
+import com.volcano.esecurebox.VlApplication;
 
 /**
  * A utility class for working with bitmaps, colors and pictures
@@ -58,6 +61,22 @@ public final class BitmapUtils {
     {
         return context.getResources().getIdentifier(name, "drawable", context.getPackageName());
     }
+
+    /**
+     * @param context The context
+     * @param name The identifier name
+     * @return The Drawable, null if isn't valid
+     */
+    public static Drawable getDrawable(Context context, String name) {
+        final int id = getDrawableIdentifier(context, name);
+        if (id != 0) {
+            return VlApplication.getInstance().getResources().getDrawable(id);
+        }
+        else {
+            return null;
+        }
+    }
+
 
     /**
      * @param color The color

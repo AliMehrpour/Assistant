@@ -170,6 +170,7 @@ public final class FloatingActionMenu extends ViewGroup {
         if (!hasMenuItems()) {
             if (mListener != null) {
                 mListener.onMenuIsEmptyOnExpanding();
+                return;
             }
         }
 

@@ -2,10 +2,14 @@
 package com.volcano.esecurebox.util;
 
 import android.app.Activity;
+import android.content.res.Resources;
 import android.graphics.Rect;
 import android.view.View;
 import android.view.ViewTreeObserver;
 import android.view.inputmethod.InputMethodManager;
+
+import com.volcano.esecurebox.R;
+import com.volcano.esecurebox.VlApplication;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -13,8 +17,14 @@ import java.util.List;
 /**
  * Helper class that handle soft keyboard states and notify it
  */
+@SuppressWarnings("UnusedDeclaration")
 public class SoftKeyboardUtils implements ViewTreeObserver.OnGlobalLayoutListener {
-    private static final int SOFT_KEYBOARD_HEIGHT = 100;
+
+    private float mMaxHeigthDiff;
+    private final List<OnSoftKeyboardStateListener> listeners = new LinkedList<>();
+    private final View mActivityRootView;
+    private int mLastSoftKeyboardHeight;
+    private boolean mIsSoftKeyboardOpened;
 
     /**
      * Interface for containing activities to implement to be notified
@@ -33,41 +43,44 @@ public class SoftKeyboardUtils implements ViewTreeObserver.OnGlobalLayoutListene
         public void onSoftKeyboardClosed();
     }
 
-    private final List<OnSoftKeyboardStateListener> listeners = new LinkedList<>();
-    private final View activityRootView;
-    private int lastSoftKeyboardHeight;
-    private boolean isSoftKeyboardOpened;
-
     public SoftKeyboardUtils(View activityRootView) {
         this(activityRootView, false);
     }
 
     public SoftKeyboardUtils(View activityRootView, boolean isSoftKeyboardOpened) {
-        this.activityRootView = activityRootView;
-        this.isSoftKeyboardOpened = isSoftKeyboardOpened;
+        mActivityRootView = activityRootView;
+        mIsSoftKeyboardOpened = isSoftKeyboardOpened;
         activityRootView.getViewTreeObserver().addOnGlobalLayoutListener(this);
+
+        final Resources res = VlApplication.getInstance().getResources();
+        // For confidence use 150% of status bar
+        mMaxHeigthDiff = 1.5f * res.getDimensionPixelSize(R.dimen.status_bar_height);
+        if (Utils.hasLollipopApi()) {
+            final float buttonBarHeight = res.getDimensionPixelSize(R.dimen.button_bar_height_lollipop);
+            mMaxHeigthDiff += buttonBarHeight;
+        }
     }
 
     /**
      * @param isSoftKeyboardOpened True is soft keyboard is open
      */
     public void setIsSoftKeyboardOpened(boolean isSoftKeyboardOpened) {
-        this.isSoftKeyboardOpened = isSoftKeyboardOpened;
+        mIsSoftKeyboardOpened = isSoftKeyboardOpened;
     }
 
     /**
      * @return True if soft keyboard is open
      */
-    public boolean isSoftKeyboardOpened() {
-        return isSoftKeyboardOpened;
+    public boolean ismIsSoftKeyboardOpened() {
+        return mIsSoftKeyboardOpened;
     }
 
     /**
      * Default value is zero (0)
      * @return last saved keyboard height in px
      */
-    public int getLastSoftKeyboardHeight() {
-        return lastSoftKeyboardHeight;
+    public int getmLastSoftKeyboardHeight() {
+        return mLastSoftKeyboardHeight;
     }
 
     /**
@@ -90,21 +103,21 @@ public class SoftKeyboardUtils implements ViewTreeObserver.OnGlobalLayoutListene
     public void onGlobalLayout() {
         final Rect r = new Rect();
         //r will be populated with the coordinates of your view that area still visible.
-        activityRootView.getWindowVisibleDisplayFrame(r);
+        mActivityRootView.getWindowVisibleDisplayFrame(r);
 
-        final int heightDiff = activityRootView.getRootView().getHeight() - (r.bottom - r.top);
-        if (!isSoftKeyboardOpened && heightDiff > SOFT_KEYBOARD_HEIGHT) {
-            isSoftKeyboardOpened = true;
+        final int heightDiff = mActivityRootView.getRootView().getHeight() - (r.bottom - r.top);
+        if (!mIsSoftKeyboardOpened && heightDiff > mMaxHeigthDiff) {
+            mIsSoftKeyboardOpened = true;
             notifyOnSoftKeyboardOpened(heightDiff);
         }
-        else if (isSoftKeyboardOpened && heightDiff < SOFT_KEYBOARD_HEIGHT) {
-            isSoftKeyboardOpened = false;
+        else if (mIsSoftKeyboardOpened && heightDiff < mMaxHeigthDiff) {
+            mIsSoftKeyboardOpened = false;
             notifyOnSoftKeyboardClosed();
         }
     }
 
     private void notifyOnSoftKeyboardOpened(int keyboardHeight) {
-        lastSoftKeyboardHeight = keyboardHeight;
+        mLastSoftKeyboardHeight = keyboardHeight;
 
         for (OnSoftKeyboardStateListener listener : listeners) {
             if (listener != null) {

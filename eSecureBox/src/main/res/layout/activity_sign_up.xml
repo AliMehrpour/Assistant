@@ -27,9 +27,9 @@
         <com.volcano.esecurebox.widget.RobotoEditText
             android:id="@+id/edit_name"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/text_view_height"
+            android:layout_height="wrap_content"
+            android:paddingTop="@dimen/margin_20"
             android:layout_marginTop="@dimen/margin_12"
-            android:paddingTop="@dimen/margin_12"
             android:gravity="center_vertical"
             android:inputType="text|textFilter|textCapWords"
             android:imeOptions="actionNext"
@@ -48,8 +48,8 @@
         <com.volcano.esecurebox.widget.RobotoEditText
             android:id="@+id/edit_username"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/text_view_height"
-            android:paddingTop="@dimen/margin_12"
+            android:layout_height="wrap_content"
+            android:paddingTop="@dimen/margin_20"
             android:gravity="center_vertical"
             android:inputType="text|textNoSuggestions"
             android:imeOptions="actionNext"
@@ -71,8 +71,8 @@
         <com.volcano.esecurebox.widget.RobotoEditText
             android:id="@+id/edit_password"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/text_view_height"
-            android:paddingTop="@dimen/margin_12"
+            android:layout_height="wrap_content"
+            android:paddingTop="@dimen/margin_20"
             android:gravity="center_vertical"
             android:inputType="textPassword"
             android:imeOptions="actionDone"
@@ -91,8 +91,8 @@
         <com.volcano.esecurebox.widget.RobotoEditText
             android:id="@+id/edit_email"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/text_view_height"
-            android:paddingTop="@dimen/margin_12"
+            android:layout_height="wrap_content"
+            android:paddingTop="@dimen/margin_20"
             android:gravity="center_vertical"
             android:inputType="textEmailAddress"
             android:imeOptions="actionDone"
@@ -109,12 +109,11 @@
             android:visibility="gone"/>
 
         <com.volcano.esecurebox.widget.RobotoTextView
-            android:id="@+id/button_signup"
+            android:id="@+id/button_submit"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/margin_40"
             android:gravity="center_horizontal|center_vertical"
-            android:text="@string/button_signup"
             android:background="@drawable/button_full_width_red"
             style="@style/ButtonFullWidth" />
 
@@ -137,7 +136,6 @@
                 android:layout_height="wrap_content"
                 android:gravity="center"
                 android:layout_gravity="center"
-                android:text="@string/label_initialize_data"
                 style="@style/Text.RegularDark16" />
 
         </LinearLayout>

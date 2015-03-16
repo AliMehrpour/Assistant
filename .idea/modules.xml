@@ -4,7 +4,6 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/Assistant.iml" filepath="$PROJECT_DIR$/Assistant.iml" />
       <module fileurl="file://$PROJECT_DIR$/MaterialDialogs/MaterialDialogs.iml" filepath="$PROJECT_DIR$/MaterialDialogs/MaterialDialogs.iml" />
-      <module fileurl="file://$PROJECT_DIR$/MaterialLibrary/MaterialLibrary.iml" filepath="$PROJECT_DIR$/MaterialLibrary/MaterialLibrary.iml" />
       <module fileurl="file://$PROJECT_DIR$/eSecureBox/eSecureBox.iml" filepath="$PROJECT_DIR$/eSecureBox/eSecureBox.iml" />
     </modules>
   </component>

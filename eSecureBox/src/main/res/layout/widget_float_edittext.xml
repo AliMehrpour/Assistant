@@ -1,41 +1,69 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!-- Copyright (c) 2015 Volcano. All rights reserved. -->
 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="@dimen/text_view_height">
+    android:layout_height="wrap_content">
 
     <ImageView
-        android:id="@+id/image_indicator"
-        android:layout_width="@dimen/iconed_edittext_size"
-        android:layout_height="@dimen/iconed_edittext_size"
+        android:id="@+id/icon"
+        android:layout_width="@dimen/floating_edit_text_icon_size"
+        android:layout_height="@dimen/floating_edit_text_icon_size"
         android:layout_marginLeft="@dimen/margin_20"
         android:layout_marginRight="@dimen/margin_25"
-        android:layout_centerVertical="true" />
+        android:layout_marginTop="@dimen/margin_16"
+        android:layout_marginBottom="@dimen/margin_16"
+        tools:ignore="ContentDescription"/>
 
     <com.volcano.esecurebox.widget.RobotoTextView
         android:id="@+id/text_hint"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/margin_10"
-        android:layout_toRightOf="@id/image_indicator"
+        android:layout_marginTop="@dimen/margin_12"
+        android:layout_toRightOf="@id/icon"
         android:layout_alignParentTop="true"
         style="@style/Text.RegularGrey12" />
 
-    <com.volcano.esecurebox.widget.RobotoEditText
+    <ImageView
+        android:id="@+id/button_action_2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:layout_marginRight="@dimen/margin_16"
+        android:src="@drawable/icon_generate_password"
+        android:visibility="gone"
+        tools:ignore="ContentDescription" />
+
+    <ImageView
+        android:id="@+id/button_action_1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toLeftOf="@id/button_action_2"
+        android:layout_alignWithParentIfMissing="true"
+        android:layout_centerVertical="true"
+        android:layout_marginRight="@dimen/margin_16"
+        android:visibility="gone"
+        tools:ignore="ContentDescription" />
+
+    <com.volcano.esecurebox.widget.FormattedEditText
         android:id="@+id/edittext"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="@dimen/margin_10"
-        android:layout_toRightOf="@id/image_indicator"
-        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="@dimen/margin_12"
+        android:layout_marginRight="@dimen/margin_8"
+        android:layout_toRightOf="@id/icon"
+        android:layout_toLeftOf="@id/button_action_1"
+        android:layout_below="@+id/text_hint"
+        android:drawablePadding="@dimen/margin_8"
         android:background="@null"
-        android:singleLine="true"
-        style="@style/Text.RegularDark16" />
+        style="@style/Text.RegularDarker16" />
 
     <View
         android:id="@+id/divider_line"
-        android:layout_alignParentBottom="true"
-        android:layout_toRightOf="@+id/image_indicator"
+        android:layout_below="@+id/edittext"
+        android:layout_toRightOf="@+id/icon"
         style="@style/Divider" />
 
 </RelativeLayout>

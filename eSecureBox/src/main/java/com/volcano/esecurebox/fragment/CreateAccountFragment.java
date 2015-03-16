@@ -3,7 +3,6 @@ package com.volcano.esecurebox.fragment;
 
 import android.app.Activity;
 import android.content.DialogInterface;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -27,13 +26,16 @@ import com.volcano.esecurebox.Managers;
 import com.volcano.esecurebox.R;
 import com.volcano.esecurebox.model.Account;
 import com.volcano.esecurebox.model.AccountFieldValue;
+import com.volcano.esecurebox.model.Field;
+import com.volcano.esecurebox.model.FieldTypeValue;
 import com.volcano.esecurebox.model.SubCategory;
 import com.volcano.esecurebox.model.SubCategoryField;
 import com.volcano.esecurebox.util.BitmapUtils;
 import com.volcano.esecurebox.util.LogUtils;
 import com.volcano.esecurebox.util.Utils;
 import com.volcano.esecurebox.widget.CircleDrawable;
-import com.volcano.esecurebox.widget.IconizedEditText;
+import com.volcano.esecurebox.widget.FloatingLabeledEditText;
+import com.volcano.esecurebox.widget.RobotoEditText;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -51,7 +53,7 @@ public class CreateAccountFragment extends AbstractFragment {
     private String mSelectedSubCategoryId;
     private int mSavedFieldCount = 0;
 
-    private IconizedEditText mAccountTitle;
+    private RobotoEditText mAccountTitle;
     private RelativeLayout mSubCategoryLayout;
     private TextView mSubCategoryText;
     private ImageView mSubCategoryImage;
@@ -75,7 +77,7 @@ public class CreateAccountFragment extends AbstractFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         final View view = inflater.inflate(R.layout.fragment_create_account, container, false);
 
-        mAccountTitle = (IconizedEditText) view.findViewById(R.id.text_account_title);
+        mAccountTitle = (RobotoEditText) view.findViewById(R.id.text_account_title);
         mFieldLayout = (LinearLayout) view.findViewById(R.id.layout_fields);
         mSubCategoryLayout = (RelativeLayout) view.findViewById(R.id.layout_sub_category);
         mSubCategoryText = (TextView) view.findViewById(R.id.text_sub_category);
@@ -122,7 +124,7 @@ public class CreateAccountFragment extends AbstractFragment {
 
         if (savedInstanceState != null) {
             mSelectedSubCategoryId = savedInstanceState.getString(Intents.KEY_SUB_CATEGORY_ID);
-            addCancellingRequest(SubCategory.getInBackground(mSelectedSubCategoryId, new GetCallback<SubCategory>() {
+            SubCategory.getInBackground(this, mSelectedSubCategoryId, new GetCallback<SubCategory>() {
                 @Override
                 public void done(SubCategory subCategory, ParseException e) {
                     if (e == null) {
@@ -133,10 +135,10 @@ public class CreateAccountFragment extends AbstractFragment {
                         setErrorState();
                     }
                 }
-            }));
+            });
 
             mAccountTitle.setVisibility(View.VISIBLE);
-
+            mSubCategoryText.setVisibility(View.VISIBLE);
             // TODO: do restore state of load account
         }
     }
@@ -201,13 +203,13 @@ public class CreateAccountFragment extends AbstractFragment {
                             mSavedFieldCount = 0;
                             final int size = mFields.size();
                             for (int i = 0; i < size; i++) {
-                                final IconizedEditText fieldEditText = (IconizedEditText) mFieldLayout.getChildAt(i);
+                                final FloatingLabeledEditText fieldEditText = (FloatingLabeledEditText) mFieldLayout.getChildAt(i);
 
                                 final AccountFieldValue value = new AccountFieldValue();
                                 final SubCategoryField field = mFields.get(i);
                                 value.setAccount(mAccount);
                                 value.setField(field.getField());
-                                value.setValue(fieldEditText.getText().toString());
+                                value.setValue(fieldEditText.getText());
                                 value.setOrder(field.getOrder());
                                 value.save(new SaveCallback() {
                                     @Override
@@ -248,10 +250,10 @@ public class CreateAccountFragment extends AbstractFragment {
                             mSavedFieldCount = 0;
                             final int size = mAccountFieldValues.size();
                             for (int i = 0; i < size; i++) {
-                                final IconizedEditText fieldEditText = (IconizedEditText) mFieldLayout.getChildAt(i);
+                                final FloatingLabeledEditText fieldEditText = (FloatingLabeledEditText) mFieldLayout.getChildAt(i);
 
                                 final AccountFieldValue value = mAccountFieldValues.get(i);
-                                value.setValue(fieldEditText.getText().toString());
+                                value.setValue(fieldEditText.getText());
                                 value.save(new SaveCallback() {
                                     @Override
                                     public void done(ParseException e) {
@@ -280,9 +282,6 @@ public class CreateAccountFragment extends AbstractFragment {
 
             }
         }
-        else {
-            Utils.showToast(R.string.toast_account_save_validation);
-        }
     }
 
     /**
@@ -291,10 +290,9 @@ public class CreateAccountFragment extends AbstractFragment {
     public void delete() {
         if (mAccount != null) {
             new AlertDialogWrapper.Builder(getActivity())
-                    .setTitle(getString(R.string.label_delete))
                     .setMessage(R.string.alert_delete_account)
                     .setNegativeButton(android.R.string.cancel, null)
-                    .setPositiveButton(R.string.label_yes_uppercase, new DialogInterface.OnClickListener() {
+                    .setPositiveButton(R.string.button_delete_uppercase, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             mProgressLayout.setVisibility(View.VISIBLE);
@@ -339,26 +337,38 @@ public class CreateAccountFragment extends AbstractFragment {
         mSelectedSubCategoryId = subCategory.getObjectId();
         mSubCategoryText.setText(mSelectedSubCategory.getName());
 
-        if (mSelectedSubCategory.hasIcon()) {
-            mSubCategoryImage.setImageDrawable(getResources().getDrawable(BitmapUtils.getDrawableIdentifier(getActivity(), subCategory.getIconName())));
+        boolean hasIcon = false;
+        if (subCategory.hasIcon()) {
+            final int resourceId = BitmapUtils.getDrawableIdentifier(getActivity(), subCategory.getIconName());
+            if (resourceId != 0) {
+                mSubCategoryImage.setImageDrawable(getResources().getDrawable(resourceId));
+                hasIcon = true;
+            }
         }
-        else {
+        if (!hasIcon) {
             mSubCategoryImage.setImageDrawable(new CircleDrawable(subCategory.getCategory().getColor(), CircleDrawable.FILL));
         }
     }
 
     private boolean valid() {
-        return !TextUtils.isEmpty(mAccountTitle.getText()) &&
-                (mContentSource == ContentSource.BY_CATEGORY ? mFields.size() > 0 : mAccountFieldValues.size() > 0);
+        boolean valid = true;
+
+        if (TextUtils.isEmpty(mAccountTitle.getText())) {
+            valid = false;
+            Utils.showToast(R.string.toast_account_save_validation_title_empty);
+        }
+        else if ((mContentSource == ContentSource.BY_CATEGORY ? mFields.size() : mAccountFieldValues.size()) == 0) {
+            valid = false;
+            Utils.showToast(R.string.toast_account_save_validation_no_field);
+        }
+
+        return valid;
     }
 
     private void loadFieldsBySubCategory() {
         mProgressLayout.setVisibility(View.VISIBLE);
         mListener.OnEnableActions(false);
-        final ParseQuery query = SubCategoryField.getFieldBySubCategory(mSelectedSubCategory);
-        addCancellingRequest(query);
-        //noinspection unchecked
-        query.findInBackground(
+        final ParseQuery<SubCategoryField> query = SubCategoryField.getFieldBySubCategory(this, mSelectedSubCategory,
                 new FindCallback<SubCategoryField>() {
                     @Override
                     public void done(List<SubCategoryField> subCategoryFields, ParseException e) {
@@ -370,19 +380,29 @@ public class CreateAccountFragment extends AbstractFragment {
                             final int size = mFields.size();
                             for (int i = 0; i < size; i++) {
                                 final SubCategoryField field = mFields.get(i);
-                                final IconizedEditText fieldEditText = new IconizedEditText(getActivity());
+                                final FloatingLabeledEditText fieldEditText = new FloatingLabeledEditText(getActivity());
                                 final String iconName = field.getField().getIconName();
-                                if (iconName != null) {
-                                    fieldEditText.setIcon(getResources().getDrawable(BitmapUtils.getDrawableIdentifier(getActivity(), iconName)));
-                                }
-                                else {
-                                    fieldEditText.setIcon(new CircleDrawable(Color.TRANSPARENT, CircleDrawable.FILL,
-                                            field.getField().getName().substring(0, 1), getResources().getColor(R.color.theme_primary)));
-                                }
-                                if (!TextUtils.isEmpty(field.getDefaultValue())) {
-                                    fieldEditText.setText(field.getDefaultValue());
-                                }
+                                fieldEditText.setIcon(iconName, field.getField().getName().charAt(0), getResources().getColor(R.color.grey_1));
+                                fieldEditText.setText(field.getDefaultValue());
                                 fieldEditText.setHint(field.getField().getName());
+                                fieldEditText.setFormatType(field.getField().getFormat());
+                                if (field.getField().getFormat() == Field.FORMAT_ENUM) {
+                                    FieldTypeValue.getValueByField(THIS, field.getField(), new FindCallback<FieldTypeValue>() {
+                                        @Override
+                                        public void done(List<FieldTypeValue> fieldTypeValues, ParseException e) {
+                                            if (e == null) {
+                                                final ArrayList<String> values = new ArrayList<>();
+                                                for (FieldTypeValue value : fieldTypeValues) {
+                                                    values.add(value.getValue());
+                                                }
+                                                fieldEditText.setPossibleValues(values);
+                                            }
+                                            else {
+                                                LogUtils.LogE(TAG, "Load field values failed");
+                                            }
+                                        }
+                                    });
+                                }
                                 mFieldLayout.addView(fieldEditText);
                             }
 
@@ -401,14 +421,14 @@ public class CreateAccountFragment extends AbstractFragment {
     private void loadFieldsByAccount(String accountId) {
         mProgressLayout.setVisibility(View.VISIBLE);
         mListener.OnEnableActions(false);
-        addCancellingRequest(Account.getFirstInBackground(accountId, new GetCallback<Account>() {
+        Account.getFirstInBackground(this, accountId, new GetCallback<Account>() {
             @Override
             public void done(Account account, ParseException e) {
                 if (e == null) {
                     mAccount = account;
                     setSubCategory(account.getSubCategory());
                     mAccountTitle.setText(account.getTitle());
-                    addCancellingRequest(AccountFieldValue.findInBackground(account, new FindCallback<AccountFieldValue>() {
+                    AccountFieldValue.findInBackground(this, account, new FindCallback<AccountFieldValue>() {
                         @Override
                         public void done(List<AccountFieldValue> accountFieldValues, ParseException e) {
                             if (e == null) {
@@ -418,12 +438,28 @@ public class CreateAccountFragment extends AbstractFragment {
                                 final int size = mAccountFieldValues.size();
                                 for (int i = 0; i < size; i++) {
                                     final AccountFieldValue value = mAccountFieldValues.get(i);
-                                    final IconizedEditText fieldEditText = new IconizedEditText(getActivity());
+                                    final FloatingLabeledEditText fieldEditText = new FloatingLabeledEditText(getActivity());
                                     fieldEditText.setHint(value.getField().getName());
                                     fieldEditText.setText(value.getValue());
-                                    fieldEditText.setIcon(new CircleDrawable(Color.TRANSPARENT, CircleDrawable.FILL,
-                                            value.getField().getName().substring(0, 1), getResources().getColor(R.color.theme_primary)));
-
+                                    fieldEditText.setIcon(value.getField().getIconName(), value.getField().getName().charAt(0), getResources().getColor(R.color.grey_1));
+                                    fieldEditText.setFormatType(value.getField().getFormat());
+                                    if (value.getField().getFormat() == Field.FORMAT_ENUM) {
+                                        FieldTypeValue.getValueByField(THIS, value.getField(), new FindCallback<FieldTypeValue>() {
+                                            @Override
+                                            public void done(List<FieldTypeValue> fieldTypeValues, ParseException e) {
+                                                if (e == null) {
+                                                    final ArrayList<String> values = new ArrayList<>();
+                                                    for (FieldTypeValue value : fieldTypeValues) {
+                                                        values.add(value.getValue());
+                                                    }
+                                                    fieldEditText.setPossibleValues(values);
+                                                }
+                                                else {
+                                                    LogUtils.LogE(TAG, "Load field values failed");
+                                                }
+                                            }
+                                        });
+                                    }
                                     mFieldLayout.addView(fieldEditText);
                                 }
 
@@ -437,13 +473,13 @@ public class CreateAccountFragment extends AbstractFragment {
                                 setErrorState();
                             }
                         }
-                    }));
+                    });
                 }
                 else {
                     setErrorState();
                 }
             }
-        }));
+        });
     }
 
     private void emptyFields() {

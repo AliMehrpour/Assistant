@@ -5,6 +5,8 @@ import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
+import com.parse.SaveCallback;
+import com.volcano.esecurebox.backend.ParseManager;
 import com.volcano.esecurebox.util.LogUtils;
 
 import java.util.List;
@@ -16,6 +18,8 @@ public final class User extends ParseUser {
     private static final String TAG = LogUtils.makeLogTag(SubCategory.class);
 
     private static final String NAME = "name";
+    private static final String ENCRYPTION_SALT = "encryptionSalt";
+    private static final String ENCRYPTION_IV   = "encryptionIv";
 
     /**
      * This method only should call for getting fields for first time and exclusively called by
@@ -48,5 +52,37 @@ public final class User extends ParseUser {
 
     public String getName() {
         return getString(NAME);
+    }
+
+    public void setEncryptionSalt(String salt) {
+        put(ENCRYPTION_SALT, salt);
+    }
+
+    public String getEncryptionSalt() {
+        return getString(ENCRYPTION_SALT);
+    }
+
+    public void setEncryptionIv(String iv) {
+        put(ENCRYPTION_IV, iv);
+    }
+
+    public String getEncryptionIv() {
+        return getString(ENCRYPTION_IV);
+    }
+
+    public void save(final SaveCallback callback) {
+        final SaveCallback saveCallback = new SaveCallback() {
+            @Override
+            public void done(ParseException e) {
+                callback.done(e);
+            }
+        };
+
+        if (ParseManager.isLocalDatabaseActive()) {
+            pinInBackground(saveCallback);
+        }
+        else {
+            saveInBackground(saveCallback);
+        }
     }
 }

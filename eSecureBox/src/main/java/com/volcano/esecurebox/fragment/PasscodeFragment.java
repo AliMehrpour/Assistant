@@ -15,6 +15,7 @@ import android.widget.TextView;
 import com.volcano.esecurebox.Intents;
 import com.volcano.esecurebox.Managers;
 import com.volcano.esecurebox.R;
+import com.volcano.esecurebox.analytics.MixpanelManager;
 import com.volcano.esecurebox.util.Utils;
 
 /**
@@ -193,6 +194,8 @@ public final class PasscodeFragment extends AbstractFragment {
                             clearPins();
                         }
                         else if (mFirstPasscode.equals(pin)) {
+                            Managers.getMixpanelManager().track(mOldPasscodeApproved ? MixpanelManager.EVENT_CHANGE_PASSCODE : MixpanelManager.EVENT_ENABLE_PASSCODE);
+
                             Managers.getApplicationLockManager().getApplicationLock().setPasscode(pin);
                             Utils.showToast(getString(mOldPasscodeApproved ? R.string.toast_passcode_changed : R.string.toast_passcode_enabled));
                             getActivity().finish();
@@ -206,6 +209,8 @@ public final class PasscodeFragment extends AbstractFragment {
                     }
                     else if (mMode == Mode.DISABLE) {
                         if (Managers.getApplicationLockManager().getApplicationLock().verifyPasscode(pin)) {
+                            Managers.getMixpanelManager().track(MixpanelManager.EVENT_DISABLE_PASSCODE);
+
                             Managers.getApplicationLockManager().getApplicationLock().setPasscode(null);
                             Utils.showToast(getString(R.string.toast_passcode_disabled));
                             getActivity().finish();

@@ -1,1 +1,1 @@
-include ':eSecureBox', ':MaterialLibrary', ':MaterialDialogs'
+include ':eSecureBox', ':MaterialDialogs'

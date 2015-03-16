@@ -61,14 +61,16 @@ public final class Intents {
     public static Intent getPasscodeIntent(Mode passcodeMode) {
         return new Intent(VlApplication.getInstance(), PasscodeActivity.class)
                .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-               .putExtra(Intents.EXTRA_MODE, passcodeMode);
+               .putExtra(EXTRA_MODE, passcodeMode);
     }
 
     public static Intent getSigninIntent() {
         return new Intent(VlApplication.getInstance(), SigninActivity.class);
     }
 
-    public static Intent getSignupIntent() {
-        return new Intent(VlApplication.getInstance(), SignupActivity.class);
+    public static Intent getSignupIntent(int mode) {
+        Intent intent =new Intent(VlApplication.getInstance(), SignupActivity.class);
+        intent.putExtra(EXTRA_MODE, mode);
+        return intent;
     }
 }

@@ -6,6 +6,7 @@ import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.volcano.esecurebox.backend.ParseManager;
+import com.volcano.esecurebox.backend.TimedoutQuery;
 import com.volcano.esecurebox.util.LogUtils;
 
 import java.util.List;
@@ -22,10 +23,17 @@ public class SubCategoryField extends ParseObject {
     private static final String ORDER           = "order";
     private static final String DEFAULT_VALUE   = "defaultValue";
 
-    public static ParseQuery<SubCategoryField> getFieldBySubCategory(SubCategory subCategory) {
+    public static ParseQuery<SubCategoryField> getFieldBySubCategory(Object tag, SubCategory subCategory, final FindCallback<SubCategoryField> callback) {
         final ParseQuery<SubCategoryField> query = getQuery()
                 .whereEqualTo(SUB_CATEGORY, subCategory);
         query.include(FIELD);
+
+        new TimedoutQuery<>(query).findInBackground(tag, new FindCallback<SubCategoryField>() {
+            @Override
+            public void done(List<SubCategoryField> subCategoryFields, ParseException e) {
+                callback.done(subCategoryFields, e);
+            }
+        });
 
         return query;
     }

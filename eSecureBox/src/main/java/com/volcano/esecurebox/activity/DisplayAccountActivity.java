@@ -8,7 +8,9 @@ import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 
 import com.volcano.esecurebox.Intents;
+import com.volcano.esecurebox.Managers;
 import com.volcano.esecurebox.R;
+import com.volcano.esecurebox.analytics.MixpanelManager;
 import com.volcano.esecurebox.fragment.DisplayAccountFragment;
 import com.volcano.esecurebox.widget.FloatingActionButton;
 import com.volcano.esecurebox.widget.RobotoTextView;
@@ -47,7 +49,8 @@ public class DisplayAccountActivity extends AbstractActivity {
         mEditButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                finish();
+                Managers.getMixpanelManager().track(MixpanelManager.EVENT_EDIT_ITEM);
+
                 startActivity(Intents.getEditAccountIntent(accountId, color));
             }
         });

@@ -10,6 +10,7 @@ import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.volcano.esecurebox.backend.ParseManager;
+import com.volcano.esecurebox.backend.TimedoutQuery;
 import com.volcano.esecurebox.util.LogUtils;
 
 import java.util.List;
@@ -26,10 +27,10 @@ public class SubCategory extends ParseObject {
     private static final String ICON_NAME   = "iconName";
     public static final String CATEGORY     = "category";
 
-    public static ParseQuery findInBackground(Category category, final FindCallback<SubCategory> callback) {
+    public static ParseQuery findInBackground(Object tag, Category category, final FindCallback<SubCategory> callback) {
         final ParseQuery<SubCategory> query = getQuery();
         query.whereEqualTo(CATEGORY, category);
-        query.findInBackground(new FindCallback<SubCategory>() {
+        new TimedoutQuery<>(query).findInBackground(tag, new FindCallback<SubCategory>() {
             @Override
             public void done(List<SubCategory> categories, ParseException e) {
                 callback.done(categories, e);
@@ -39,11 +40,11 @@ public class SubCategory extends ParseObject {
         return query;
     }
 
-    public static ParseQuery getInBackground(String subCategoryId, final GetCallback<SubCategory> callback) {
+    public static ParseQuery getInBackground(Object tag, String subCategoryId, final GetCallback<SubCategory> callback) {
         final ParseQuery<SubCategory> query = getQuery();
         query.whereEqualTo("objectId", subCategoryId);
         query.include(CATEGORY);
-        query.getFirstInBackground(new GetCallback<SubCategory>() {
+        new TimedoutQuery<>(query).getInBackground(tag, new GetCallback<SubCategory>() {
             @Override
             public void done(SubCategory subCategory, ParseException e) {
                 callback.done(subCategory, e);

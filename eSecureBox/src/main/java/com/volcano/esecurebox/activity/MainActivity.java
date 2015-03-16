@@ -2,9 +2,12 @@
 package com.volcano.esecurebox.activity;
 
 import android.app.FragmentManager;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
@@ -33,7 +36,7 @@ import java.util.ArrayList;
 
 public class MainActivity extends AbstractActivity {
 
-    private AccountManager.LoginResetReceiver mLoginResetReceiver;
+    private BroadcastReceiver mLoginResetReceiver;
     private FloatingActionMenu mCreateAccountMenu;
     private NavigationFragment mNavigationFragment;
     private AccountListFragment mAccountListFragment;
@@ -80,6 +83,7 @@ public class MainActivity extends AbstractActivity {
             loadFloatingMenuCategories();
         }
 
+        mCreateAccountMenu.collapse();
         mCreateAccountMenu.setOnFloatingActionsMenuUpdateListener(new OnFloatingActionsMenuUpdateListener() {
             @Override
             public void onMenuExpanded() {
@@ -93,17 +97,20 @@ public class MainActivity extends AbstractActivity {
 
             @Override
             public void onMenuIsEmptyOnExpanding() {
-                mCreateAccountMenu.collapse();
                 loadFloatingMenuCategories();
-                Utils.showToast(R.string.toast_category_for_create_account_unavailable);
+                if (ConfigManager.getCategories().size() == 0) {
+                    Utils.showToast(R.string.toast_category_try_get_category);
+                }
+                else {
+                    mCreateAccountMenu.expand();
+                }
             }
         });
 
-        mLoginResetReceiver = new AccountManager.LoginResetReceiver() {
+        mLoginResetReceiver = new BroadcastReceiver() {
             @Override
-            public void onReset() {
+            public void onReceive(Context context, Intent intent) {
                 if (Managers.getAccountManager().isLoggedIn()) {
-                    mNavigationFragment.showAccountInfo();
                     mNavigationFragment.loadNavigationItems();
                     loadAccounts(PrefUtils.getPref(PrefUtils.PREF_NAVIGATOR_LAST_CATEGORY, ""));
                     loadFloatingMenuCategories();
@@ -156,7 +163,7 @@ public class MainActivity extends AbstractActivity {
                     .setMessage(R.string.alert_signout)
                     .setTitle(R.string.label_sign_out)
                     .setNegativeButton(android.R.string.cancel, null)
-                    .setPositiveButton(R.string.label_yes_uppercase, new DialogInterface.OnClickListener() {
+                    .setPositiveButton(R.string.button_signout_uppercase, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             Managers.getAccountManager().signout();
@@ -173,8 +180,10 @@ public class MainActivity extends AbstractActivity {
     protected void onDestroy() {
         super.onDestroy();
 
+        Managers.getMixpanelManager().flush();
+
         if (mLoginResetReceiver != null) {
-            unregisterReceiver(mLoginResetReceiver);
+            LocalBroadcastManager.getInstance(this).unregisterReceiver(mLoginResetReceiver);
         }
     }
 
@@ -196,6 +205,7 @@ public class MainActivity extends AbstractActivity {
                             mCreateAccountMenu.toggle();
 
                             final Category category = (Category) menu.getTag(R.id.category);
+                            Managers.getMixpanelManager().trackCreateItemEvent(category.getName());
                             startActivity(Intents.getCreateAccountIntent(category.getObjectId(), category.getColor()));
                         }
                     });
@@ -210,7 +220,7 @@ public class MainActivity extends AbstractActivity {
                             loadFloatingMenuCategories();
                         }
                         else {
-                            Utils.showToast(R.string.toast_category_for_create_account_unavailable);
+                            Utils.showToast(R.string.toast_category_create_account_unavailable);
                         }
                     }
                 });

@@ -39,7 +39,7 @@
             android:layout_marginTop="@dimen/margin_16"
             android:layout_marginBottom="@dimen/margin_16"
             android:text="@string/label_about_dialog_content_general"
-            style="@style/Text.RegularGrey16" />
+            style="@style/Text.RegularGreyDarker16" />
 
         <com.volcano.esecurebox.widget.RobotoTextView
             android:id="@+id/text_website_link"
@@ -47,7 +47,7 @@
             android:layout_height="wrap_content"
             android:autoLink="web"
             android:text="@string/link_website"
-            style="@style/Text.RegularGrey16" />
+            style="@style/Text.RegularGreyDarker16" />
 
         <com.volcano.esecurebox.widget.RobotoTextView
             android:id="@+id/text_email_link"
@@ -56,7 +56,7 @@
             android:layout_marginTop="@dimen/margin_4"
             android:autoLink="email"
             android:text="@string/link_email"
-            style="@style/Text.RegularGrey16" />
+            style="@style/Text.RegularGreyDarker16" />
 
     </LinearLayout>
 

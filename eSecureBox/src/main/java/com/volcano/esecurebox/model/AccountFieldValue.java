@@ -8,8 +8,8 @@ import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.SaveCallback;
 import com.volcano.esecurebox.backend.ParseManager;
+import com.volcano.esecurebox.backend.TimedoutQuery;
 import com.volcano.esecurebox.security.SecurityUtils;
-import com.volcano.esecurebox.security.SecurityUtils.EncryptionAlgorithm;
 
 import java.util.List;
 
@@ -23,12 +23,12 @@ public class AccountFieldValue extends ParseObject {
     private static final String VALUE       = "value";
     private static final String ORDER       = "order";
 
-    public static ParseQuery findInBackground(Account account, final FindCallback<AccountFieldValue> callback) {
+    public static ParseQuery findInBackground(Object tag, Account account, final FindCallback<AccountFieldValue> callback) {
         final ParseQuery<AccountFieldValue> query = getQuery();
         query.whereEqualTo(ACCOUNT, account);
         query.include(FIELD);
         query.orderByAscending(ORDER);
-        query.findInBackground(new FindCallback<AccountFieldValue>() {
+        new TimedoutQuery<>(query).findInBackground(tag, new FindCallback<AccountFieldValue>() {
             @Override
             public void done(List<AccountFieldValue> accountFieldValues, ParseException e) {
                 callback.done(accountFieldValues, e);
@@ -96,11 +96,11 @@ public class AccountFieldValue extends ParseObject {
     }
 
     public String getValue() {
-        return SecurityUtils.decrypt(EncryptionAlgorithm.AES_ECB, getString(VALUE));
+        return SecurityUtils.decrypt(getString(VALUE));
     }
 
     public void setValue(String value) {
-        put(VALUE, SecurityUtils.encrypt(EncryptionAlgorithm.AES_ECB, value));
+        put(VALUE, SecurityUtils.encrypt(value));
     }
 
     public void setOrder(int order) {

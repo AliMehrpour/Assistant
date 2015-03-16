@@ -37,16 +37,16 @@ public class CircleDrawable extends Drawable {
         this(Color.RED, STROKE, null, Color.WHITE);
     }
 
+    public CircleDrawable(int color, int style) {
+        this(color, style, null, Color.WHITE);
+    }
+
     public CircleDrawable(String color, int style) {
         this(BitmapUtils.getColor(color), style, null, Color.WHITE);
     }
 
     public CircleDrawable(String color, int style, String text) {
         this(BitmapUtils.getColor(color), style, text, Color.WHITE);
-    }
-
-    public CircleDrawable(String color, int style, String text, String textColor) {
-        this(BitmapUtils.getColor(color), style, text, BitmapUtils.getColor(textColor));
     }
 
     public CircleDrawable(int color, int style, String text, int textColor) {

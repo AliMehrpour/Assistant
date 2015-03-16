@@ -11,8 +11,7 @@ import com.parse.ParseQuery;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
 import com.volcano.esecurebox.backend.ParseManager;
-import com.volcano.esecurebox.security.SecurityUtils;
-import com.volcano.esecurebox.security.SecurityUtils.EncryptionAlgorithm;
+import com.volcano.esecurebox.backend.TimedoutQuery;
 
 import java.util.List;
 
@@ -25,14 +24,16 @@ public class Account extends ParseObject {
     private static final String SUB_CATEGORY    = "subCategory";
     private static final String USER            = "user";
 
-    public static ParseQuery findInBackground(Category category, final FindCallback<Account> callback) {
-        final ParseQuery<SubCategory> innerQuery = SubCategory.getQuery();
-        innerQuery.whereEqualTo(SubCategory.CATEGORY, category);
+    public static ParseQuery findInBackground(Object tag, Category category, final FindCallback<Account> callback) {
+        final ParseQuery<SubCategory> innerQuery = SubCategory.getQuery()
+                .whereEqualTo(SubCategory.CATEGORY, category);
 
-        final ParseQuery<Account> query = getQuery();
-        query.whereMatchesQuery(SUB_CATEGORY, innerQuery);
-        query.whereEqualTo(USER, ParseUser.getCurrentUser());
-        query.findInBackground(new FindCallback<Account>() {
+        final ParseQuery<Account> query = getQuery()
+            .whereMatchesQuery(SUB_CATEGORY, innerQuery)
+            .whereEqualTo(USER, ParseUser.getCurrentUser())
+            .orderByAscending(TITLE);
+
+        new TimedoutQuery<>(query).findInBackground(tag, new FindCallback<Account>() {
             @Override
             public void done(List<Account> accounts, ParseException e) {
                 callback.done(accounts, e);
@@ -42,10 +43,11 @@ public class Account extends ParseObject {
         return query;
     }
 
-    public static ParseQuery getFirstInBackground(String accountId, final GetCallback<Account> callback) {
+    public static ParseQuery getFirstInBackground(Object tag, String accountId, final GetCallback<Account> callback) {
         final ParseQuery<Account> query = getQuery()
                 .whereEqualTo("objectId", accountId);
-        query.getFirstInBackground(new GetCallback<Account>() {
+
+        new TimedoutQuery<>(query).getInBackground(tag, new GetCallback<Account>() {
             @Override
             public void done(Account account, ParseException e) {
                 callback.done(account, e);
@@ -114,11 +116,11 @@ public class Account extends ParseObject {
     }
 
     public String getTitle() {
-        return SecurityUtils.decrypt(EncryptionAlgorithm.AES_ECB, getString(TITLE));
+        return getString(TITLE);
     }
 
     public void setTitle(String title) {
-        put(TITLE, SecurityUtils.encrypt(EncryptionAlgorithm.AES_ECB, title));
+        put(TITLE, title);
     }
 
     public SubCategory getSubCategory() {
