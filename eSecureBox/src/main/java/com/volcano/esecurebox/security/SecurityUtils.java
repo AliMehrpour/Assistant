@@ -4,18 +4,21 @@ package com.volcano.esecurebox.security;
 import android.text.TextUtils;
 import android.util.Base64;
 
+import com.volcano.esecurebox.Managers;
+import com.volcano.esecurebox.model.User;
 import com.volcano.esecurebox.util.LogUtils;
 
 import java.io.UnsupportedEncodingException;
-import java.math.BigInteger;
-import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.util.Arrays;
+import java.security.SecureRandom;
+import java.security.spec.InvalidKeySpecException;
 
 import javax.crypto.Cipher;
+import javax.crypto.NoSuchPaddingException;
 import javax.crypto.SecretKey;
 import javax.crypto.SecretKeyFactory;
-import javax.crypto.spec.DESKeySpec;
+import javax.crypto.spec.IvParameterSpec;
+import javax.crypto.spec.PBEKeySpec;
 import javax.crypto.spec.SecretKeySpec;
 
 /**
@@ -24,50 +27,80 @@ import javax.crypto.spec.SecretKeySpec;
 public class SecurityUtils {
     private static final String TAG = LogUtils.makeLogTag(SecurityUtils.class);
 
-    private static final String AES_SECRET  = "abcdefghijklmnop";
-    private static final String DES_SECRET  = "abcdefghijklmnop";
+    private static final String RANDOM_ALGORITHM = "SHA1PRNG";
+    private static final String PBE_ALGORITHM = "PBEWithSHA256And256BitAES-CBC-BC";
+    private static final String CIPHER_ALGORITHM = "AES/CBC/PKCS5Padding";
+    private static final int NUM_ITERATION = 1000;
+    private static final int KEY_SIZE = 256;
+    private static final int SALT_SIZE = 128;
+    private static final int IV_SIZE = 16;
 
-    private static Cipher mAESCipher;
-    private static SecretKeySpec mAESSecretKey;
-
-    private static Cipher mDESCipher;
-    private static SecretKey mDESSecretKey;
+    private static Cipher mCipher;
+    private static SecretKey mSecretKey;
+    private static IvParameterSpec mIvSpec;
 
     /**
-     * Encryption algorithms
-     * DES - DES algorithm <br />
-     * AES_ECB - AES_ECB algorithm
+     * Initialize cryptography
+     * @param password The password
      */
-    public enum EncryptionAlgorithm {
-        DES,
-        AES_ECB
-    }
+    public static void initializeCryptography(String password) {
+        final User user = Managers.getAccountManager().getCurrentUser();
+        final byte[] iv = decodeToByte(user.getEncryptionIv());
 
-    static {
-        initializeAES();
-        initializeDES();
+        try {
+            mSecretKey = generateSecretKey(password);
+            mIvSpec = new IvParameterSpec(iv);
+            mCipher = Cipher.getInstance(CIPHER_ALGORITHM);
+        }
+        catch (NoSuchAlgorithmException | NoSuchPaddingException e) {
+            LogUtils.LogE(TAG, "Error in initialization cryptography", e);
+        }
     }
 
     /**
-     * Encrypt a clear text
-     * @param algorithm The {@link EncryptionAlgorithm}
+     * Generate secret key based on password
+     * @param password The password
+     */
+    private static SecretKey generateSecretKey(String password) {
+        final User user = Managers.getAccountManager().getCurrentUser();
+        final byte[] salt = decodeToByte(user.getEncryptionSalt());
+
+        try {
+            final PBEKeySpec pbeKeySpec = new PBEKeySpec(password.toCharArray(), salt, NUM_ITERATION, KEY_SIZE);
+            final SecretKeyFactory keyFactory = SecretKeyFactory.getInstance(PBE_ALGORITHM);
+            final SecretKey tempKey = keyFactory.generateSecret(pbeKeySpec);
+            return new SecretKeySpec(tempKey.getEncoded(), "AES");
+        }
+        catch (InvalidKeySpecException | NoSuchAlgorithmException e) {
+            LogUtils.LogE(TAG, "Error in generate secret key", e);
+        }
+
+        return null;
+    }
+
+    /**
+     * Encrypt a clear text with default secret key
      * @param clearText The clear text
-     * @return encrypted text
+     * @return Encrypted text
      */
-    public static String encrypt(EncryptionAlgorithm algorithm, String clearText) {
+    public static String encrypt(String clearText) {
+        return encrypt(mSecretKey, clearText);
+    }
+
+    /**
+     * Encrypt a clear text with given secret key
+     * @param secretKey The secret key
+     * @param clearText The clear text
+     * @return Encrypted text
+     */
+    public static String encrypt(SecretKey secretKey, String clearText) {
         if (clearText == null || TextUtils.isEmpty(clearText)) {
             return clearText;
         }
 
         try {
-            if (algorithm == EncryptionAlgorithm.DES) {
-                mDESCipher.init(Cipher.ENCRYPT_MODE, mDESSecretKey);
-                return encodeToString(mDESCipher.doFinal(getBytes(clearText)));
-            }
-            else if (algorithm == EncryptionAlgorithm.AES_ECB) {
-                mAESCipher.init(Cipher.ENCRYPT_MODE, mAESSecretKey);
-                return encodeToString(mAESCipher.doFinal(getBytes(clearText)));
-            }
+            mCipher.init(Cipher.ENCRYPT_MODE, secretKey, mIvSpec);
+            return encodeToString(mCipher.doFinal(getBytes(clearText)));
         }
         catch (Exception e) {
             LogUtils.LogE(TAG, "Error in encryption", e);
@@ -77,25 +110,28 @@ public class SecurityUtils {
     }
 
     /**
-     * Decrypt an encrypted text
-     * @param algorithm The {@link EncryptionAlgorithm}
+     * Decrypt an encrypted text with default secret key
      * @param encryptedText The encrypted text
-     * @return decrypted text
+     * @return Decrypted text
      */
-    public static String decrypt(EncryptionAlgorithm algorithm, String encryptedText) {
+    public static String decrypt(String encryptedText) {
+        return decrypt(mSecretKey, encryptedText);
+    }
+
+    /**
+     * Decrypt an encrypted text with given secret key
+     * @param secretKey The secret key
+     * @param encryptedText The encrypted text
+     * @return Decrypted text
+     */
+    public static String decrypt(SecretKey secretKey, String encryptedText) {
         if (encryptedText == null || TextUtils.isEmpty(encryptedText)) {
             return encryptedText;
         }
 
         try {
-            if (algorithm == EncryptionAlgorithm.DES) {
-                mDESCipher.init(Cipher.DECRYPT_MODE, mDESSecretKey);
-                return new String(mDESCipher.doFinal(decodeToByte(encryptedText)));
-            }
-            else if (algorithm == EncryptionAlgorithm.AES_ECB) {
-                mAESCipher.init(Cipher.DECRYPT_MODE, mAESSecretKey);
-                return new String(mAESCipher.doFinal(decodeToByte(encryptedText)));
-            }
+            mCipher.init(Cipher.DECRYPT_MODE, secretKey, mIvSpec);
+            return new String(mCipher.doFinal(decodeToByte(encryptedText)));
         }
         catch (Exception e) {
             LogUtils.LogE(TAG, "Error in decryption", e);
@@ -105,57 +141,31 @@ public class SecurityUtils {
     }
 
     /**
-     * Get MD5Hash of a input string
-     * @param input The input string
-     * @return The MD5Hash string
+     * @return The random salt suitable for GenerateKeyFromPassword
      */
-    public static String getMd5Hash(String input) {
+    public static String generateSalt() {
         try {
-            final MessageDigest md = MessageDigest.getInstance("MD5");
-            final byte[] messageDigest = md.digest(input.getBytes());
-            final BigInteger number = new BigInteger(1, messageDigest);
-
-            String md5 = number.toString(16);
-            while (md5.length() < 32) {
-                md5 = "0" + md5;
-            }
-
-            return md5;
+            final byte[] randomBytes = randomBytes(SALT_SIZE);
+            return encodeToString(randomBytes);
         }
         catch (NoSuchAlgorithmException e) {
-            LogUtils.LogE(TAG, "No algorithm for encryption", e);
+            LogUtils.LogE(TAG, "Error in generating salt", e);
         }
-
-        return input;
+        return null;
     }
 
-    private static void initializeAES() {
+    /**
+     * @return The random iv suitable for GenerateKeyFromPassword
+     */
+    public static String generateIv() {
         try {
-            // Set secret key
-            byte[] key = getBytes(AES_SECRET);
-            MessageDigest sha = MessageDigest.getInstance("SHA-1");
-            key = sha.digest(key);
-            key = Arrays.copyOf(key, 16); // use only first 128 bit
-            mAESSecretKey = new SecretKeySpec(key, "AES");
-
-            // Set cipher
-            mAESCipher = Cipher.getInstance("AES/ECB/PKCS5PADDING");
+            final byte[] randomBytes = randomBytes(IV_SIZE);
+            return encodeToString(randomBytes);
         }
-        catch (Exception e) {
-            LogUtils.LogE(TAG, "Initialize AES failed", e);
+        catch (NoSuchAlgorithmException e) {
+            LogUtils.LogE(TAG, "Error in generating iv", e);
         }
-    }
-
-    private static void initializeDES() {
-        try {
-            final DESKeySpec keySpec = new DESKeySpec(getBytes(DES_SECRET));
-            final SecretKeyFactory keyFactory = SecretKeyFactory.getInstance("DES");
-            mDESSecretKey = keyFactory.generateSecret(keySpec);
-            mDESCipher = Cipher.getInstance("DES");
-        }
-        catch (Exception e) {
-            LogUtils.LogE(TAG, "Initialize DES failed", e);
-        }
+        return null;
     }
 
     private static byte[] getBytes(String string) {
@@ -176,4 +186,10 @@ public class SecurityUtils {
         return Base64.decode(input, Base64.DEFAULT);
     }
 
+    private static byte[] randomBytes(int length) throws NoSuchAlgorithmException {
+        final SecureRandom random = SecureRandom.getInstance(RANDOM_ALGORITHM);
+        final byte[] bytes = new byte[length];
+        random.nextBytes(bytes);
+        return bytes;
+    }
 }

@@ -16,11 +16,19 @@ import com.volcano.esecurebox.Intents;
 import com.volcano.esecurebox.Managers;
 import com.volcano.esecurebox.VlApplication;
 import com.volcano.esecurebox.model.User;
+import com.volcano.esecurebox.security.SecurityUtils;
 
 /**
  * Manager handles all operation for users
  */
 public class AccountManager {
+
+    /**
+     * Because we need user always enter his password, so Logout user at startup
+     */
+    public AccountManager() {
+        signout();
+    }
 
     public boolean isLoggedIn() {
         return ParseUser.getCurrentUser() != null;
@@ -30,12 +38,13 @@ public class AccountManager {
         return (User) ParseUser.getCurrentUser();
     }
 
-    public void signin(String username, String password, final LogInCallback callback) {
+    public void signin(String username, final String password, final LogInCallback callback) {
         ParseUser.logInInBackground(username, password, new LogInCallback() {
             @Override
             public void done(ParseUser parseUser, ParseException e) {
                 if (e == null) {
                     broadcastLoginReset();
+                    SecurityUtils.initializeCryptography(password);
                 }
                 callback.done(parseUser, e);
             }
@@ -53,6 +62,8 @@ public class AccountManager {
         user.setName(name);
         user.setPassword(password);
         user.setEmail(email);
+        user.setEncryptionSalt(SecurityUtils.generateSalt());
+        user.setEncryptionIv(SecurityUtils.generateIv());
 
         user.signUpInBackground(new SignUpCallback() {
             @Override
@@ -120,6 +131,7 @@ public class AccountManager {
      * Used to send a broadcast when login status changed
      */
     private void broadcastLoginReset() {
+        Managers.getMixpanelManager().setIdentity(getCurrentUser() == null ? null : getCurrentUser().getObjectId());
         LocalBroadcastManager.getInstance(VlApplication.getInstance()).sendBroadcast(new Intent(Intents.ACTION_LOGIN_RESET));
     }
 }

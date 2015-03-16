@@ -27,7 +27,6 @@ public final class TimedoutQuery<T extends ParseObject> {
     private final Thread mThread;
     private ParseQuery<T> mQuery;
     private FindCallback<T> mFindCallback;
-    private Object mTag;
     private Date mStartTime;
 
     public TimedoutQuery(ParseQuery<T> query) {
@@ -57,7 +56,6 @@ public final class TimedoutQuery<T extends ParseObject> {
      */
     public void findInBackground(Object tag, final FindCallback<T> callback) {
         if (tag != null) {
-            mTag = tag;
             Managers.getParseManager().getRequestManager().addRequest(tag, mQuery);
         }
 
@@ -82,7 +80,6 @@ public final class TimedoutQuery<T extends ParseObject> {
      */
     public void getInBackground(Object tag, final GetCallback<T> callback) {
         if (tag != null) {
-            mTag = tag;
             Managers.getParseManager().getRequestManager().addRequest(tag, mQuery);
         }
 

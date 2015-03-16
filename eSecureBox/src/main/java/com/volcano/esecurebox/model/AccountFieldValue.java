@@ -10,7 +10,6 @@ import com.parse.SaveCallback;
 import com.volcano.esecurebox.backend.ParseManager;
 import com.volcano.esecurebox.backend.TimedoutQuery;
 import com.volcano.esecurebox.security.SecurityUtils;
-import com.volcano.esecurebox.security.SecurityUtils.EncryptionAlgorithm;
 
 import java.util.List;
 
@@ -97,11 +96,11 @@ public class AccountFieldValue extends ParseObject {
     }
 
     public String getValue() {
-        return SecurityUtils.decrypt(EncryptionAlgorithm.AES_ECB, getString(VALUE));
+        return SecurityUtils.decrypt(getString(VALUE));
     }
 
     public void setValue(String value) {
-        put(VALUE, SecurityUtils.encrypt(EncryptionAlgorithm.AES_ECB, value));
+        put(VALUE, SecurityUtils.encrypt(value));
     }
 
     public void setOrder(int order) {

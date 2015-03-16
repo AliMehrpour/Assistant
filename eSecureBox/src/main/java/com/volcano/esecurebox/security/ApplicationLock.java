@@ -6,11 +6,11 @@ import android.app.Application;
 import android.os.Bundle;
 
 import com.volcano.esecurebox.Intents;
+import com.volcano.esecurebox.Managers;
 import com.volcano.esecurebox.R;
 import com.volcano.esecurebox.activity.PasscodeActivity;
 import com.volcano.esecurebox.fragment.PasscodeFragment.Mode;
 import com.volcano.esecurebox.util.PrefUtils;
-import com.volcano.esecurebox.security.SecurityUtils.EncryptionAlgorithm;
 
 import java.util.Date;
 
@@ -63,7 +63,7 @@ public class ApplicationLock implements Application.ActivityLifecycleCallbacks {
         }
         else {
             passcode = SALT + passcode + SALT;
-            passcode = SecurityUtils.encrypt(EncryptionAlgorithm.DES, passcode);
+            passcode = SecurityUtils.encrypt(passcode);
             PrefUtils.setPref(mApplication.getString(R.string.preference_passcode), passcode);
             mLostFocusDate = new Date();
             enable();
@@ -79,7 +79,7 @@ public class ApplicationLock implements Application.ActivityLifecycleCallbacks {
 
         if (PrefUtils.exists(mApplication.getString(R.string.preference_passcode))) {
             storedPasscode = PrefUtils.getPref(mApplication.getString(R.string.preference_passcode), "");
-            storedPasscode = SecurityUtils.decrypt(EncryptionAlgorithm.DES, storedPasscode);
+            storedPasscode = SecurityUtils.decrypt(storedPasscode);
             passcode = SALT + passcode + SALT;
         }
 
@@ -109,7 +109,7 @@ public class ApplicationLock implements Application.ActivityLifecycleCallbacks {
 
     private boolean mustShowUnlockScreen() {
 
-        if (!isPasscodeEnable()) {
+        if (!Managers.getAccountManager().isLoggedIn() || !isPasscodeEnable()) {
             return false;
         }
 

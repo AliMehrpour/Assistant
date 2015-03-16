@@ -18,6 +18,8 @@ public final class User extends ParseUser {
     private static final String TAG = LogUtils.makeLogTag(SubCategory.class);
 
     private static final String NAME = "name";
+    private static final String ENCRYPTION_SALT = "encryptionSalt";
+    private static final String ENCRYPTION_IV   = "encryptionIv";
 
     /**
      * This method only should call for getting fields for first time and exclusively called by
@@ -50,6 +52,22 @@ public final class User extends ParseUser {
 
     public String getName() {
         return getString(NAME);
+    }
+
+    public void setEncryptionSalt(String salt) {
+        put(ENCRYPTION_SALT, salt);
+    }
+
+    public String getEncryptionSalt() {
+        return getString(ENCRYPTION_SALT);
+    }
+
+    public void setEncryptionIv(String iv) {
+        put(ENCRYPTION_IV, iv);
+    }
+
+    public String getEncryptionIv() {
+        return getString(ENCRYPTION_IV);
     }
 
     public void save(final SaveCallback callback) {

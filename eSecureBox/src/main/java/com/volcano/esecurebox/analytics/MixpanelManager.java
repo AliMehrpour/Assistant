@@ -3,7 +3,6 @@ package com.volcano.esecurebox.analytics;
 import android.util.Log;
 
 import com.mixpanel.android.mpmetrics.MixpanelAPI;
-import com.volcano.esecurebox.Managers;
 import com.volcano.esecurebox.VlApplication;
 import com.volcano.esecurebox.util.LogUtils;
 
@@ -39,7 +38,6 @@ public final class MixpanelManager {
 
     public MixpanelManager() {
         mMixpanelAPI = MixpanelAPI.getInstance(VlApplication.getInstance(), TOKEN);
-        mMixpanelAPI.identify(Managers.getAccountManager().getCurrentUser().getObjectId());
     }
 
     /**
@@ -68,6 +66,14 @@ public final class MixpanelManager {
         if (mEnabled) {
             mMixpanelAPI.track(eventName, properties);
         }
+    }
+
+    /**
+     * Set Identity for following events
+     * @param identity The identity
+     */
+    public void setIdentity(String identity) {
+        mMixpanelAPI.identify(identity);
     }
 
     /**
