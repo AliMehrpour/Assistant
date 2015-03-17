@@ -11,6 +11,7 @@ import com.volcano.esecurebox.VlApplication;
  */
 public final class PrefUtils {
 
+    public static String PREF_LAST_USERNAME             = "last_username";
     public static String PREF_NAVIGATOR_LAST_CATEGORY   = "navigator_last_category";
     public static String PREF_NAVIGATOR_USER_LEARNED    = "navigator_user_learned";
 

@@ -17,6 +17,7 @@ import com.volcano.esecurebox.Managers;
 import com.volcano.esecurebox.VlApplication;
 import com.volcano.esecurebox.model.User;
 import com.volcano.esecurebox.security.SecurityUtils;
+import com.volcano.esecurebox.util.PrefUtils;
 
 /**
  * Manager handles all operation for users
@@ -38,13 +39,12 @@ public class AccountManager {
         return (User) ParseUser.getCurrentUser();
     }
 
-    public void signin(String username, final String password, final LogInCallback callback) {
+    public void signin(final String username, final String password, final LogInCallback callback) {
         ParseUser.logInInBackground(username, password, new LogInCallback() {
             @Override
             public void done(ParseUser parseUser, ParseException e) {
                 if (e == null) {
-                    broadcastLoginReset();
-                    SecurityUtils.initializeCryptography(password);
+                    initialization(username, password);
                 }
                 callback.done(parseUser, e);
             }
@@ -56,7 +56,7 @@ public class AccountManager {
         ParseUser.logOut();
     }
 
-    public void signup(String username, String name, String password, String email, final SignUpCallback callback) {
+    public void signup(final String username, final String name, final String password, final String email, final SignUpCallback callback) {
         final User user = new User();
         user.setUsername(username);
         user.setName(name);
@@ -69,7 +69,7 @@ public class AccountManager {
             @Override
             public void done(ParseException e) {
                 if (e == null) {
-                    broadcastLoginReset();
+                    initialization(username, password);
                 }
                 callback.done(e);
             }
@@ -133,5 +133,17 @@ public class AccountManager {
     private void broadcastLoginReset() {
         Managers.getMixpanelManager().setIdentity(getCurrentUser() == null ? null : getCurrentUser().getObjectId());
         LocalBroadcastManager.getInstance(VlApplication.getInstance()).sendBroadcast(new Intent(Intents.ACTION_LOGIN_RESET));
+    }
+
+    private void initialization(String username, String password) {
+        SecurityUtils.initializeCryptography(password);
+
+        broadcastLoginReset();
+
+        final String lastUsername = PrefUtils.getPref(PrefUtils.PREF_LAST_USERNAME, "");
+        if (!lastUsername.equals(username)) {
+            Managers.getApplicationLockManager().getApplicationLock().setPasscode(null);
+        }
+        PrefUtils.setPref(PrefUtils.PREF_LAST_USERNAME, username);
     }
 }

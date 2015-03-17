@@ -1,29 +1,22 @@
 // Copyright (c) 2015 Volcano. All rights reserved.
 package com.volcano.esecurebox.fragment;
 
-import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.preference.Preference;
 import android.preference.PreferenceFragment;
 import android.view.View;
-import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.afollestad.materialdialogs.AlertDialogWrapper;
-import com.parse.ParseException;
-import com.parse.SaveCallback;
 import com.volcano.esecurebox.Intents;
 import com.volcano.esecurebox.Managers;
 import com.volcano.esecurebox.R;
 import com.volcano.esecurebox.activity.SignupActivity;
 import com.volcano.esecurebox.analytics.MixpanelManager;
 import com.volcano.esecurebox.fragment.PasscodeFragment.Mode;
-import com.volcano.esecurebox.util.SoftKeyboardUtils;
 import com.volcano.esecurebox.util.Utils;
-import com.volcano.esecurebox.widget.RobotoEditText;
-import com.volcano.esecurebox.widget.RobotoTextView;
 
 import java.util.Collections;
 
@@ -34,7 +27,7 @@ import java.util.Collections;
 public class SettingsFragment extends PreferenceFragment {
 
     private Preference mEditProfilePref;
-    private Preference mChangePasswordPref;
+    //private Preference mChangePasswordPref;
     private Preference mPasscodeEnablePref;
     private Preference mPasscodeChangePref;
     private Preference mAboutPref;
@@ -42,7 +35,7 @@ public class SettingsFragment extends PreferenceFragment {
     private Preference mRatePref;
     private Preference mSharePref;
 
-    private AlertDialog mChangePasswordDialog;
+    //private AlertDialog mChangePasswordDialog;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -58,6 +51,7 @@ public class SettingsFragment extends PreferenceFragment {
             }
         });
 
+        /*
         mChangePasswordPref = findPreference(getString(R.string.preference_general_change_password_key));
         mChangePasswordPref.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             @Override
@@ -150,6 +144,7 @@ public class SettingsFragment extends PreferenceFragment {
                 return false;
             }
         });
+        */
 
         mPasscodeEnablePref = findPreference(getString(R.string.preference_passcode_enable_key));
         mPasscodeEnablePref.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {

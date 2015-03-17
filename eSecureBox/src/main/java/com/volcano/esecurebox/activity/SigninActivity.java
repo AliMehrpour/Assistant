@@ -15,6 +15,7 @@ import com.parse.ParseUser;
 import com.volcano.esecurebox.Intents;
 import com.volcano.esecurebox.Managers;
 import com.volcano.esecurebox.R;
+import com.volcano.esecurebox.util.PrefUtils;
 import com.volcano.esecurebox.util.SoftKeyboardUtils;
 import com.volcano.esecurebox.util.Utils;
 
@@ -95,6 +96,8 @@ public class SigninActivity extends AbstractActivity {
                 startActivityForResult(Intents.getSignupIntent(SignupActivity.MODE_CREATE), Intents.REQUEST_CODE_SIGNUP);
             }
         });
+
+        mUsernameEdit.setText(PrefUtils.getPref(PrefUtils.PREF_LAST_USERNAME, null));
     }
 
     @Override

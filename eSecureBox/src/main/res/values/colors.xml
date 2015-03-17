@@ -17,6 +17,8 @@
     <color name="fab_pressed">#A13028</color>
     <color name="fab_transparent_background">#79999999</color>
 
+    <color name="green">#23850E</color>
+
     <color name="grey_1">#858585</color>
     <color name="grey_2">#737373</color>
     <color name="grey_3">#8c8c8c</color>

@@ -40,7 +40,6 @@ public class SignupActivity extends AbstractActivity {
     private TextView mUsernameErrorText;
 
     private int mExtraMode;
-    private User mUser ;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -103,7 +102,12 @@ public class SignupActivity extends AbstractActivity {
         mPasswordEdit.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
-                if (!hasFocus) {
+                if (hasFocus) {
+                    mPasswordErrorText.setText(R.string.hint_password_select);
+                    mPasswordErrorText.setTextColor(getResources().getColor(R.color.green));
+                    mPasswordErrorText.setVisibility(View.VISIBLE);
+                }
+                else {
                     isPasswordValid();
                 }
             }
@@ -204,6 +208,8 @@ public class SignupActivity extends AbstractActivity {
         boolean isValid = true;
         if (mPasswordEdit.getText().toString().trim().length() <
                 getResources().getInteger(R.integer.min_password_length) ) {
+            mPasswordErrorText.setText(R.string.error_password_minimum_character);
+            mPasswordErrorText.setTextColor(getResources().getColor(R.color.red_2));
             mPasswordErrorText.setVisibility(View.VISIBLE);
             isValid = false;
         }
@@ -265,11 +271,11 @@ public class SignupActivity extends AbstractActivity {
         mPasswordEdit.setVisibility(View.GONE);
         mEmailEdit.setEnabled(false);
 
-        mUser = Managers.getAccountManager().getCurrentUser();
-        mNameEdit.setText(mUser.getName());
-        mNameEdit.setSelection(mUser.getName().length());
-        mUsernameEdit.setText(mUser.getUsername());
-        mEmailEdit.setText(mUser.getEmail());
+        final User user = Managers.getAccountManager().getCurrentUser();
+        mNameEdit.setText(user.getName());
+        mNameEdit.setSelection(user.getName().length());
+        mUsernameEdit.setText(user.getUsername());
+        mEmailEdit.setText(user.getEmail());
     }
 
     private void update() {

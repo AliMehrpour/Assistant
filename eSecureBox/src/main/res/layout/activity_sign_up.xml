@@ -83,7 +83,6 @@
             android:id="@+id/text_password"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/error_password_minimum_character"
             android:gravity="center_vertical"
             style="@style/Text.RegularRed13"
             android:visibility="gone"/>
