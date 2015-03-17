@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Copyright (c) 2015 Volcano. All rights reserved. -->
+
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingLeft="@dimen/signup_horizontal_margin"
+        android:paddingRight="@dimen/signup_horizontal_margin"
+        android:animateLayoutChanges="true"
+        android:background="@color/background_default">
+
+        <com.volcano.esecurebox.widget.RobotoTextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/margin_30"
+            android:paddingTop="@dimen/margin_4"
+            android:gravity="center_horizontal"
+            android:text="@string/app_name"
+            android:drawableTop="@drawable/icon_launcher"
+            style="@style/Text.RegularDark18" />
+
+        <com.volcano.esecurebox.widget.RobotoEditText
+            android:id="@+id/edit_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="@dimen/margin_20"
+            android:layout_marginTop="@dimen/margin_12"
+            android:gravity="center_vertical"
+            android:inputType="text|textFilter|textCapWords"
+            android:imeOptions="actionNext"
+            android:hint="@string/hint_name"
+            style="@style/Text.RegularDark16" />
+
+        <com.volcano.esecurebox.widget.RobotoTextView
+            android:id="@+id/text_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/error_name_not_empty"
+            android:gravity="center_vertical"
+            style="@style/Text.RegularRed13"
+            android:visibility="gone"/>
+
+        <com.volcano.esecurebox.widget.RobotoEditText
+            android:id="@+id/edit_username"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="@dimen/margin_20"
+            android:gravity="center_vertical"
+            android:inputType="text|textNoSuggestions"
+            android:imeOptions="actionNext"
+            android:digits="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ_0123456789"
+            android:maxLength="@integer/max_username_length"
+            android:singleLine="true"
+            android:hint="@string/hint_username"
+            style="@style/Text.RegularDark16" />
+
+        <com.volcano.esecurebox.widget.RobotoTextView
+            android:id="@+id/text_username"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/error_username_not_empty"
+            android:gravity="center_vertical"
+            style="@style/Text.RegularRed13"
+            android:visibility="gone"/>
+
+        <com.volcano.esecurebox.widget.RobotoEditText
+            android:id="@+id/edit_password"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="@dimen/margin_20"
+            android:gravity="center_vertical"
+            android:inputType="textPassword"
+            android:imeOptions="actionDone"
+            android:hint="@string/hint_password"
+            style="@style/Text.RegularDark16" />
+
+        <com.volcano.esecurebox.widget.RobotoTextView
+            android:id="@+id/text_password"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            style="@style/Text.RegularRed13"
+            android:visibility="gone"/>
+
+        <com.volcano.esecurebox.widget.RobotoEditText
+            android:id="@+id/edit_email"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="@dimen/margin_20"
+            android:gravity="center_vertical"
+            android:inputType="textEmailAddress"
+            android:imeOptions="actionDone"
+            android:hint="@string/hint_email"
+            style="@style/Text.RegularDark16" />
+
+        <com.volcano.esecurebox.widget.RobotoTextView
+            android:id="@+id/text_email"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:maxLines="3"
+            android:gravity="center_vertical"
+            style="@style/Text.RegularRed13"
+            android:visibility="gone"/>
+
+        <com.volcano.esecurebox.widget.RobotoTextView
+            android:id="@+id/button_submit"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/margin_40"
+            android:gravity="center_horizontal|center_vertical"
+            android:background="@drawable/button_full_width_red"
+            style="@style/ButtonFullWidth" />
+
+        <LinearLayout
+            android:id="@+id/layout_progress"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="@dimen/margin_10"
+            android:orientation="vertical"
+            android:visibility="gone">
+
+            <ProgressBar
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:indeterminate="true"/>
+
+            <com.volcano.esecurebox.widget.RobotoTextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:layout_gravity="center"
+                style="@style/Text.RegularDark16" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</ScrollView>

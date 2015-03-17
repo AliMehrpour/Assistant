@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Copyright (c) 2015 Volcano. All rights reserved. -->
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingLeft="@dimen/margin_16"
+    android:paddingRight="@dimen/margin_16"
+    android:paddingTop="@dimen/margin_8"
+    android:paddingBottom="@dimen/margin_8"
+    android:clickable="true"
+    android:background="@drawable/list_item_selector">
+
+    <ImageView
+        android:id="@+id/image_icon"
+        android:layout_width="@dimen/account_avatar_size"
+        android:layout_height="@dimen/account_avatar_size"
+        android:layout_alignParentLeft="true"
+        android:layout_centerVertical="true"
+        android:scaleType="center"
+        android:layout_marginRight="@dimen/margin_16"
+        tools:ignore="ContentDescription"/>
+
+    <com.volcano.esecurebox.widget.RobotoTextView
+        android:id="@+id/text_date"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        style="@style/Text.RegularGrey12"
+        tools:ignore="RelativeOverlap"/>
+
+    <com.volcano.esecurebox.widget.RobotoTextView
+        android:id="@+id/text_account_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@id/image_icon"
+        android:layout_toLeftOf="@id/text_date"
+        android:layout_marginRight="@dimen/margin_16"
+        android:layout_centerVertical="true"
+        android:maxLines="2"
+        android:ellipsize="end"
+        style="@style/Text.RegularDark16"
+        tools:ignore="RelativeOverlap"/>
+
+    <ImageView
+        android:id="@+id/image_favorite"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentBottom="true"
+        android:src="@drawable/icon_star_outline"
+        android:visibility="gone"
+        tools:ignore="ContentDescription"/>
+
+</RelativeLayout>

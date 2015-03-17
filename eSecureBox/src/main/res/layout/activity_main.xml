@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Copyright (c) 2015 Volcano. All rights reserved. -->
+
+<android.support.v4.widget.DrawerLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:volcano="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/drawer_layout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <!-- Main layout -->
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <include
+            android:id="@+id/toolbar"
+            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:layout_alignParentTop="true"
+            layout="@layout/toolbar" />
+
+        <!-- As the main content view, the view below consumes the entire
+         space available using match_parent in both dimensions. -->
+        <FrameLayout
+            android:id="@+id/layout_acount_list"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@id/toolbar">
+
+            <fragment
+                android:id="@+id/fragment_account_list"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_below="@id/toolbar"
+                android:name="com.volcano.esecurebox.fragment.AccountListFragment" />
+
+        </FrameLayout>
+
+        <View
+            android:id="@+id/background_transparent"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@id/toolbar"
+            android:background="@color/fab_transparent_background"
+            android:clickable="true"
+            android:visibility="gone" />
+
+       <com.volcano.esecurebox.widget.FloatingActionMenu
+            android:id="@+id/menu_create_account"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="16dp"
+            android:layout_marginBottom="16dp"
+            volcano:famLabelStyle="@style/FloatingActionMenu"
+            android:focusableInTouchMode="true" />
+
+    </RelativeLayout>
+
+    <!-- Navigation view -->
+    <fragment
+        android:id="@+id/fragment_navigation_drawer"
+        android:layout_width="@dimen/navigation_width"
+        android:layout_height="match_parent"
+        android:layout_gravity="start"
+        android:name="com.volcano.esecurebox.fragment.NavigationFragment" />
+
+</android.support.v4.widget.DrawerLayout>

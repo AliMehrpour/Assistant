@@ -1,0 +1,67 @@
+// Copyright (c) 2015 Volcano. All rights reserved.
+package com.volcano.esecurebox.activity;
+
+import android.content.Intent;
+import android.os.Bundle;
+import android.view.View;
+import android.view.animation.AnimationUtils;
+import android.widget.ImageView;
+
+import com.volcano.esecurebox.Intents;
+import com.volcano.esecurebox.Managers;
+import com.volcano.esecurebox.R;
+import com.volcano.esecurebox.analytics.MixpanelManager;
+import com.volcano.esecurebox.fragment.DisplayAccountFragment;
+import com.volcano.esecurebox.widget.FloatingActionButton;
+import com.volcano.esecurebox.widget.RobotoTextView;
+
+/**
+ * Display a account values
+ */
+public class DisplayAccountActivity extends AbstractActivity {
+
+    private FloatingActionButton mEditButton;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_display_account);
+
+        final Intent intent = getIntent();
+        final String accountId = intent.getStringExtra(Intents.EXTRA_ACCOUNT_ID);
+        final String color = intent.getStringExtra(Intents.EXTRA_CATEGORY_COLOR);
+        setToolbarColor(color);
+
+        final ImageView cancelImage = (ImageView) findViewById(R.id.image_cancel);
+        cancelImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
+
+        final RobotoTextView titleText = (RobotoTextView) findViewById(R.id.text_title);
+        titleText.setText(intent.getStringExtra(Intents.EXTRA_ACCOUNT_TITLE));
+
+        mEditButton = (FloatingActionButton) findViewById(R.id.button_edit);
+        mEditButton.setColorNormal(color, true);
+        mEditButton.startAnimation(AnimationUtils.loadAnimation(this, R.anim.button_zoom_in));
+        mEditButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Managers.getMixpanelManager().track(MixpanelManager.EVENT_EDIT_ITEM);
+
+                startActivity(Intents.getEditAccountIntent(accountId, color));
+            }
+        });
+
+        final DisplayAccountFragment fragment = (DisplayAccountFragment) getFragmentManager().findFragmentById(R.id.fragment_edit_account);
+        fragment.setOnEnableEditListener(new DisplayAccountFragment.OnEnableEditListener() {
+            @Override
+            public void onEnableEdit(boolean enable) {
+                mEditButton.setEnabled(enable);
+            }
+        });
+        fragment.loadFields(accountId);
+    }
+}

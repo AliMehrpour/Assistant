@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Copyright (c) 2015 Volcano. All rights reserved. -->
+
+<resources>
+
+    <color name="background_default">#EDEDED</color>
+
+    <color name="blue">#3F5799</color>
+    <color name="blue_1">#596699</color>
+    <color name="blue_2">#41C2FA</color>
+
+    <color name="divider">#CECECE</color>
+
+    <color name="fab_disable">#AAAAAA</color>
+    <color name="fab_label_background">#99000000</color>
+    <color name="fab_normal">#F44336</color>
+    <color name="fab_pressed">#A13028</color>
+    <color name="fab_transparent_background">#79999999</color>
+
+    <color name="green">#23850E</color>
+
+    <color name="grey_1">#858585</color>
+    <color name="grey_2">#737373</color>
+    <color name="grey_3">#8c8c8c</color>
+    <color name="grey_4">#6D6D6D</color>
+    <color name="grey_5">#E0E0E0</color>
+    <color name="grey_6">#3F3F3F</color>
+    <color name="grey_7">#ECECEC</color>
+    <color name="grey_8">#F2F2F2</color>
+    <color name="grey_9">#424242</color>
+
+    <color name="navigation_selector">#B6B6B6</color>
+    <color name="navigation_statusbar_color">#000000</color>
+
+    <color name="red">#F44336</color>
+    <color name="red_1">#FFF47D70</color>
+    <color name="red_2">#D32F2F</color>
+
+    <color name="teal">#008EA3</color>
+    <color name="teal_1">#9D00AFC4</color>
+
+    <color name="theme_accent">#FF5252</color>
+    <color name="theme_primary">#F44336</color>
+    <color name="theme_primary_dark">#D32F2F</color>
+
+</resources>

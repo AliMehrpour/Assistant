@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Copyright (c) 2015 Volcano. All rights reserved. -->
+
+<resources>
+
+    <declare-styleable name="FloatingActionButton">
+
+        <attr name="fabColorDisabled" format="color" />
+        <attr name="fabColorNormal" format="color" />
+        <attr name="fabColorPressed" format="color" />
+        <attr name="fabIcon" format="reference" />
+        <attr name="fabStrokeVisible" format="boolean" />
+        <attr name="fabTitle" format="string" />
+        <attr name="fabType" format="enum">
+            <enum name="normal" value="0" />
+            <enum name="mini" value="1" />
+        </attr>
+
+    </declare-styleable>
+
+    <declare-styleable name="FloatingActionMenu">
+
+        <attr name="famColorDisabled" format="color" />
+        <attr name="famColorNormal" format="color" />
+        <attr name="famColorPressed" format="color" />
+        <attr name="famShadow" format="boolean" />
+        <attr name="famType" format="enum">
+            <enum name="normal" value="0" />
+            <enum name="mini" value="1" />
+        </attr>
+        <attr name="famLabelStyle" format="reference" />
+
+    </declare-styleable>
+
+    <declare-styleable name="FloatingLabeledEditText">
+
+        <attr name="fleBackground" format="reference|color" />
+        <attr name="fleHint" format="reference|string" />
+        <attr name="flePadding" format="reference|dimension" />
+        <attr name="flePaddingLeft" format="reference|dimension" />
+        <attr name="flePaddingTop" format="reference|dimension" />
+        <attr name="flePaddingRight" format="reference|dimension" />
+        <attr name="flePaddingBottom" format="reference|dimension" />
+        <attr name="fleShowIcon" format="boolean" />
+        <attr name="fleTextAppearance" format="reference" />
+
+    </declare-styleable>
+
+    <declare-styleable name="RobotoTextView">
+
+        <attr name="robotoTypeface" format="enum">
+
+            <enum name="regular" value="0" />
+            <enum name="medium" value="1" />
+            <enum name="black_italic" value="2" />
+
+        </attr>
+
+    </declare-styleable>
+
+</resources>
