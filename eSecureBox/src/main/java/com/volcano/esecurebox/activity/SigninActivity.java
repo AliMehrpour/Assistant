@@ -97,7 +97,15 @@ public class SigninActivity extends AbstractActivity {
             }
         });
 
-        mUsernameEdit.setText(PrefUtils.getPref(PrefUtils.PREF_LAST_USERNAME, null));
+        final String lastUsername = PrefUtils.getPref(PrefUtils.PREF_LAST_USERNAME, null);
+        if (lastUsername != null) {
+            mUsernameEdit.setText(lastUsername);
+            mPasswordEdit.requestFocus();
+        }
+        else {
+            mUsernameEdit.requestFocus();
+        }
+
     }
 
     @Override
