@@ -50,7 +50,7 @@
     <string name="error_password_minimum_character">Password must be at least 6 characters</string>
     <string name="error_username_not_empty">Username can not be empty</string>
 
-    <string name="hint_account_name">Enter account title</string>
+    <string name="hint_account_title">Enter title</string>
     <string name="hint_email">Email</string>
     <string name="hint_name">Name</string>
     <string name="hint_navigation_close">Close</string>
@@ -69,12 +69,12 @@
     <string name="label_category">Category</string>
     <string name="label_delete">Delete</string>
     <string name="label_change_password_dialog_title">Change password</string>
-    <string name="label_edit_account">Edit Account</string>
+    <string name="label_edit_account">Edit Item</string>
     <string name="label_enter_passcode">Enter your passcode</string>
     <string name="label_enter_new_passcode">Enter your new passcode</string>
     <string name="label_enter_old_passcode">Enter your old passcode</string>
     <string name="label_initialize_data">Initializing for first time\n Be patient! It takes less than a minute…</string>
-    <string name="label_new_account">New Account</string>
+    <string name="label_new_account">New Item</string>
     <string name="label_ninety_nine_plus">99+</string>
     <string name="label_re_enter_passcode">Re-enter your passcode</string>
     <string name="label_re_enter_new_passcode">Re-enter your new passcode</string>
@@ -91,7 +91,7 @@
     <string name="preference_general_profile_edit_title">Edit profile</string>
     <string name="preference_other_category_title">OTHER</string>
     <string name="preference_other_about_title">About</string>
-    <string name="preference_other_report_bug_title">Report a bug</string>
+    <string name="preference_other_feedback_title">Feedback</string>
     <string name="preference_other_rate_title">Rate and review</string>
     <string name="preference_other_share_title">Share app</string>
     <string name="preference_passcode_category_title">PASSCODE</string>
@@ -100,7 +100,9 @@
     <string name="preference_passcode_enable_title">Turn passcode on</string>
 
     <string name="share_subject">eSecureBox App</string>
-    <string name="share_body">\neSecureBox is an awesome app, you can save all of your accounts, login and important information in one safe place. Download it and enjoy!\n\n http://www.eSecureBox.net</string>
+    <string name="share_body">\neSecureBox is a free and secure app to store all your private info
+        in one box and get them anywhere you want. Perfect password manager with simple and user friendly design.\n
+        Download it and enjoy!\n\n http://www.eSecureBox.net</string>
 
     <string name="toast_account_create_failed">Create new item failed</string>
     <string name="toast_account_delete_successful">Item deleted successfully</string>
@@ -123,11 +125,12 @@
     <string name="toast_load_category_failed">Load category failed</string>
     <string name="toast_load_email_client_failed">Not found any email app on your device</string>
     <string name="toast_load_share_client_failed">Not found any share app on your device</string>
+    <string name="toast_no_network_connection">Please check network connection and try again</string>
     <string name="toast_passcode_changed">Passcode changed</string>
     <string name="toast_passcode_disabled">Passcode disabled</string>
     <string name="toast_passcode_enabled">Passcode enabled</string>
     <string name="toast_passcode_invalid">Wrong passcode, please try again</string>
-    <string name="toast_passcode_not_matched">The Passcodes didn\'t match, pleas try again</string>
+    <string name="toast_passcode_not_matched">The Passcodes didn\'t match, please try again</string>
     <string name="toast_signup_failed">Signup failed</string>
 
 </resources>

@@ -1,3 +1,4 @@
+// Copyright (c) 2015 Volcano. All rights reserved.
 package com.volcano.esecurebox.model;
 
 import com.parse.FindCallback;
@@ -6,7 +7,7 @@ import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.volcano.esecurebox.backend.ParseManager;
-import com.volcano.esecurebox.backend.TimedoutQuery;
+import com.volcano.esecurebox.backend.TimeoutQuery;
 import com.volcano.esecurebox.util.LogUtils;
 
 import java.util.List;
@@ -28,7 +29,7 @@ public class SubCategoryField extends ParseObject {
                 .whereEqualTo(SUB_CATEGORY, subCategory);
         query.include(FIELD);
 
-        new TimedoutQuery<>(query).findInBackground(tag, new FindCallback<SubCategoryField>() {
+        new TimeoutQuery<>(query).findInBackground(tag, new FindCallback<SubCategoryField>() {
             @Override
             public void done(List<SubCategoryField> subCategoryFields, ParseException e) {
                 callback.done(subCategoryFields, e);

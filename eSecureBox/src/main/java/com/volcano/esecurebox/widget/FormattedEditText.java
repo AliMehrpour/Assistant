@@ -68,11 +68,11 @@ public final class FormattedEditText extends RobotoEditText {
         final int defaultInputType = InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS;
         switch (mFormatType) {
             case FORMAT_STRING:
-                setInputType(defaultInputType | InputType.TYPE_TEXT_FLAG_CAP_SENTENCES);
+                setInputType(defaultInputType);
                 break;
 
             case FORMAT_STRING_MULTILINE:
-                setInputType(defaultInputType | InputType.TYPE_TEXT_FLAG_CAP_SENTENCES | InputType.TYPE_TEXT_FLAG_MULTI_LINE);
+                setInputType(defaultInputType | InputType.TYPE_TEXT_FLAG_MULTI_LINE);
                 break;
 
             case FORMAT_PASSWORD:

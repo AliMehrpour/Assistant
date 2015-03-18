@@ -31,7 +31,7 @@ public class SettingsFragment extends PreferenceFragment {
     private Preference mPasscodeEnablePref;
     private Preference mPasscodeChangePref;
     private Preference mAboutPref;
-    private Preference mReportBugPref;
+    private Preference mFeedbackPref;
     private Preference mRatePref;
     private Preference mSharePref;
 
@@ -182,12 +182,12 @@ public class SettingsFragment extends PreferenceFragment {
             }
         });
 
-        mReportBugPref = findPreference(getString(R.string.preference_other_report_bug_key));
-        mReportBugPref.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+        mFeedbackPref = findPreference(getString(R.string.preference_other_feedback_key));
+        mFeedbackPref.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             @Override
             public boolean onPreferenceClick(Preference preference) {
                 Utils.launchEmailClient(getActivity(),
-                        Collections.singletonList(getString(R.string.email_address_bug)),
+                        Collections.singletonList(getString(R.string.email_address_feedback)),
                         String.format(getString(R.string.email_subject_bug_report), getString(R.string.app_name), Utils.getAppVersionName()));
                 return false;
             }

@@ -64,7 +64,12 @@ public class SigninActivity extends AbstractActivity {
                                     else {
                                         enable(true);
                                         mProgressLayout.setVisibility(View.GONE);
-                                        Utils.showToast(getResources().getString(R.string.toast_invalid_username_or_password));
+                                        if (e.getCode() == ParseException.CONNECTION_FAILED) {
+                                            Utils.showToast(getResources().getString(R.string.toast_no_network_connection));
+                                        }
+                                        else {
+                                            Utils.showToast(getResources().getString(R.string.toast_invalid_username_or_password));
+                                        }
                                     }
                                 }
                             });

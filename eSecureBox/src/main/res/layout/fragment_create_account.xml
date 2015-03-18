@@ -35,7 +35,7 @@
 
             <com.volcano.esecurebox.widget.RobotoEditText
                 android:id="@+id/text_account_title"
-                android:hint="@string/hint_account_name"
+                android:hint="@string/hint_account_title"
                 android:visibility="gone"
                 style="@style/Text.FullWidth"/>
 
