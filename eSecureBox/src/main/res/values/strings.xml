@@ -63,7 +63,7 @@
     <string name="hint_select_sub_category">Select Account Type</string>
     <string name="hint_username">Username</string>
 
-    <string name="label_about_dialog_content_general">A secure and reliable box to save your important information.\nCopyright © 2015 Volcano.</string>
+    <string name="label_about_dialog_content_general">A secure and reliable box to save your private information.\nCopyright © 2015 Volcano.</string>
     <string name="label_about_dialog_title">About</string>
     <string name="label_cancel">Cancel</string>
     <string name="label_category">Category</string>
@@ -101,7 +101,7 @@
 
     <string name="share_subject">eSecureBox App</string>
     <string name="share_body">\neSecureBox is a free and secure app to store all your private info
-        in one box and get them anywhere you want. Perfect password manager with simple and user friendly design.\n
+        in one box and get them anywhere you want. Perfect Password Manager with simple and user friendly design.\n
         Download it and enjoy!\n\n http://www.eSecureBox.net</string>
 
     <string name="toast_account_create_failed">Create new item failed</string>
