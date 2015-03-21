@@ -11,7 +11,7 @@ import com.parse.ParseQuery;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
 import com.volcano.esecurebox.backend.ParseManager;
-import com.volcano.esecurebox.backend.TimedoutQuery;
+import com.volcano.esecurebox.backend.TimeoutQuery;
 
 import java.util.List;
 
@@ -33,7 +33,7 @@ public class Account extends ParseObject {
             .whereEqualTo(USER, ParseUser.getCurrentUser())
             .orderByAscending(TITLE);
 
-        new TimedoutQuery<>(query).findInBackground(tag, new FindCallback<Account>() {
+        new TimeoutQuery<>(query).findInBackground(tag, new FindCallback<Account>() {
             @Override
             public void done(List<Account> accounts, ParseException e) {
                 callback.done(accounts, e);
@@ -47,7 +47,7 @@ public class Account extends ParseObject {
         final ParseQuery<Account> query = getQuery()
                 .whereEqualTo("objectId", accountId);
 
-        new TimedoutQuery<>(query).getInBackground(tag, new GetCallback<Account>() {
+        new TimeoutQuery<>(query).getInBackground(tag, new GetCallback<Account>() {
             @Override
             public void done(Account account, ParseException e) {
                 callback.done(account, e);

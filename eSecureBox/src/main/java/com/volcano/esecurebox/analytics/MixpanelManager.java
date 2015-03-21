@@ -1,3 +1,4 @@
+// Copyright (c) 2015 Volcano. All rights reserved.
 package com.volcano.esecurebox.analytics;
 
 import android.util.Log;
