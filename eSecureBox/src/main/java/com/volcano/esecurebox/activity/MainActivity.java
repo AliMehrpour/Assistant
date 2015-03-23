@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -46,6 +47,7 @@ public class MainActivity extends AbstractActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        mFinishIfNotLoggedIn = false;
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
@@ -73,12 +75,16 @@ public class MainActivity extends AbstractActivity {
             startActivityForResult(Intents.getSigninIntent(), Intents.REQUEST_CODE_SIGNIN);
         }
         else {
+            String categoryId = null;
             if (savedInstanceState != null) {
-                loadAccounts(savedInstanceState.getString(Intents.KEY_CATEGORY_ID));
+                categoryId = savedInstanceState.getString(Intents.KEY_CATEGORY_ID);
             }
-            else {
-                loadAccounts(PrefUtils.getPref(PrefUtils.PREF_NAVIGATOR_LAST_CATEGORY, ""));
+
+            if (TextUtils.isEmpty(categoryId)) {
+                categoryId = PrefUtils.getPref(PrefUtils.PREF_NAVIGATOR_LAST_CATEGORY, "");
             }
+
+            loadAccounts(categoryId);
             mNavigationFragment.loadNavigationItems();
             loadFloatingMenuCategories();
         }

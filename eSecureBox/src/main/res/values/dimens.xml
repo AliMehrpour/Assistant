@@ -9,6 +9,7 @@
     <dimen name="button_bar_height_lollipop">48dp</dimen>
 
     <dimen name="circle_drawable_size">24dp</dimen>
+    <dimen name="circle_drawable_stroke_size">4dp</dimen>
 
     <dimen name="divider">1dp</dimen>
 

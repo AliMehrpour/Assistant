@@ -19,7 +19,7 @@ import com.volcano.esecurebox.util.RobotoUtils;
  */
 public class CircleDrawable extends Drawable {
 
-    private static final int STROKE_WIDTH   = 12;
+    private static final int STROKE_WIDTH   = VlApplication.getInstance().getResources().getDimensionPixelSize(R.dimen.circle_drawable_stroke_size);
 
     public static final int FILL    = 0;
     public static final int STROKE  = 1;

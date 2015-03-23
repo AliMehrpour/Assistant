@@ -3,6 +3,7 @@ package com.volcano.esecurebox.activity;
 
 import android.annotation.SuppressLint;
 import android.graphics.Color;
+import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.Toolbar;
@@ -21,6 +22,17 @@ import com.volcano.esecurebox.util.Utils;
  */
 public class AbstractActivity extends ActionBarActivity {
     protected final String TAG = LogUtils.makeLogTag(getClass().getName());
+
+    protected boolean mFinishIfNotLoggedIn = true;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        if (mFinishIfNotLoggedIn && !Managers.getAccountManager().isLoggedIn()) {
+            finish();
+        }
+    }
 
     @Override
     public void onResume() {

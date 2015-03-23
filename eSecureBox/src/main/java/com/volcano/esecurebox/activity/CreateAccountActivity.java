@@ -1,6 +1,7 @@
 // Copyright (c) 2015 Volcano. All rights reserved.
 package com.volcano.esecurebox.activity;
 
+import android.annotation.SuppressLint;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.drawable.StateListDrawable;
@@ -17,6 +18,7 @@ import com.volcano.esecurebox.R;
 import com.volcano.esecurebox.fragment.CreateAccountFragment;
 import com.volcano.esecurebox.util.BitmapUtils;
 import com.volcano.esecurebox.util.SoftKeyboardUtils;
+import com.volcano.esecurebox.util.Utils;
 import com.volcano.esecurebox.widget.RobotoTextView;
 
 /**
@@ -29,6 +31,7 @@ public class CreateAccountActivity extends AbstractActivity {
 
     private String mAccountId;
 
+    @SuppressLint("NewApi")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -61,37 +64,40 @@ public class CreateAccountActivity extends AbstractActivity {
             }
         });
 
-        if (savedInstanceState == null) {
-            if (categoryId != null) {
-                mFragment.setCategoryId(categoryId, categoryColor);
-                setTitle(R.string.label_new_account);
-                deleteText.setVisibility(View.GONE);
+        if (categoryId != null) {
+            mFragment.setCategoryId(categoryId, categoryColor);
+            setTitle(R.string.label_new_account);
+            deleteText.setVisibility(View.GONE);
+        }
+        else {
+            mFragment.setAccountId(mAccountId);
+            setTitle(R.string.label_edit_account);
+            deleteText.setVisibility(View.VISIBLE);
+
+            final int normalColor = BitmapUtils.getColor(categoryColor);
+            final StateListDrawable stateListDrawable = new StateListDrawable();
+            stateListDrawable.addState(new int[] { -android.R.attr.state_enabled }, BitmapUtils.getColorDrawablr(getResources().getColor(android.R.color.darker_gray)));
+            stateListDrawable.addState(new int[] { android.R.attr.state_pressed }, BitmapUtils.getColorDrawablr(BitmapUtils.getLightenColor(normalColor, .2f)));
+            stateListDrawable.addState(new int[] { }, BitmapUtils.getColorDrawablr(normalColor));
+            if (Utils.hasJellyBeanApi()) {
+                deleteText.setBackground(stateListDrawable);
             }
             else {
-                mFragment.setAccountId(mAccountId);
-                setTitle(R.string.label_edit_account);
-                deleteText.setVisibility(View.VISIBLE);
-
-                final int normalColor = BitmapUtils.getColor(categoryColor);
-                final StateListDrawable stateListDrawable = new StateListDrawable();
-                stateListDrawable.addState(new int[] { -android.R.attr.state_enabled }, BitmapUtils.getColorDrawablr(getResources().getColor(android.R.color.darker_gray)));
-                stateListDrawable.addState(new int[] { android.R.attr.state_pressed }, BitmapUtils.getColorDrawablr(BitmapUtils.getLightenColor(normalColor, .2f)));
-                stateListDrawable.addState(new int[] { }, BitmapUtils.getColorDrawablr(normalColor));
-                deleteText.setBackground(stateListDrawable);
-
-                final SoftKeyboardUtils softKeyboardHelper = new SoftKeyboardUtils(findViewById(R.id.root));
-                softKeyboardHelper.addSoftKeyboardStateListener(new SoftKeyboardUtils.OnSoftKeyboardStateListener() {
-                    @Override
-                    public void onSoftKeyboardOpened(int keyboardHeight) {
-                        deleteText.setVisibility(View.GONE);
-                    }
-
-                    @Override
-                    public void onSoftKeyboardClosed() {
-                        deleteText.setVisibility(View.VISIBLE);
-                    }
-                });
+                deleteText.setBackgroundDrawable(stateListDrawable);
             }
+
+            final SoftKeyboardUtils softKeyboardHelper = new SoftKeyboardUtils(findViewById(R.id.root));
+            softKeyboardHelper.addSoftKeyboardStateListener(new SoftKeyboardUtils.OnSoftKeyboardStateListener() {
+                @Override
+                public void onSoftKeyboardOpened(int keyboardHeight) {
+                    deleteText.setVisibility(View.GONE);
+                }
+
+                @Override
+                public void onSoftKeyboardClosed() {
+                    deleteText.setVisibility(View.VISIBLE);
+                }
+            });
         }
     }
 

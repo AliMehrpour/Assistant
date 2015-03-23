@@ -104,25 +104,25 @@
         in one box and get them anywhere you want. Perfect Password Manager with simple and user friendly design.\n
         Download it and enjoy!\n\n http://www.eSecureBox.net</string>
 
-    <string name="toast_account_create_failed">Create new item failed</string>
+    <string name="toast_account_create_failed">Unable create new item</string>
     <string name="toast_account_delete_successful">Item deleted successfully</string>
-    <string name="toast_account_delete_failed">Delete item failed</string>
-    <string name="toast_account_load_failed">Load item failed</string>
-    <string name="toast_account_save_failed">Save item failed</string>
+    <string name="toast_account_delete_failed">Unable delete item</string>
+    <string name="toast_account_load_failed">Unable load item</string>
+    <string name="toast_account_save_failed">Unable save item</string>
     <string name="toast_account_save_validation_no_field">No information for save, please try again</string>
     <string name="toast_account_save_validation_title_empty">Title can not be empty</string>
-    <string name="toast_account_update_failed">Update item failed</string>
+    <string name="toast_account_update_failed">Unable update item</string>
     <string name="toast_category_try_get_category">Try preparing creating items…</string>
     <string name="toast_category_create_account_unavailable">Please check network connection and try again</string>
     <string name="toast_change_password_successful">Password changed successfully</string>
-    <string name="toast_change_password_failed">Change password failed</string>
+    <string name="toast_change_password_failed">Unable change password</string>
     <string name="toast_copy_to_clipboard">Copied to clipboard</string>
     <string name="toast_device_offline_message">Your device appears to be offline</string>
     <string name="toast_edit_profile_successful">Profile updated successfully</string>
-    <string name="toast_edit_profile_failed">Update profile failed</string>
+    <string name="toast_edit_profile_failed">Unable update profile</string>
     <string name="toast_initialize_failed">Initialization failed</string>
     <string name="toast_invalid_username_or_password">Invalid username or password</string>
-    <string name="toast_load_category_failed">Load category failed</string>
+    <string name="toast_load_category_failed">Unable load category</string>
     <string name="toast_load_email_client_failed">Not found any email app on your device</string>
     <string name="toast_load_share_client_failed">Not found any share app on your device</string>
     <string name="toast_no_network_connection">Please check network connection and try again</string>
@@ -131,6 +131,6 @@
     <string name="toast_passcode_enabled">Passcode enabled</string>
     <string name="toast_passcode_invalid">Wrong passcode, please try again</string>
     <string name="toast_passcode_not_matched">The Passcodes didn\'t match, please try again</string>
-    <string name="toast_signup_failed">Signup failed</string>
+    <string name="toast_signup_failed">Unable signup</string>
 
 </resources>

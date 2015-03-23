@@ -83,7 +83,7 @@ public class Utils {
      * @return True if SDK is greater than JellyBean
      */
     public static boolean hasJellyBeanApi() {
-        return Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1;
+        return Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN;
     }
 
     /**
