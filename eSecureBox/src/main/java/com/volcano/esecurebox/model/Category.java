@@ -8,7 +8,7 @@ import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.volcano.esecurebox.backend.ParseManager;
-import com.volcano.esecurebox.backend.TimedoutQuery;
+import com.volcano.esecurebox.backend.TimeoutQuery;
 import com.volcano.esecurebox.util.LogUtils;
 
 import java.util.List;
@@ -28,7 +28,7 @@ public class Category extends ParseObject {
     public static ParseQuery findInBackground(Object tag, final FindCallback<Category> callback) {
         final ParseQuery<Category> query = getQuery();
 
-        new TimedoutQuery<>(query).findInBackground(tag, new FindCallback<Category>() {
+        new TimeoutQuery<>(query).findInBackground(tag, new FindCallback<Category>() {
             @Override
             public void done(List<Category> categories, ParseException e) {
                 callback.done(categories, e);
@@ -41,7 +41,7 @@ public class Category extends ParseObject {
     public static ParseQuery getInBackground(Object tag, String categoryId, final GetCallback<Category> callback) {
         final ParseQuery<Category> query = getQuery();
         query.whereEqualTo("objectId", categoryId);
-        new TimedoutQuery<>(query).getInBackground(tag, new GetCallback<Category>() {
+        new TimeoutQuery<>(query).getInBackground(tag, new GetCallback<Category>() {
             @Override
             public void done(Category category, ParseException e) {
                 callback.done(category, e);

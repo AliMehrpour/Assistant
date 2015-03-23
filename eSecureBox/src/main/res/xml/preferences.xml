@@ -39,8 +39,8 @@
             android:title="@string/preference_other_about_title"/>
 
         <Preference
-            android:key="@string/preference_other_report_bug_key"
-            android:title="@string/preference_other_report_bug_title"/>
+            android:key="@string/preference_other_feedback_key"
+            android:title="@string/preference_other_feedback_title"/>
 
         <Preference
             android:key="@string/preference_other_rate_key"

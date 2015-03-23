@@ -1,3 +1,4 @@
+// Copyright (c) 2015 Volcano. All rights reserved.
 package com.volcano.esecurebox.backend;
 
 import android.os.Handler;
@@ -20,8 +21,8 @@ import java.util.List;
  * If after a 4 seconds server doesn't get back result, cancel the query and send a {@link com.parse.ParseException}
  * with {@link com.parse.ParseException#TIMEOUT} code and empty message
  */
-public final class TimedoutQuery<T extends ParseObject> {
-    private static final String TAG = LogUtils.makeLogTag(TimedoutQuery.class);
+public final class TimeoutQuery<T extends ParseObject> {
+    private static final String TAG = LogUtils.makeLogTag(TimeoutQuery.class);
 
     private final Object mLock = new Object();
     private final Thread mThread;
@@ -29,7 +30,7 @@ public final class TimedoutQuery<T extends ParseObject> {
     private FindCallback<T> mFindCallback;
     private Date mStartTime;
 
-    public TimedoutQuery(ParseQuery<T> query) {
+    public TimeoutQuery(ParseQuery<T> query) {
         mQuery = query;
         mThread = new Thread() {
             @Override
@@ -124,9 +125,8 @@ public final class TimedoutQuery<T extends ParseObject> {
         if (mQuery != null) {
             LogUtils.LogD(TAG, String.format("Query finish" + (error ? " with error" : "") + ": %d ms [X] %s", (System.currentTimeMillis() - mStartTime.getTime()), mQuery.getClassName() + "@" + mQuery.hashCode()));
             Managers.getParseManager().getRequestManager().remove(mQuery);
-
-            mThread.interrupt();
             mQuery = null;
+            mThread.interrupt();
         }
     }
 }

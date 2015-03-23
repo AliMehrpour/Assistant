@@ -56,17 +56,26 @@ public final class ParseRequestManager {
 
     /**
      * Remove query from queue
-     * @param removedQuery The query
+     * @param query The query
      */
-    public void remove(ParseQuery removedQuery) {
+    public void remove(ParseQuery query) {
+        CancelableQuery candidateQuery = null;
+        int candidateIndex = 0;
 
         final int size = mRequestQueue.size();
         for (int i = 0; i < size; i++) {
             final CancelableQuery cancelableQuery = mRequestQueue.get(i);
-            if (cancelableQuery.query == removedQuery) {
-                mRequestQueue.remove(cancelableQuery);
-                LogUtils.LogD(TAG, String.format("Remove query: %d [X] %s", i, cancelableQuery.query.getClassName() + "@" + cancelableQuery.query.hashCode()));
+            if (cancelableQuery.query == query) {
+                candidateQuery = cancelableQuery;
+                candidateIndex = i;
+                break;
             }
+        }
+
+        if (candidateQuery != null) {
+            mRequestQueue.remove(candidateQuery);
+            LogUtils.LogD(TAG, String.format("Remove query: %d [X] %s", candidateIndex, candidateQuery.query.getClassName() + "@" + candidateQuery.query.hashCode()));
+
         }
     }
 

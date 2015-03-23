@@ -15,3 +15,14 @@
 #-keepclassmembers class fqcn.of.javascript.interface.for.webview {
 #   public *;
 #}
+-keepattributes SourceFile,LineNumberTable
+
+-keep class com.mixpanel.android.* { *; }
+-dontwarn com.mixpanel.android.**
+
+-keep class com.parse.* { *; }
+-dontwarn com.parse.**
+
+-keepclasseswithmembernames class * {
+    native <methods>;
+}

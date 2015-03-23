@@ -1,3 +1,4 @@
+// Copyright (c) 2015 Volcano. All rights reserved.
 package com.volcano.esecurebox.model;
 
 import com.parse.DeleteCallback;
@@ -8,7 +9,7 @@ import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.SaveCallback;
 import com.volcano.esecurebox.backend.ParseManager;
-import com.volcano.esecurebox.backend.TimedoutQuery;
+import com.volcano.esecurebox.backend.TimeoutQuery;
 import com.volcano.esecurebox.security.SecurityUtils;
 
 import java.util.List;
@@ -28,7 +29,7 @@ public class AccountFieldValue extends ParseObject {
         query.whereEqualTo(ACCOUNT, account);
         query.include(FIELD);
         query.orderByAscending(ORDER);
-        new TimedoutQuery<>(query).findInBackground(tag, new FindCallback<AccountFieldValue>() {
+        new TimeoutQuery<>(query).findInBackground(tag, new FindCallback<AccountFieldValue>() {
             @Override
             public void done(List<AccountFieldValue> accountFieldValues, ParseException e) {
                 callback.done(accountFieldValues, e);

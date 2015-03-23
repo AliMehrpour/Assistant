@@ -54,11 +54,7 @@
             android:inputType="textPassword"
             android:imeOptions="actionDone"
             android:hint="@string/hint_password"
-            style="@style/Text.RegularDark16">
-
-            <requestFocus />
-
-        </com.volcano.esecurebox.widget.RobotoEditText>
+            style="@style/Text.RegularDark16" />
 
         <com.volcano.esecurebox.widget.RobotoTextView
             android:id="@+id/text_password"
