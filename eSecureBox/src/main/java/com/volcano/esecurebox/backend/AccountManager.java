@@ -143,6 +143,7 @@ public class AccountManager {
         final String lastUsername = PrefUtils.getPref(PrefUtils.PREF_LAST_USERNAME, "");
         if (!lastUsername.equals(username)) {
             Managers.getApplicationLockManager().getApplicationLock().setPasscode(null);
+            PrefUtils.setPref(PrefUtils.PREF_NAVIGATOR_USER_LEARNED, false);
         }
         PrefUtils.setPref(PrefUtils.PREF_LAST_USERNAME, username);
     }

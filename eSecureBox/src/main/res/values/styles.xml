@@ -26,6 +26,7 @@
 
         <item name="windowActionBar">false</item>
         <item name="android:windowNoTitle">true</item>
+        <item name="android:windowBackground">@android:color/white</item>
 
     </style>
 

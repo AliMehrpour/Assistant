@@ -3,8 +3,6 @@
 
 <resources>
 
-    <color name="background_default">#EDEDED</color>
-
     <color name="blue">#3F5799</color>
     <color name="blue_1">#596699</color>
     <color name="blue_2">#41C2FA</color>

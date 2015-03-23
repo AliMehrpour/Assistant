@@ -11,8 +11,7 @@
         android:layout_height="wrap_content"
         android:paddingLeft="@dimen/signup_horizontal_margin"
         android:paddingRight="@dimen/signup_horizontal_margin"
-        android:animateLayoutChanges="true"
-        android:background="@color/background_default">
+        android:animateLayoutChanges="true">
 
         <com.volcano.esecurebox.widget.RobotoTextView
             android:layout_width="match_parent"

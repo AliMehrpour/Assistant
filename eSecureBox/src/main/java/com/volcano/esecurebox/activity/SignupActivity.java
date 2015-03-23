@@ -43,6 +43,7 @@ public class SignupActivity extends AbstractActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        mFinishIfNotLoggedIn = false;
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_up);
 
