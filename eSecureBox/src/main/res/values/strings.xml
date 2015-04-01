@@ -67,6 +67,7 @@
     <string name="label_about_dialog_title">About</string>
     <string name="label_cancel">Cancel</string>
     <string name="label_category">Category</string>
+    <string name="label_copyright">Copyright © 2015 Volcano</string>
     <string name="label_delete">Delete</string>
     <string name="label_change_password_dialog_title">Change password</string>
     <string name="label_edit_account">Edit Item</string>
@@ -81,6 +82,7 @@
     <string name="label_settings">Settings</string>
     <string name="label_share_choose_app">Share via…</string>
     <string name="label_sign_out">Sign out</string>
+    <string name="label_signup">Don\'t have an account? Sign up.</string>
 
     <string name="menu_save">Save</string>
     <string name="menu_settings">Settings</string>

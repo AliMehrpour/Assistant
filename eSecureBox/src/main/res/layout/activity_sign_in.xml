@@ -3,101 +3,125 @@
 
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="match_parent"
+    android:fillViewport="true">
 
     <LinearLayout
-        android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingLeft="@dimen/signup_horizontal_margin"
         android:paddingRight="@dimen/signup_horizontal_margin"
-        android:animateLayoutChanges="true">
+        android:paddingTop="@dimen/margin_40"
+        android:paddingBottom="@dimen/margin_30"
+        android:animateLayoutChanges="true"
+        android:orientation="vertical">
 
-        <com.volcano.esecurebox.widget.RobotoTextView
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/margin_30"
-            android:paddingTop="@dimen/margin_4"
-            android:gravity="center_horizontal"
-            android:text="@string/app_name"
-            android:drawableTop="@drawable/icon_launcher"
-            style="@style/Text.RegularDark18" />
+            android:orientation="vertical">
 
-        <com.volcano.esecurebox.widget.RobotoEditText
-            android:id="@+id/edit_username"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/margin_20"
-            android:paddingTop="@dimen/margin_16"
-            android:gravity="center_vertical"
-            android:inputType="text|textFilter"
-            android:imeOptions="actionNext"
-            android:hint="@string/hint_username"
-            style="@style/Text.RegularDark16" />
+            <com.volcano.esecurebox.widget.RobotoTextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingTop="@dimen/margin_4"
+                android:gravity="center_horizontal"
+                android:text="@string/app_name"
+                android:drawableTop="@drawable/icon_esecurebox"
+                style="@style/Text.RegularDark18" />
 
-        <com.volcano.esecurebox.widget.RobotoTextView
-            android:id="@+id/text_username"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/error_username_not_empty"
-            android:gravity="center_vertical"
-            style="@style/Text.RegularRed13"
-            android:visibility="gone"/>
+            <com.volcano.esecurebox.widget.RobotoEditText
+                android:id="@+id/edit_username"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/margin_20"
+                android:paddingTop="@dimen/margin_16"
+                android:gravity="center_vertical"
+                android:inputType="text|textNoSuggestions"
+                android:imeOptions="actionNext"
+                android:hint="@string/hint_username"
+                style="@style/Text.RegularDark16" />
 
-        <com.volcano.esecurebox.widget.RobotoEditText
-            android:id="@+id/edit_password"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:paddingTop="@dimen/margin_20"
-            android:gravity="center_vertical"
-            android:inputType="textPassword"
-            android:imeOptions="actionDone"
-            android:hint="@string/hint_password"
-            style="@style/Text.RegularDark16" />
+            <com.volcano.esecurebox.widget.RobotoTextView
+                android:id="@+id/text_username"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/error_username_not_empty"
+                android:gravity="center_vertical"
+                style="@style/Text.RegularRed13"
+                android:visibility="gone"/>
 
-        <com.volcano.esecurebox.widget.RobotoTextView
-            android:id="@+id/text_password"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/error_password_minimum_character"
-            android:gravity="center_vertical"
-            style="@style/Text.RegularRed13"
-            android:visibility="gone"/>
+            <com.volcano.esecurebox.widget.RobotoEditText
+                android:id="@+id/edit_password"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingTop="@dimen/margin_20"
+                android:gravity="center_vertical"
+                android:inputType="textPassword"
+                android:imeOptions="actionDone"
+                android:hint="@string/hint_password"
+                style="@style/Text.RegularDark16" />
 
-        <com.volcano.esecurebox.widget.RobotoTextView
-            android:id="@+id/text_signin"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/margin_40"
-            android:gravity="center_horizontal|center_vertical"
-            android:text="@string/button_signin_uppercase"
-            android:background="@drawable/button_full_width_red"
-            style="@style/ButtonFullWidth" />
+            <com.volcano.esecurebox.widget.RobotoTextView
+                android:id="@+id/text_password"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/error_password_minimum_character"
+                android:gravity="center_vertical"
+                style="@style/Text.RegularRed13"
+                android:visibility="gone"/>
 
-        <com.volcano.esecurebox.widget.RobotoTextView
-            android:id="@+id/text_signup_email"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/margin_10"
-            android:gravity="center_horizontal|center_vertical"
-            android:text="@string/button_signup_uppercase"
-            android:background="@drawable/button_full_width_teal"
-            style="@style/ButtonFullWidth" />
+            <com.volcano.esecurebox.widget.RobotoTextView
+                android:id="@+id/text_signin"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/margin_40"
+                android:gravity="center_horizontal|center_vertical"
+                android:text="@string/button_signin_uppercase"
+                android:background="@drawable/button_full_width_red"
+                style="@style/ButtonFullWidth" />
+
+            <com.volcano.esecurebox.widget.RobotoTextView
+                android:id="@+id/text_signup_email"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/margin_25"
+                android:gravity="center_horizontal|center_vertical"
+                style="@style/Text.RegularDark18" />
+
+        </LinearLayout>
 
         <FrameLayout
             android:id="@+id/layout_progress"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/margin_10"
             android:visibility="gone">
 
-        <ProgressBar
+            <ProgressBar
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:indeterminate="true" />
 
         </FrameLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:gravity="bottom|center_horizontal">
+
+            <com.volcano.esecurebox.widget.RobotoTextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_horizontal"
+                android:text="@string/label_copyright"
+                style="@style/Text.RegularDark16" />
+
+        </LinearLayout>
+
+
 
     </LinearLayout>
 
