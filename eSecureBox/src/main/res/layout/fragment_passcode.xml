@@ -16,10 +16,10 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:layout_marginTop="@dimen/margin_60"
-            android:layout_marginBottom="@dimen/margin_25"
-            android:drawablePadding="@dimen/margin_20"
-            android:drawableTop="@drawable/icon_launcher"
+            android:layout_marginTop="@dimen/margin_25"
+            android:layout_marginBottom="@dimen/margin_8"
+            android:drawablePadding="@dimen/margin_10"
+            android:drawableTop="@drawable/icon_esecurebox"
             style="@style/Text.RegularDark20" />
 
         <LinearLayout
@@ -68,19 +68,19 @@
                 android:id="@+id/button_1"
                 android:text="@string/button_1"
                 android:tag="1"
-                style="@style/ButtonPasscode" />
+                style="@style/ButtonPassCode" />
 
             <Button
                 android:id="@+id/button_2"
                 android:text="@string/button_2"
                 android:tag="2"
-                style="@style/ButtonPasscode" />
+                style="@style/ButtonPassCode" />
 
             <Button
                 android:id="@+id/button_3"
                 android:text="@string/button_3"
                 android:tag="3"
-                style="@style/ButtonPasscode" />
+                style="@style/ButtonPassCode" />
 
         </LinearLayout>
 
@@ -93,19 +93,19 @@
                 android:id="@+id/button_4"
                 android:text="@string/button_4"
                 android:tag="4"
-                style="@style/ButtonPasscode"/>
+                style="@style/ButtonPassCode"/>
 
             <Button
                 android:id="@+id/button_5"
                 android:text="@string/button_5"
                 android:tag="5"
-                style="@style/ButtonPasscode"/>
+                style="@style/ButtonPassCode"/>
 
             <Button
                 android:id="@+id/button_6"
                 android:text="@string/button_6"
                 android:tag="6"
-                style="@style/ButtonPasscode"/>
+                style="@style/ButtonPassCode"/>
 
         </LinearLayout>
 
@@ -118,19 +118,19 @@
                 android:id="@+id/button_7"
                 android:text="@string/button_7"
                 android:tag="7"
-                style="@style/ButtonPasscode"/>
+                style="@style/ButtonPassCode"/>
 
             <Button
                 android:id="@+id/button_8"
                 android:text="@string/button_8"
                 android:tag="8"
-                style="@style/ButtonPasscode"/>
+                style="@style/ButtonPassCode"/>
 
             <Button
                 android:id="@+id/button_9"
                 android:text="@string/button_9"
                 android:tag="9"
-                style="@style/ButtonPasscode"/>
+                style="@style/ButtonPassCode"/>
 
         </LinearLayout>
 
@@ -140,18 +140,18 @@
             android:orientation="horizontal">
 
             <Button
-                style="@style/ButtonPasscode"/>
+                style="@style/ButtonPassCode"/>
 
             <Button
                 android:id="@+id/button_0"
                 android:text="@string/button_0"
                 android:tag="0"
-                style="@style/ButtonPasscode"/>
+                style="@style/ButtonPassCode"/>
 
             <Button
                 android:id="@+id/button_clear"
                 android:text="@string/button_del_uppercase"
-                style="@style/ButtonPasscode"/>
+                style="@style/ButtonPassCode"/>
 
         </LinearLayout>
 

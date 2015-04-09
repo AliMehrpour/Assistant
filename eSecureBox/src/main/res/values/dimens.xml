@@ -50,7 +50,7 @@
     <dimen name="navigation_width">-.5dp</dimen>
 
     <dimen name="passcode_button_height">65dp</dimen>
-    <dimen name="passcode_edit_height">40dp</dimen>
+    <dimen name="passcode_edit_height">70dp</dimen>
     <dimen name="passcode_edit_width">70dp</dimen>
 
     <dimen name="signup_horizontal_margin">40dp</dimen>
