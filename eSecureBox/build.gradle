@@ -2,7 +2,7 @@ apply plugin: 'com.android.application'
 
 android {
     compileSdkVersion 22
-    buildToolsVersion "22.0.0"
+    buildToolsVersion "22.0.1"
 
     defaultConfig {
         applicationId "com.volcano.esecurebox"
@@ -20,8 +20,10 @@ android {
 dependencies {
     compile project(':MaterialDialogs')
 
-    compile 'com.android.support:appcompat-v7:22.0.0'
+    compile 'com.android.support:appcompat-v7:22.2.0'
     compile 'com.android.support:recyclerview-v7:22.0.0'
+
+    compile 'com.android.support:design:22.2.0'
 
     compile 'com.parse.bolts:bolts-android:1.1.4'
     compile fileTree(dir: 'libs', include: 'Parse-*.jar')

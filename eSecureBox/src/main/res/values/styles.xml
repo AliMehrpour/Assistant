@@ -3,9 +3,7 @@
 
 <resources>
 
-    <style name="FrameworkRoot.Theme" parent="Theme.AppCompat.Light" />
-
-    <style name="FrameworkRoot.Widget" parent="Theme.AppCompat" />
+    <style name="FrameworkRoot.Theme" parent="Theme.AppCompat.Light.NoActionBar" />
 
     <style name="Theme.Assistant" parent="Theme.Assistant.Base" />
 
@@ -25,7 +23,7 @@
         <item name="toolbarStyle">@style/Theme.Assistant.Toolbar</item>
 
         <item name="windowActionBar">false</item>
-        <item name="android:windowNoTitle">true</item>
+        <item name="windowNoTitle">true</item>
         <item name="android:windowBackground">@android:color/white</item>
 
     </style>
@@ -33,7 +31,6 @@
     <style name="Theme.Assistant.Toolbar" parent="Widget.AppCompat.Toolbar">
         <item name="contentInsetStart">0dp</item>
     </style>
-
 
 
     <style name="ButtonFullWidth" parent="@android:style/TextAppearance.Holo">

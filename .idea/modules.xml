@@ -2,10 +2,9 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/Assistant.iml" filepath="$PROJECT_DIR$/Assistant.iml" />
       <module fileurl="file://$PROJECT_DIR$/MaterialDialogs/MaterialDialogs.iml" filepath="$PROJECT_DIR$/MaterialDialogs/MaterialDialogs.iml" />
-      <module fileurl="file://$PROJECT_DIR$/eSecureBox/eSecureBox.iml" filepath="$PROJECT_DIR$/eSecureBox/eSecureBox.iml" />
+      <module fileurl="file://$PROJECT_DIR$/eSecureBox.iml" filepath="$PROJECT_DIR$/eSecureBox.iml" />
+      <module fileurl="file://$PROJECT_DIR$/eSecureBox/eSecureBox-eSecureBox.iml" filepath="$PROJECT_DIR$/eSecureBox/eSecureBox-eSecureBox.iml" />
     </modules>
   </component>
 </project>
-
