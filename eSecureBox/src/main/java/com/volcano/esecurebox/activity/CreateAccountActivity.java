@@ -120,7 +120,6 @@ public class CreateAccountActivity extends AbstractActivity {
         }
     }
 
-
     @Override
     protected boolean askToFinish() {
         new AlertDialogWrapper.Builder(this)

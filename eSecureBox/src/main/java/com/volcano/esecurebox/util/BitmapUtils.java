@@ -6,7 +6,8 @@ import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 
-import com.volcano.esecurebox.VlApplication;
+import com.volcano.esecurebox.model.Field;
+import com.volcano.esecurebox.widget.CircleDrawable;
 
 /**
  * A utility class for working with bitmaps, colors and pictures
@@ -63,18 +64,36 @@ public final class BitmapUtils {
     }
 
     /**
+     * Return a drawable related to {@link Field} object.
+     * <p>
+     * If could find related icon in assets, return related drawable
+     * <p>
+     * If failed to find an icon, return a filled colored circle which display {@param ch} in it
+     * <p>
+     * If doesn't supply a character, return a filled colored circle
      * @param context The context
-     * @param name The identifier name
+     * @param iconName The identifier of icon
      * @return The Drawable, null if isn't valid
      */
-    public static Drawable getDrawable(Context context, String name) {
-        final int id = getDrawableIdentifier(context, name);
-        if (id != 0) {
-            return VlApplication.getInstance().getResources().getDrawable(id);
+    public static Drawable getFieldDrawable(Context context, String iconName, Character ch, int color) {
+        int resourceId = 0;
+        if (iconName != null) {
+            resourceId = BitmapUtils.getDrawableIdentifier(context, iconName);
         }
-        else {
-            return null;
+
+        Drawable drawable = null;
+
+        if (resourceId != 0) {
+            drawable = context.getResources().getDrawable(resourceId);
         }
+        else if (ch != null) {
+            drawable = new CircleDrawable(Color.TRANSPARENT, CircleDrawable.FILL, ch.toString(), color);
+        }
+        else if (color != 0) {
+            drawable = new CircleDrawable(color, CircleDrawable.FILL);
+        }
+
+        return drawable;
     }
 
 

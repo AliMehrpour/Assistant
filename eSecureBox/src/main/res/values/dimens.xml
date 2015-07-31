@@ -8,6 +8,13 @@
 
     <dimen name="button_bar_height_lollipop">48dp</dimen>
 
+    <dimen name="button_dialog_height">48dp</dimen>
+    <dimen name="button_dialog_min_width">42dp</dimen>
+    <dimen name="button_dialog_textsize">14sp</dimen>
+    <dimen name="button_dialog_inset_vertical">6dp</dimen>
+    <dimen name="button_dialog_inset_horizontal">4dp</dimen>
+
+
     <dimen name="circle_drawable_size">24dp</dimen>
     <dimen name="circle_drawable_stroke_size">4dp</dimen>
 
@@ -40,6 +47,7 @@
     <dimen name="margin_30">30dp</dimen>
     <dimen name="margin_40">40dp</dimen>
     <dimen name="margin_56">56dp</dimen>
+    <dimen name="margin_71">71dp</dimen>
     <dimen name="margin_60">60dp</dimen>
     <dimen name="margin_80">80dp</dimen>
 

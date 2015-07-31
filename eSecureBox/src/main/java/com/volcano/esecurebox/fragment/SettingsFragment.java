@@ -1,15 +1,17 @@
 // Copyright (c) 2015 Volcano. All rights reserved.
 package com.volcano.esecurebox.fragment;
 
+import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.preference.Preference;
 import android.preference.PreferenceFragment;
 import android.view.View;
+import android.view.WindowManager;
+import android.view.WindowManager.LayoutParams;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.afollestad.materialdialogs.AlertDialogWrapper;
 import com.volcano.esecurebox.Intents;
 import com.volcano.esecurebox.Managers;
 import com.volcano.esecurebox.R;
@@ -168,7 +170,7 @@ public class SettingsFragment extends PreferenceFragment {
                 final TextView textVersion = (TextView) layout.findViewById(R.id.text_app_version);
                 textVersion.setText(Utils.getAppVersionName());
 
-                new AlertDialogWrapper.Builder(getActivity())
+                AlertDialog dialog = new AlertDialog.Builder(getActivity())
                         .setTitle(getString(R.string.label_about_dialog_title))
                         .setView(layout)
                         .setNegativeButton(R.string.button_close_uppercase, new DialogInterface.OnClickListener() {
@@ -176,7 +178,12 @@ public class SettingsFragment extends PreferenceFragment {
                                 dialog.dismiss();
                             }
                         })
-                        .show();
+                        .create();
+
+                dialog.getWindow().setFlags(LayoutParams.FLAG_FULLSCREEN, LayoutParams.FLAG_FULLSCREEN);
+                dialog.getWindow().setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.MATCH_PARENT);
+
+                dialog.show();
 
                 return false;
             }

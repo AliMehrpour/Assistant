@@ -32,7 +32,7 @@
 
     </declare-styleable>
 
-    <declare-styleable name="FloatingLabeledEditText">
+    <declare-styleable name="FieldCell">
 
         <attr name="fleBackground" format="reference|color" />
         <attr name="fleHint" format="reference|string" />

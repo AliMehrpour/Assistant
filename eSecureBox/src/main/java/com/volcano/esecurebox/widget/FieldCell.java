@@ -5,11 +5,13 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
+import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.res.TypedArray;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
+import android.os.Build.VERSION_CODES;
 import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
@@ -18,19 +20,27 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 
 import com.afollestad.materialdialogs.AlertDialogWrapper;
+import com.parse.FindCallback;
+import com.parse.ParseException;
 import com.volcano.esecurebox.Managers;
 import com.volcano.esecurebox.R;
 import com.volcano.esecurebox.analytics.MixpanelManager;
+import com.volcano.esecurebox.model.Field;
+import com.volcano.esecurebox.model.FieldTypeValue;
+import com.volcano.esecurebox.model.SubCategory;
 import com.volcano.esecurebox.security.PasswordGenerator;
 import com.volcano.esecurebox.util.BitmapUtils;
+import com.volcano.esecurebox.util.LogUtils;
 import com.volcano.esecurebox.util.Utils;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Floating label edit text with two action button
  */
-public class FloatingLabeledEditText extends LinearLayout {
+public class FieldCell extends LinearLayout {
+    private final String TAG = LogUtils.makeLogTag(FieldCell.class.getSimpleName());
 
     private static final int ACTION_GENERATE_PASSWORD = 1;
     private static final int ACTION_SHOW_LIST         = 2;
@@ -49,22 +59,22 @@ public class FloatingLabeledEditText extends LinearLayout {
     private int mAction1;
     private int mAction2;
 
-    public FloatingLabeledEditText(Context context) {
+    public FieldCell(Context context) {
         this(context, null);
     }
 
-    public FloatingLabeledEditText(Context context, AttributeSet attrs) {
+    public FieldCell(Context context, AttributeSet attrs) {
         this(context, attrs, 0);
     }
 
-    public FloatingLabeledEditText(Context context, AttributeSet attrs, int defStyle) {
+    public FieldCell(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
         init(context, attrs);
     }
 
     private void init(Context context, AttributeSet attrs) {
         final LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        inflater.inflate(R.layout.widget_float_edittext, this, true);
+        inflater.inflate(R.layout.widget_field_cell, this, true);
 
         mIcon = (ImageView) findViewById(R.id.icon);
         mHintTextView = (RobotoTextView) findViewById(R.id.text_hint);
@@ -73,23 +83,23 @@ public class FloatingLabeledEditText extends LinearLayout {
         mAction2Button = (ImageView) findViewById(R.id.button_action_2);
         mDividerLine = findViewById(R.id.divider_line);
 
-        final TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.FloatingLabeledEditText);
+        final TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.FieldCell);
         try {
-            final boolean showIcon = a.getBoolean(R.styleable.FloatingLabeledEditText_fleShowIcon, true);
+            final boolean showIcon = a.getBoolean(R.styleable.FieldCell_fleShowIcon, true);
             if (!showIcon) {
                 mIcon.setVisibility(View.GONE);
                 mEditText.setPadding(getResources().getDimensionPixelSize(R.dimen.margin_16), 0, 0, 0);
                 mHintTextView.setPadding(getResources().getDimensionPixelSize(R.dimen.margin_16), 0, 0, 0);
             }
 
-            final Drawable background = a.getDrawable(R.styleable.FloatingLabeledEditText_fleBackground);
+            final Drawable background = a.getDrawable(R.styleable.FieldCell_fleBackground);
             if (background != null) {
                 setHintBackground(background);
             }
 
             //mHintTextView.setAlpha(0);
             setEditText(mEditText);
-            setHint(a.getString(R.styleable.FloatingLabeledEditText_fleHint));
+            setHint(a.getString(R.styleable.FieldCell_fleHint));
             mHintTextView.setAlpha(1f);
             ObjectAnimator.ofFloat(mHintTextView, "alpha", 1f, 0.5f).start();
         }
@@ -104,15 +114,12 @@ public class FloatingLabeledEditText extends LinearLayout {
                     toggleEyeButton();
                 }
                 else if (mAction1 == ACTION_SHOW_LIST && mValues.size() > 0) {
-                    new AlertDialogWrapper.Builder(getContext())
-                            .setTitle(mHintTextView.getText())
-                            .setItems( mValues.toArray(new CharSequence[mValues.size()]), new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    mEditText.setText(mValues.get(which));
-                                }
-                            })
-                            .show();
+                    new AlertDialogWrapper.Builder(getContext()).setTitle(mHintTextView.getText()).setItems(mValues.toArray(new CharSequence[mValues.size()]), new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            mEditText.setText(mValues.get(which));
+                        }
+                    }).show();
                 }
             }
         });
@@ -126,9 +133,7 @@ public class FloatingLabeledEditText extends LinearLayout {
                     final boolean isPassword = mFormatType == FormattedEditText.FORMAT_PASSWORD;
                     final boolean isNumberPassword = mFormatType == FormattedEditText.FORMAT_PASSWORD_NUMBER;
 
-                    mEditText.setText(new PasswordGenerator().generate(
-                            isPassword ? PasswordGenerator.PASSWORD_LENGTH_DEFAULT : PasswordGenerator.PASSWORD_LENGTH_NUMBER,
-                            isPassword || isNumberPassword, isPassword, isPassword));
+                    mEditText.setText(new PasswordGenerator().generate(isPassword ? PasswordGenerator.PASSWORD_LENGTH_DEFAULT : PasswordGenerator.PASSWORD_LENGTH_NUMBER, isPassword || isNumberPassword, isPassword, isPassword));
                 }
             }
         });
@@ -147,33 +152,67 @@ public class FloatingLabeledEditText extends LinearLayout {
         return mEditText.getText().toString().trim();
     }
 
-    public void setText(String text) {
+    public void setField(Field field, String value) {
+        setField(field, value, false);
+    }
+
+    public void setField(Field field, String value, boolean readonly) {
+        setIcon(field.getIconName(), field.getName().charAt(0), getResources().getColor(R.color.grey_1));
+        setText(value);
+        setHint(field.getName());
+        setFormatType(field.getFormat());
+
+        if (readonly) {
+            setEnabled(false);
+            mEditText.setFocusable(false); // TODO: ????
+            setDividerLineVisibility(View.INVISIBLE);
+        }
+        else {
+            if (field.getFormat() == Field.FORMAT_ENUM) {
+                FieldTypeValue.getValueByField(FieldCell.class, field, new FindCallback<FieldTypeValue>() {
+                    @Override
+                    public void done(List<FieldTypeValue> fieldTypeValues, ParseException e) {
+                        if (e == null) {
+                            final ArrayList<String> values = new ArrayList<>();
+                            for (FieldTypeValue value : fieldTypeValues) {
+                                values.add(value.getValue());
+                            }
+                            setPossibleValues(values);
+                        }
+                        else {
+                            LogUtils.LogE(TAG, "Load field values failed");
+                        }
+                    }
+                });
+            }
+        }
+    }
+
+    public void setSubCategory(SubCategory subCategory) {
+        setDividerLineVisibility(View.INVISIBLE);
+        setEnabled(false);
+        setHint(getResources().getString(R.string.label_category));
+        setText(subCategory.getName());
+        setIcon(subCategory.getIconName(), null, BitmapUtils.getColor(subCategory.getCategory().getColor()));
+    }
+
+    private void setText(String text) {
         if (!TextUtils.isEmpty(text)) {
             mEditText.setText(text);
         }
     }
 
-    public void setHint(String hint) {
+    private void setHint(String hint) {
         mEditText.setHint(hint);
         mHintTextView.setText(hint);
     }
 
-    /**
-     * Set the icon
-     * @param drawable The drawable
-     */
-    public void setIcon(Drawable drawable) {
+    private void setIcon(Drawable drawable) {
         mIcon.setVisibility(View.VISIBLE);
         mIcon.setImageDrawable(drawable);
     }
 
-    /**
-     * Set the icon
-     * @param iconName The icon name
-     * @param ch The character to be used id iconName is null
-     * @param color The color of character or fill color
-     */
-    public void setIcon(String iconName, Character ch, int color) {
+    private void setIcon(String iconName, Character ch, int color) {
         int resourceId = 0;
         if (iconName != null) {
             resourceId = BitmapUtils.getDrawableIdentifier(getContext(), iconName);
@@ -190,11 +229,7 @@ public class FloatingLabeledEditText extends LinearLayout {
         }
     }
 
-    /**
-     * Set format type
-     * @param formatType See {@link com.volcano.esecurebox.widget.FormattedEditText} for possible values
-     */
-    public void setFormatType(int formatType) {
+    private void setFormatType(int formatType) {
         mEditText.setFormatType(formatType);
         mFormatType = formatType;
         setEyeAction();
@@ -202,23 +237,15 @@ public class FloatingLabeledEditText extends LinearLayout {
         setListAction();
     }
 
-    /**
-     * Set Divider line visibility. use one of {@link android.view.View#VISIBLE} or {@link android.view.View#INVISIBLE}
-     * or {@link android.view.View#GONE}
-     * @param visibility The visibility
-     */
-    public void setDividerLineVisibility(int visibility) {
+    private void setDividerLineVisibility(int visibility) {
         mDividerLine.setVisibility(visibility);
     }
 
-    /**
-     * Set values for FORMAT_ENUM data types
-     * @param values The values
-     */
-    public void setPossibleValues(ArrayList<String> values) {
+    private void setPossibleValues(ArrayList<String> values) {
         mValues = values;
     }
 
+    @TargetApi(VERSION_CODES.JELLY_BEAN)
     private void setHintBackground(Drawable background) {
         if (Utils.hasJellyBeanApi()) {
             mHintTextView.setBackground(background);

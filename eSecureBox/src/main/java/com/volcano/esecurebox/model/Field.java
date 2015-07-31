@@ -7,6 +7,7 @@ import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.volcano.esecurebox.backend.ParseManager;
+import com.volcano.esecurebox.backend.TimeoutQuery;
 import com.volcano.esecurebox.util.LogUtils;
 
 import java.util.List;
@@ -32,6 +33,13 @@ public class Field extends ParseObject {
     private final static String ICON_NAME   = "iconName";
     private final static String NAME        = "name";
     private final static String TYPE        = "type";
+
+
+    public static void findInBackground(Object tag, final FindCallback<Field> callback) {
+        final ParseQuery<Field> query = getQuery()
+                .orderByAscending(NAME);
+        new TimeoutQuery<>(query).findInBackground(tag, callback);
+    }
 
     /**
      * This method only should call for getting fields for first time and exclusively called by
@@ -77,5 +85,15 @@ public class Field extends ParseObject {
 
     public String getIconName() {
         return getString(ICON_NAME);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        return (o instanceof Field) && (getObjectId().equals(((Field) o).getObjectId()));
+    }
+
+    @Override
+    public int hashCode() {
+        return getObjectId().hashCode();
     }
 }

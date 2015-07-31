@@ -2,10 +2,10 @@
 <!-- Copyright (c) 2015 Volcano. All rights reserved. -->
 
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-             xmlns:tools="http://schemas.android.com/tools"
-             android:layout_width="match_parent"
-             android:layout_height="match_parent"
-             android:background="@android:color/white">
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/white">
 
     <FrameLayout
         android:id="@+id/layout_progress"
@@ -23,6 +23,7 @@
     </FrameLayout>
 
     <ScrollView
+        android:id="@+id/scroll_view_fields"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:fillViewport="true">
@@ -50,8 +51,11 @@
                     android:layout_width="@dimen/circle_drawable_size"
                     android:layout_height="@dimen/circle_drawable_size"
                     android:layout_marginLeft="@dimen/margin_20"
+                    android:layout_marginStart="@dimen/margin_20"
                     android:layout_marginRight="@dimen/margin_25"
+                    android:layout_marginEnd="@dimen/margin_25"
                     android:layout_alignParentLeft="true"
+                    android:layout_alignParentStart="true"
                     android:layout_centerVertical="true"
                     tools:ignore="contentDescription" />
 
@@ -60,8 +64,10 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginRight="@dimen/margin_16"
+                    android:layout_marginEnd="@dimen/margin_16"
                     android:layout_centerVertical="true"
                     android:layout_toRightOf="@id/image_sub_category"
+                    android:layout_toEndOf="@id/image_sub_category"
                     android:hint="@string/hint_select_sub_category"
                     style="@style/Text.RegularDarker16" />
 
@@ -94,6 +100,20 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
                 android:scrollbars="vertical" />
+
+            <com.volcano.esecurebox.widget.RobotoTextView
+                android:id="@+id/button_add_field"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/margin_56"
+                android:layout_marginLeft="@dimen/margin_71"
+                android:layout_marginStart="@dimen/margin_71"
+                android:layout_marginRight="@dimen/margin_16"
+                android:layout_marginEnd="@dimen/margin_16"
+                android:gravity="center_vertical"
+                android:text="@string/button_add_field"
+                android:textColor="@color/grey_2"
+                style="@style/Text.RegularGrey16"
+                android:visibility="gone"/>
 
         </LinearLayout>
 
