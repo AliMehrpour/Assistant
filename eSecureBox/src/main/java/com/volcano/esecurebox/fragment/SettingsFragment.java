@@ -83,14 +83,14 @@ public class SettingsFragment extends PreferenceFragment {
                                 newPasswordErrorText.setVisibility(View.GONE);
 
                                 boolean isValid = true;
-                                if (oldPasswordEdit.getText().toString().trim().length() < minPasswordLength) {
+                                if (oldPasswordEdit.getValue().toString().trim().length() < minPasswordLength) {
                                     oldPasswordErrorText.setText(getString(R.string.error_password_minimum_character));
                                     oldPasswordErrorText.setVisibility(View.VISIBLE);
                                     oldPasswordEdit.requestFocus();
                                     isValid = false;
                                 }
 
-                                if (newPasswordEdit.getText().toString().trim().length() < minPasswordLength) {
+                                if (newPasswordEdit.getValue().toString().trim().length() < minPasswordLength) {
                                     newPasswordErrorText.setText(getString(R.string.error_password_minimum_character));
                                     newPasswordErrorText.setVisibility(View.VISIBLE);
                                     if (isValid) {
@@ -103,8 +103,8 @@ public class SettingsFragment extends PreferenceFragment {
                                     enable(false);
                                     progressLayout.setVisibility(View.VISIBLE);
 
-                                    Managers.getAccountManager().changePassword(oldPasswordEdit.getText().toString().trim(),
-                                            newPasswordEdit.getText().toString().trim(), new SaveCallback() {
+                                    Managers.getAccountManager().changePassword(oldPasswordEdit.getValue().toString().trim(),
+                                            newPasswordEdit.getValue().toString().trim(), new SaveCallback() {
                                                 @Override
                                                 public void done(ParseException e) {
                                                     if (e == null) {

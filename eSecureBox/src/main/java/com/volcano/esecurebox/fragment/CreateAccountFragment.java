@@ -229,7 +229,7 @@ public class CreateAccountFragment extends AbstractFragment {
                                 final SubCategoryField field = mFields.get(i);
                                 value.setAccount(mAccount);
                                 value.setField(field.getField());
-                                value.setValue(fieldCell.getText());
+                                value.setValue(fieldCell.getValue());
                                 value.setOrder(i + 1); // Set order based on user input
                                 value.save(new SaveCallback() {
                                     @Override
@@ -273,7 +273,7 @@ public class CreateAccountFragment extends AbstractFragment {
                                 final FieldCell fieldCell = (FieldCell) mFieldsLayout.getChildAt(i);
 
                                 final AccountFieldValue value = mAccountFieldValues.get(i);
-                                value.setValue(fieldCell.getText());
+                                value.setValue(fieldCell.getValue());
                                 value.save(new SaveCallback() {
                                     @Override
                                     public void done(ParseException e) {

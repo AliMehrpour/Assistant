@@ -5,13 +5,11 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
-import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.res.TypedArray;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
-import android.os.Build.VERSION_CODES;
 import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
@@ -37,9 +35,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Floating label edit text with two action button
+ * Contains a Floating Edit Text with two action available
  */
-public class FieldCell extends LinearLayout {
+public final class FieldCell extends LinearLayout {
     private final String TAG = LogUtils.makeLogTag(FieldCell.class.getSimpleName());
 
     private static final int ACTION_GENERATE_PASSWORD = 1;
@@ -53,7 +51,7 @@ public class FieldCell extends LinearLayout {
     private ImageView mAction2Button;
     private View mDividerLine;
 
-    private ArrayList<String> mValues = new ArrayList<>();
+    private final ArrayList<String> mListItems = new ArrayList<>();
     private boolean mVisiblePassword = false;
     private int mFormatType;
     private int mAction1;
@@ -84,28 +82,26 @@ public class FieldCell extends LinearLayout {
         mDividerLine = findViewById(R.id.divider_line);
 
         final TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.FieldCell);
-        try {
-            final boolean showIcon = a.getBoolean(R.styleable.FieldCell_fleShowIcon, true);
-            if (!showIcon) {
-                mIcon.setVisibility(View.GONE);
-                mEditText.setPadding(getResources().getDimensionPixelSize(R.dimen.margin_16), 0, 0, 0);
-                mHintTextView.setPadding(getResources().getDimensionPixelSize(R.dimen.margin_16), 0, 0, 0);
-            }
 
-            final Drawable background = a.getDrawable(R.styleable.FieldCell_fleBackground);
-            if (background != null) {
-                setHintBackground(background);
-            }
+        final boolean showIcon = a.getBoolean(R.styleable.FieldCell_fleShowIcon, true);
+        if (!showIcon) {
+            mIcon.setVisibility(View.GONE);
+            mEditText.setPadding(getResources().getDimensionPixelSize(R.dimen.margin_16), 0, 0, 0);
+            mHintTextView.setPadding(getResources().getDimensionPixelSize(R.dimen.margin_16), 0, 0, 0);
+        }
 
-            //mHintTextView.setAlpha(0);
-            setEditText(mEditText);
-            setHint(a.getString(R.styleable.FieldCell_fleHint));
-            mHintTextView.setAlpha(1f);
-            ObjectAnimator.ofFloat(mHintTextView, "alpha", 1f, 0.5f).start();
-        }
-        finally {
-            a.recycle();
-        }
+        //mHintTextView.setAlpha(0);
+        mEditText.setOnFocusChangeListener(new OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                onFocusChanged(hasFocus);
+            }
+        });
+        setHint(a.getString(R.styleable.FieldCell_fleHint));
+        mHintTextView.setAlpha(1f);
+        ObjectAnimator.ofFloat(mHintTextView, "alpha", 1f, 0.5f).start();
+
+        a.recycle();
 
         mAction1Button.setOnClickListener(new OnClickListener() {
             @Override
@@ -113,13 +109,17 @@ public class FieldCell extends LinearLayout {
                 if (mAction1 == ACTION_VISIBLE_PASSWORD) {
                     toggleEyeButton();
                 }
-                else if (mAction1 == ACTION_SHOW_LIST && mValues.size() > 0) {
-                    new AlertDialogWrapper.Builder(getContext()).setTitle(mHintTextView.getText()).setItems(mValues.toArray(new CharSequence[mValues.size()]), new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            mEditText.setText(mValues.get(which));
-                        }
-                    }).show();
+                else if (mAction1 == ACTION_SHOW_LIST && mListItems.size() > 0) {
+                    new AlertDialogWrapper.Builder(getContext())
+                            .setTitle(mHintTextView.getText())
+                            .setItems(mListItems.toArray(new CharSequence[mListItems.size()]),
+                                    new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialog, int which) {
+                                            mEditText.setText(mListItems.get(which));
+                                        }
+                                    })
+                            .show();
                 }
             }
         });
@@ -133,7 +133,9 @@ public class FieldCell extends LinearLayout {
                     final boolean isPassword = mFormatType == FormattedEditText.FORMAT_PASSWORD;
                     final boolean isNumberPassword = mFormatType == FormattedEditText.FORMAT_PASSWORD_NUMBER;
 
-                    mEditText.setText(new PasswordGenerator().generate(isPassword ? PasswordGenerator.PASSWORD_LENGTH_DEFAULT : PasswordGenerator.PASSWORD_LENGTH_NUMBER, isPassword || isNumberPassword, isPassword, isPassword));
+                    mEditText.setText(
+                            new PasswordGenerator().generate(isPassword ? PasswordGenerator.PASSWORD_LENGTH_DEFAULT : PasswordGenerator.PASSWORD_LENGTH_NUMBER,
+                            isPassword || isNumberPassword, isPassword, isPassword));
                 }
             }
         });
@@ -145,29 +147,43 @@ public class FieldCell extends LinearLayout {
             mEditText.setKeyListener(null);
             mEditText.setFocusable(false);
             showMenuOnLongClick();
+            setDividerLineVisibility(View.INVISIBLE);
         }
     }
 
-    public String getText() {
+    /**
+     * @return The field value
+     */
+    public String getValue() {
         return mEditText.getText().toString().trim();
     }
 
+    /**
+     * Set the field
+     * @param field The field
+     * @param value The value
+     */
     public void setField(Field field, String value) {
         setField(field, value, false);
     }
 
+    /**
+     * Set the field
+     * @param field The field
+     * @param value The value
+     * @param readonly True if field is readonly, false otherwise
+     */
     public void setField(Field field, String value, boolean readonly) {
         setIcon(field.getIconName(), field.getName().charAt(0), getResources().getColor(R.color.grey_1));
         setText(value);
         setHint(field.getName());
-        setFormatType(field.getFormat());
 
         if (readonly) {
             setEnabled(false);
-            mEditText.setFocusable(false); // TODO: ????
-            setDividerLineVisibility(View.INVISIBLE);
         }
         else {
+            setFormatType(field.getFormat());
+
             if (field.getFormat() == Field.FORMAT_ENUM) {
                 FieldTypeValue.getValueByField(FieldCell.class, field, new FindCallback<FieldTypeValue>() {
                     @Override
@@ -177,7 +193,7 @@ public class FieldCell extends LinearLayout {
                             for (FieldTypeValue value : fieldTypeValues) {
                                 values.add(value.getValue());
                             }
-                            setPossibleValues(values);
+                            setListItems(values);
                         }
                         else {
                             LogUtils.LogE(TAG, "Load field values failed");
@@ -188,8 +204,11 @@ public class FieldCell extends LinearLayout {
         }
     }
 
+    /**
+     * Set the subcategory
+     * @param subCategory The sub category
+     */
     public void setSubCategory(SubCategory subCategory) {
-        setDividerLineVisibility(View.INVISIBLE);
         setEnabled(false);
         setHint(getResources().getString(R.string.label_category));
         setText(subCategory.getName());
@@ -197,9 +216,7 @@ public class FieldCell extends LinearLayout {
     }
 
     private void setText(String text) {
-        if (!TextUtils.isEmpty(text)) {
-            mEditText.setText(text);
-        }
+        mEditText.setText(text);
     }
 
     private void setHint(String hint) {
@@ -219,6 +236,7 @@ public class FieldCell extends LinearLayout {
         }
 
         if (resourceId != 0) {
+            //noinspection deprecation
             setIcon(getResources().getDrawable(resourceId));
         }
         else if (ch != null) {
@@ -230,8 +248,9 @@ public class FieldCell extends LinearLayout {
     }
 
     private void setFormatType(int formatType) {
-        mEditText.setFormatType(formatType);
         mFormatType = formatType;
+
+        mEditText.setFormatType(formatType);
         setEyeAction();
         setGeneratePasswordAction();
         setListAction();
@@ -241,43 +260,38 @@ public class FieldCell extends LinearLayout {
         mDividerLine.setVisibility(visibility);
     }
 
-    private void setPossibleValues(ArrayList<String> values) {
-        mValues = values;
-    }
-
-    @TargetApi(VERSION_CODES.JELLY_BEAN)
-    private void setHintBackground(Drawable background) {
-        if (Utils.hasJellyBeanApi()) {
-            mHintTextView.setBackground(background);
-        }
-        else {
-            //noinspection deprecation
-            mHintTextView.setBackgroundDrawable(background);
-        }
+    private void setListItems(ArrayList<String> items) {
+        mListItems.clear();
+        mListItems.addAll(items);
     }
 
     private void onFocusChanged(boolean hasFocus) {
-        if (hasFocus && mHintTextView.getVisibility() == VISIBLE) {
+        if (hasFocus) {
             ObjectAnimator.ofFloat(mHintTextView, "alpha", 0.5f, 1f).start();
         }
-        else if (mHintTextView.getVisibility() == VISIBLE) {
+        else {
             mHintTextView.setAlpha(1f);
             ObjectAnimator.ofFloat(mHintTextView, "alpha", 1f, 0.5f).start();
         }
     }
 
+    @SuppressWarnings("deprecation")
     private void setEyeAction() {
-        final boolean isFocusable = mEditText.isFocusable();
-        final boolean isEmpty = TextUtils.isEmpty(mEditText.getText());
         final boolean isPassword = mFormatType == FormattedEditText.FORMAT_PASSWORD || mFormatType == FormattedEditText.FORMAT_PASSWORD_NUMBER;
-        if (isPassword && (isFocusable || !isEmpty)) {
-            mAction1Button.setImageDrawable(getResources().getDrawable(R.drawable.icon_eye_open));
-            mAction1Button.setVisibility(VISIBLE);
-            mAction1 = ACTION_VISIBLE_PASSWORD;
+        if (isPassword) {
+            final boolean isFocusable = mEditText.isFocusable();
+            final boolean isEmpty = TextUtils.isEmpty(mEditText.getText());
+            if (isFocusable || !isEmpty) {
+                mAction1 = ACTION_VISIBLE_PASSWORD;
+
+                mAction1Button.setImageDrawable(getResources().getDrawable(R.drawable.icon_eye_open));
+                mAction1Button.setVisibility(VISIBLE);
+            }
         }
     }
 
-    private void toggleEyeButton() {
+    @SuppressWarnings("deprecation")
+    private void toggleEyeButton()  {
         if (mVisiblePassword) {
             final int lastSelection = mEditText.getSelectionStart();
             mEditText.setFormatType(mFormatType);
@@ -294,20 +308,24 @@ public class FieldCell extends LinearLayout {
         }
     }
 
+    @SuppressWarnings("deprecation")
     private void setGeneratePasswordAction() {
         if ((mFormatType == FormattedEditText.FORMAT_PASSWORD ||
                 mFormatType == FormattedEditText.FORMAT_PASSWORD_NUMBER) && mEditText.isFocusable()) {
+            mAction2 = ACTION_GENERATE_PASSWORD;
+
             mAction2Button.setImageDrawable(getResources().getDrawable(R.drawable.icon_generate_password));
             mAction2Button.setVisibility(VISIBLE);
-            mAction2 = ACTION_GENERATE_PASSWORD;
         }
     }
 
+    @SuppressWarnings("deprecation")
     private void setListAction() {
-        if (mFormatType == FormattedEditText.FORMAT_ENUM && mEditText.isFocusable()) {
+        if (mFormatType == FormattedEditText.FORMAT_ENUM) {
+            mAction1 = ACTION_SHOW_LIST;
+
             mAction1Button.setImageDrawable(getResources().getDrawable(R.drawable.icon_list));
             mAction1Button.setVisibility(VISIBLE);
-            mAction1 = ACTION_SHOW_LIST;
         }
     }
 
@@ -330,38 +348,6 @@ public class FieldCell extends LinearLayout {
             }
         });
 
-    }
-
-    private void setEditText(FormattedEditText editText) {
-        mEditText = editText;
-
-        /*
-        mEditText.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-                setShowHint(!TextUtils.isEmpty(s));
-            }
-        });
-
-        if (!TextUtils.isEmpty(mEditText.getText())) {
-            mHintTextView.setVisibility(VISIBLE);
-        }
-        */
-
-        mEditText.setOnFocusChangeListener(new OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View v, boolean hasFocus) {
-                onFocusChanged(hasFocus);
-            }
-        });
     }
 
     @SuppressWarnings("UnusedDeclaration")

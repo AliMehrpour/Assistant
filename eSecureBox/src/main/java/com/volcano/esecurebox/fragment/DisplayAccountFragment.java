@@ -35,7 +35,7 @@ public class DisplayAccountFragment extends AbstractFragment {
     private ArrayList<AccountFieldValue> mFieldValues = new ArrayList<>();
 
     public interface OnEnableEditListener {
-        public void onEnableEdit(boolean enable);
+        void onEnableEdit(boolean enable);
     }
 
     @Override
