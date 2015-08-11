@@ -101,7 +101,7 @@ public final class BitmapUtils {
      * @param color The color
      * @return A {@link android.graphics.drawable.ColorDrawable}
      */
-    public static ColorDrawable getColorDrawablr(int color) {
+    public static ColorDrawable getColorDrawable(int color) {
         return new ColorDrawable(color);
     }
 

@@ -76,9 +76,9 @@ public class CreateAccountActivity extends AbstractActivity {
 
             final int normalColor = BitmapUtils.getColor(categoryColor);
             final StateListDrawable stateListDrawable = new StateListDrawable();
-            stateListDrawable.addState(new int[] { -android.R.attr.state_enabled }, BitmapUtils.getColorDrawablr(getResources().getColor(android.R.color.darker_gray)));
-            stateListDrawable.addState(new int[] { android.R.attr.state_pressed }, BitmapUtils.getColorDrawablr(BitmapUtils.getLightenColor(normalColor, .2f)));
-            stateListDrawable.addState(new int[] { }, BitmapUtils.getColorDrawablr(normalColor));
+            stateListDrawable.addState(new int[] { -android.R.attr.state_enabled }, BitmapUtils.getColorDrawable(getResources().getColor(android.R.color.darker_gray)));
+            stateListDrawable.addState(new int[] { android.R.attr.state_pressed }, BitmapUtils.getColorDrawable(BitmapUtils.getLightenColor(normalColor, .2f)));
+            stateListDrawable.addState(new int[] { }, BitmapUtils.getColorDrawable(normalColor));
             if (Utils.hasJellyBeanApi()) {
                 deleteText.setBackground(stateListDrawable);
             }
@@ -135,4 +135,5 @@ public class CreateAccountActivity extends AbstractActivity {
 
         return false;
     }
+
 }

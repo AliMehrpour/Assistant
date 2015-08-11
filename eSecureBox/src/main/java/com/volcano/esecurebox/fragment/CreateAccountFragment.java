@@ -39,6 +39,7 @@ import com.volcano.esecurebox.util.LogUtils;
 import com.volcano.esecurebox.util.Utils;
 import com.volcano.esecurebox.widget.CircleDrawable;
 import com.volcano.esecurebox.widget.FieldCell;
+import com.volcano.esecurebox.widget.FieldCell.OnFieldSwipeListener;
 import com.volcano.esecurebox.widget.RobotoEditText;
 import com.volcano.esecurebox.widget.RobotoTextView;
 
@@ -66,10 +67,27 @@ public class CreateAccountFragment extends AbstractFragment {
     private SubCategoryListFragment mSubCategoryListFragment;
     private FrameLayout mSubCategoryListLayout;
     private LinearLayout mFieldsLayout;
-    private ScrollView mFieldsScrollView;
     private FrameLayout mProgressLayout;
     private RobotoTextView mAddFieldButton;
-    
+    private ScrollView mFieldsScrollView;
+
+    private final OnFieldSwipeListener mSwipeListener = new OnFieldSwipeListener() {
+        @Override
+        public void onSwiped(Field field) {
+            mFieldsScrollView.requestDisallowInterceptTouchEvent(false);
+        }
+
+        @Override
+        public void onSwipeStarted() {
+            mFieldsScrollView.requestDisallowInterceptTouchEvent(true);
+        }
+
+        @Override
+        public void onSwipeCanceled() {
+            mFieldsScrollView.requestDisallowInterceptTouchEvent(false);
+        }
+    };
+
     private OnEnableActionsListener mListener;
 
     public interface OnEnableActionsListener {
@@ -437,6 +455,7 @@ public class CreateAccountFragment extends AbstractFragment {
                                     final AccountFieldValue value = mAccountFieldValues.get(i);
                                     final FieldCell fieldCell = new FieldCell(getActivity());
                                     fieldCell.setField(value.getField(), value.getValue());
+                                    fieldCell.setOnSwipeListener(mSwipeListener);
                                     mFieldsLayout.addView(fieldCell);
                                 }
 
@@ -463,6 +482,7 @@ public class CreateAccountFragment extends AbstractFragment {
     private void createFieldLayout(SubCategoryField field) {
         final FieldCell fieldCell = new FieldCell(getActivity());
         fieldCell.setField(field.getField(), field.getDefaultValue());
+        fieldCell.setOnSwipeListener(mSwipeListener);
         mFieldsLayout.addView(fieldCell);
     }
 

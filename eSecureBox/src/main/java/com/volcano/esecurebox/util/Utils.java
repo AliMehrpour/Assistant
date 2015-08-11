@@ -9,8 +9,10 @@ import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Point;
 import android.net.Uri;
 import android.os.Build;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -77,6 +79,16 @@ public class Utils {
         final ClipboardManager clipboard = (ClipboardManager) VlApplication.getInstance().getSystemService(Context.CLIPBOARD_SERVICE);
         final ClipData clip = ClipData.newPlainText(label, text);
         clipboard.setPrimaryClip(clip);
+    }
+
+    /**
+     * Get display size
+     * @param context The context
+     * @return The {@link Point} object contains width and height of device screen
+     */
+    public static Point getDisplaySize(Context context) {
+        final DisplayMetrics metrics = context.getResources().getDisplayMetrics();
+        return new Point(metrics.widthPixels, metrics.heightPixels);
     }
 
     /**

@@ -5,6 +5,7 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
+import android.animation.ValueAnimator;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.res.TypedArray;
@@ -13,9 +14,13 @@ import android.graphics.drawable.Drawable;
 import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.animation.DecelerateInterpolator;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 
 import com.afollestad.materialdialogs.AlertDialogWrapper;
 import com.parse.FindCallback;
@@ -37,25 +42,57 @@ import java.util.List;
 /**
  * Contains a Floating Edit Text with two action available
  */
-public final class FieldCell extends LinearLayout {
+public final class FieldCell extends FrameLayout {
     private final String TAG = LogUtils.makeLogTag(FieldCell.class.getSimpleName());
+
+    private static final int SWIPE_TO_REMOVE_X_THRESHOLD    = 250;
+    private static final int SWIPE_TO_REMOVE_MILLIS         = 400;
 
     private static final int ACTION_GENERATE_PASSWORD = 1;
     private static final int ACTION_SHOW_LIST         = 2;
     private static final int ACTION_VISIBLE_PASSWORD  = 3;
 
+    private RelativeLayout mViewsLayout;
     private ImageView mIcon;
     private RobotoTextView mHintTextView;
     private FormattedEditText mEditText;
     private ImageView mAction1Button;
     private ImageView mAction2Button;
     private View mDividerLine;
+    private FrameLayout.LayoutParams mLayoutParams;
 
     private final ArrayList<String> mListItems = new ArrayList<>();
     private boolean mVisiblePassword = false;
     private int mFormatType;
     private int mAction1;
     private int mAction2;
+
+    private final View THIS = this;
+    private int mStartX;
+    private int mDelta;
+
+    private OnFieldSwipeListener mSwipeListener;
+
+    /**
+     * Interface callback to be implemented of swipe status
+     */
+    public interface OnFieldSwipeListener {
+        /**
+         * Called when swipe has been completed
+         * @param field The field belong to this FieldCell
+         */
+        void onSwiped(Field field);
+
+        /**
+         * Called when swipe started
+         */
+        void onSwipeStarted();
+
+        /**
+         * Called when swipe cancelled
+         */
+        void onSwipeCanceled();
+    }
 
     public FieldCell(Context context) {
         this(context, null);
@@ -74,6 +111,7 @@ public final class FieldCell extends LinearLayout {
         final LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         inflater.inflate(R.layout.widget_field_cell, this, true);
 
+        mViewsLayout = (RelativeLayout) findViewById(R.id.layout_views);
         mIcon = (ImageView) findViewById(R.id.icon);
         mHintTextView = (RobotoTextView) findViewById(R.id.text_hint);
         mEditText = (FormattedEditText) findViewById(R.id.edittext);
@@ -81,8 +119,9 @@ public final class FieldCell extends LinearLayout {
         mAction2Button = (ImageView) findViewById(R.id.button_action_2);
         mDividerLine = findViewById(R.id.divider_line);
 
-        final TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.FieldCell);
+        mLayoutParams = (FrameLayout.LayoutParams) mViewsLayout.getLayoutParams();
 
+        final TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.FieldCell);
         final boolean showIcon = a.getBoolean(R.styleable.FieldCell_fleShowIcon, true);
         if (!showIcon) {
             mIcon.setVisibility(View.GONE);
@@ -110,16 +149,12 @@ public final class FieldCell extends LinearLayout {
                     toggleEyeButton();
                 }
                 else if (mAction1 == ACTION_SHOW_LIST && mListItems.size() > 0) {
-                    new AlertDialogWrapper.Builder(getContext())
-                            .setTitle(mHintTextView.getText())
-                            .setItems(mListItems.toArray(new CharSequence[mListItems.size()]),
-                                    new DialogInterface.OnClickListener() {
-                                        @Override
-                                        public void onClick(DialogInterface dialog, int which) {
-                                            mEditText.setText(mListItems.get(which));
-                                        }
-                                    })
-                            .show();
+                    new AlertDialogWrapper.Builder(getContext()).setTitle(mHintTextView.getText()).setItems(mListItems.toArray(new CharSequence[mListItems.size()]), new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            mEditText.setText(mListItems.get(which));
+                        }
+                    }).show();
                 }
             }
         });
@@ -133,12 +168,70 @@ public final class FieldCell extends LinearLayout {
                     final boolean isPassword = mFormatType == FormattedEditText.FORMAT_PASSWORD;
                     final boolean isNumberPassword = mFormatType == FormattedEditText.FORMAT_PASSWORD_NUMBER;
 
-                    mEditText.setText(
-                            new PasswordGenerator().generate(isPassword ? PasswordGenerator.PASSWORD_LENGTH_DEFAULT : PasswordGenerator.PASSWORD_LENGTH_NUMBER,
-                            isPassword || isNumberPassword, isPassword, isPassword));
+                    mEditText.setText(new PasswordGenerator().generate(isPassword ? PasswordGenerator.PASSWORD_LENGTH_DEFAULT : PasswordGenerator.PASSWORD_LENGTH_NUMBER, isPassword || isNumberPassword, isPassword, isPassword));
                 }
             }
         });
+    }
+
+    @Override
+    @SuppressWarnings("NullableProblems")
+    public boolean onTouchEvent(MotionEvent event) {
+        final float X = event.getX();
+
+        switch (event.getAction()) {
+            case MotionEvent.ACTION_DOWN:
+                mStartX = (int) X;
+                break;
+
+            case MotionEvent.ACTION_MOVE:
+                mDelta = (int) (X - mStartX);
+                if (mDelta > 0) {
+                    moveViewToRight(mDelta);
+                    mSwipeListener.onSwipeStarted();
+                }
+                break;
+
+            case MotionEvent.ACTION_OUTSIDE:
+            case MotionEvent.ACTION_UP:
+                if (mDelta > SWIPE_TO_REMOVE_X_THRESHOLD) {
+                    mStartX = 0;
+                    mDelta = 0;
+
+                    mViewsLayout.animate()
+                            .translationX(Utils.getDisplaySize(getContext()).x)
+                            .setDuration(SWIPE_TO_REMOVE_MILLIS)
+                            .setInterpolator(new DecelerateInterpolator())
+                            .setListener(new AnimatorListenerAdapter() {
+                                @Override
+                                public void onAnimationEnd(Animator animation) {
+                                    ((ViewGroup) getParent()).removeView(THIS);
+                                    mSwipeListener.onSwiped(null); // TODO: pass real field object
+                                }
+                            });
+                }
+                else {
+                    mStartX = 0;
+                    mDelta = 0;
+
+                    final ValueAnimator animator = ValueAnimator.ofInt(mLayoutParams.leftMargin, 0);
+                    animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+                        @Override
+                        public void onAnimationUpdate(ValueAnimator valueAnimator) {
+                            final int leftMargin = (Integer) valueAnimator.getAnimatedValue();
+                            moveViewToRight(leftMargin);
+                        }
+                    });
+                    animator.setDuration(mLayoutParams.leftMargin);
+                    animator.start();
+                    mSwipeListener.onSwipeStarted();
+                }
+                break;
+
+
+        }
+
+        return true;
     }
 
     @Override
@@ -215,6 +308,10 @@ public final class FieldCell extends LinearLayout {
         setIcon(subCategory.getIconName(), null, BitmapUtils.getColor(subCategory.getCategory().getColor()));
     }
 
+    public void setOnSwipeListener(OnFieldSwipeListener listener) {
+        mSwipeListener = listener;
+    }
+
     private void setText(String text) {
         mEditText.setText(text);
     }
@@ -273,6 +370,12 @@ public final class FieldCell extends LinearLayout {
             mHintTextView.setAlpha(1f);
             ObjectAnimator.ofFloat(mHintTextView, "alpha", 1f, 0.5f).start();
         }
+    }
+
+    private void moveViewToRight(int xLocation) {
+        mLayoutParams.leftMargin = xLocation;
+        mLayoutParams.rightMargin = -xLocation;
+        mViewsLayout.setLayoutParams(mLayoutParams);
     }
 
     @SuppressWarnings("deprecation")
@@ -334,15 +437,13 @@ public final class FieldCell extends LinearLayout {
             @Override
             public boolean onLongClick(View v) {
                 if (!mEditText.isFocusable() && !TextUtils.isEmpty(mEditText.getText())) {
-                    new AlertDialogWrapper.Builder(getContext())
-                            .setItems(R.array.array_field_actions, new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    Utils.copyToClipboard(null, mEditText.getText().toString());
-                                    Utils.showToast(R.string.toast_copy_to_clipboard);
-                                }
-                            })
-                            .show();
+                    new AlertDialogWrapper.Builder(getContext()).setItems(R.array.array_field_actions, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            Utils.copyToClipboard(null, mEditText.getText().toString());
+                            Utils.showToast(R.string.toast_copy_to_clipboard);
+                        }
+                    }).show();
                 }
                 return true;
             }
@@ -375,17 +476,17 @@ public final class FieldCell extends LinearLayout {
 
         animation.addListener(new AnimatorListenerAdapter() {
             @Override
-             public void onAnimationEnd(Animator animation) {
-                 super.onAnimationEnd(animation);
-                 mHintTextView.setVisibility(show ? VISIBLE : INVISIBLE);
-                 mHintTextView.setAlpha(show ? 1 : 0);
-             }
+            public void onAnimationEnd(Animator animation) {
+                super.onAnimationEnd(animation);
+                mHintTextView.setVisibility(show ? VISIBLE : INVISIBLE);
+                mHintTextView.setAlpha(show ? 1 : 0);
+            }
 
-             @Override
-             public void onAnimationStart(Animator animation) {
-                 super.onAnimationStart(animation);
-                 mHintTextView.setVisibility(VISIBLE);
-             }
+            @Override
+            public void onAnimationStart(Animator animation) {
+                super.onAnimationStart(animation);
+                mHintTextView.setVisibility(VISIBLE);
+            }
         });
         animation.start();
     }
