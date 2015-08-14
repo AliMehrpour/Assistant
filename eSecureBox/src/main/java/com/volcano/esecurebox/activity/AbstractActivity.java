@@ -5,7 +5,7 @@ import android.annotation.SuppressLint;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
-import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.KeyEvent;
 import android.view.MenuItem;
@@ -20,7 +20,7 @@ import com.volcano.esecurebox.util.Utils;
 /**
  * Each activity should extends this class
  */
-public class AbstractActivity extends ActionBarActivity {
+public class AbstractActivity extends AppCompatActivity {
     protected final String TAG = LogUtils.makeLogTag(getClass().getName());
 
     protected boolean mFinishIfNotLoggedIn = true;

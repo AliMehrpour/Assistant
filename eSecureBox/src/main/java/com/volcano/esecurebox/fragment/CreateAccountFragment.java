@@ -5,7 +5,11 @@ import android.app.Activity;
 import android.app.DialogFragment;
 import android.app.FragmentManager;
 import android.content.DialogInterface;
+import android.graphics.Color;
 import android.os.Bundle;
+import android.support.design.widget.CoordinatorLayout;
+import android.support.design.widget.Snackbar;
+import android.support.v4.util.Pair;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
@@ -56,6 +60,7 @@ public class CreateAccountFragment extends AbstractFragment {
     private SubCategory mSelectedSubCategory;
     private final ArrayList<AccountFieldValue> mAccountFieldValues = new ArrayList<>();
     private final ArrayList<SubCategoryField> mFields = new ArrayList<>();
+    private Pair<Integer, FieldCell> mLastRemovedFieldCell;
     private String mSelectedSubCategoryId;
     private int mSavedFieldCount = 0;
 
@@ -70,11 +75,30 @@ public class CreateAccountFragment extends AbstractFragment {
     private FrameLayout mProgressLayout;
     private RobotoTextView mAddFieldButton;
     private ScrollView mFieldsScrollView;
+    private CoordinatorLayout mSnackbarLayout;
 
     private final OnFieldSwipeListener mSwipeListener = new OnFieldSwipeListener() {
         @Override
-        public void onSwiped(Field field) {
+        public void onSwiped(FieldCell fieldCell) {
+            mLastRemovedFieldCell = new Pair<>(Integer.parseInt(fieldCell.getTag().toString()), fieldCell);
             mFieldsScrollView.requestDisallowInterceptTouchEvent(false);
+
+            final Snackbar snackbar = Snackbar.make(mSnackbarLayout, R.string.snackbar_text_field_deleted, Snackbar.LENGTH_LONG)
+                    .setActionTextColor(Color.YELLOW)
+                    .setAction(R.string.snackbar_action_undo, new OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            final FieldCell removedCell = mLastRemovedFieldCell.second;
+                            mFieldsLayout.addView(mLastRemovedFieldCell.second, mLastRemovedFieldCell.first);
+                            removedCell.resetPosition();
+                            mLastRemovedFieldCell = null;
+                        }
+                    });
+
+            final View view = snackbar.getView();
+            TextView text = (TextView) view.findViewById(android.support.design.R.id.snackbar_text);
+            text.setTextColor(Color.WHITE);
+            snackbar.show();
         }
 
         @Override
@@ -118,6 +142,7 @@ public class CreateAccountFragment extends AbstractFragment {
         }
         mAddFieldButton = (RobotoTextView) view.findViewById(R.id.button_add_field);
         mFieldsScrollView = (ScrollView) view.findViewById(R.id.scroll_view_fields);
+        mSnackbarLayout = (CoordinatorLayout) view.findViewById(R.id.layout_snackbar);
 
         return view;
     }
@@ -417,7 +442,7 @@ public class CreateAccountFragment extends AbstractFragment {
                             mFields.addAll(subCategoryFields);
                             final int size = mFields.size();
                             for (int i = 0; i < size; i++) {
-                                createFieldLayout(mFields.get(i));
+                                addToFieldsLayout(mFields.get(i));
                             }
 
                             mProgressLayout.setVisibility(View.GONE);
@@ -479,7 +504,7 @@ public class CreateAccountFragment extends AbstractFragment {
         });
     }
 
-    private void createFieldLayout(SubCategoryField field) {
+    private void addToFieldsLayout(SubCategoryField field) {
         final FieldCell fieldCell = new FieldCell(getActivity());
         fieldCell.setField(field.getField(), field.getDefaultValue());
         fieldCell.setOnSwipeListener(mSwipeListener);
@@ -507,7 +532,7 @@ public class CreateAccountFragment extends AbstractFragment {
         for(final Field field : fields) {
             final SubCategoryField subCategoryField = new SubCategoryField(mSelectedSubCategory, field);
             mFields.add(subCategoryField);
-            createFieldLayout(subCategoryField);
+            addToFieldsLayout(subCategoryField);
         }
 
         scrollToDown();

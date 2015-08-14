@@ -67,7 +67,7 @@ public final class FieldCell extends FrameLayout {
     private int mAction1;
     private int mAction2;
 
-    private final View THIS = this;
+    private final FieldCell THIS = this;
     private int mStartX;
     private int mDelta;
 
@@ -79,9 +79,9 @@ public final class FieldCell extends FrameLayout {
     public interface OnFieldSwipeListener {
         /**
          * Called when swipe has been completed
-         * @param field The field belong to this FieldCell
+         * @param fieldCell The removed {@link FieldCell}
          */
-        void onSwiped(Field field);
+        void onSwiped(FieldCell fieldCell);
 
         /**
          * Called when swipe started
@@ -205,8 +205,10 @@ public final class FieldCell extends FrameLayout {
                             .setListener(new AnimatorListenerAdapter() {
                                 @Override
                                 public void onAnimationEnd(Animator animation) {
-                                    ((ViewGroup) getParent()).removeView(THIS);
-                                    mSwipeListener.onSwiped(null); // TODO: pass real field object
+                                    final ViewGroup parent = (ViewGroup) getParent();
+                                    THIS.setTag(parent.indexOfChild(THIS));
+                                    parent.removeView(THIS);
+                                    mSwipeListener.onSwiped(THIS);
                                 }
                             });
                 }
@@ -224,7 +226,7 @@ public final class FieldCell extends FrameLayout {
                     });
                     animator.setDuration(mLayoutParams.leftMargin);
                     animator.start();
-                    mSwipeListener.onSwipeStarted();
+                    mSwipeListener.onSwipeCanceled();
                 }
                 break;
 
@@ -310,6 +312,11 @@ public final class FieldCell extends FrameLayout {
 
     public void setOnSwipeListener(OnFieldSwipeListener listener) {
         mSwipeListener = listener;
+    }
+
+    public void resetPosition() {
+        mViewsLayout.setX(mLayoutParams.leftMargin);
+        moveViewToRight(0);
     }
 
     private void setText(String text) {
