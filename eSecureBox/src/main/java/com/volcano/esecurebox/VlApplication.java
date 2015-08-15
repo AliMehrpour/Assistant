@@ -4,6 +4,8 @@ package com.volcano.esecurebox;
 import android.app.Activity;
 import android.app.Application;
 import android.os.Bundle;
+import com.crashlytics.android.Crashlytics;
+import io.fabric.sdk.android.Fabric;
 
 /**
  * A Custom application class
@@ -30,6 +32,7 @@ public final class VlApplication extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
+        Fabric.with(this, new Crashlytics());
         Managers.initialize();
         Managers.getApplicationLockManager().enableApplicationLockIfAvailable(this);
 
