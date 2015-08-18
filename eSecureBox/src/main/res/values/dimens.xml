@@ -30,8 +30,6 @@
     <dimen name="fab_shadow_radius">9dp</dimen>
     <dimen name="fab_stroke_width">1dp</dimen>
 
-    <dimen name="field_cell_height">62.5dp</dimen>
-
     <dimen name="height_56">56dp</dimen>
     <dimen name="height_72">72dp</dimen>
 

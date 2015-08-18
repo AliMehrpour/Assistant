@@ -11,7 +11,9 @@ import android.content.DialogInterface;
 import android.content.res.TypedArray;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
+import android.text.InputType;
 import android.text.TextUtils;
+import android.text.util.Linkify;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -45,31 +47,47 @@ import java.util.List;
 public final class FieldCell extends FrameLayout {
     private final String TAG = LogUtils.makeLogTag(FieldCell.class.getSimpleName());
 
-    private static final int SWIPE_TO_REMOVE_X_THRESHOLD    = 250;
-    private static final int SWIPE_TO_REMOVE_MILLIS         = 400;
+    public final static int TYPE_STRING                  = 1;
+    public final static int TYPE_STRING_MULTILINE        = 2;
+    @SuppressWarnings("unused")
+    public final static int TYPE_DATE                    = 3;
+    public final static int TYPE_PASSWORD_NUMBER         = 4;
+    public final static int TYPE_PASSWORD                = 5;
+    public final static int TYPE_URL                     = 6;
+    public final static int TYPE_PHONE                   = 7;
+    public final static int TYPE_ENUM                    = 8;
+    public final static int TYPE_EMAIL                   = 9;
+    public final static int TYPE_NUMBER                  = 10;
+    public final static int TYPE_PASSWORD_NUMBER_VISIBLE = 11;
+    public final static int TYPE_PASSWORD_VISIBLE        = 12;
 
-    private static final int ACTION_GENERATE_PASSWORD = 1;
-    private static final int ACTION_SHOW_LIST         = 2;
-    private static final int ACTION_VISIBLE_PASSWORD  = 3;
+    private static final int SWIPE_TO_REMOVE_X_THRESHOLD = 250;
+    private static final int SWIPE_TO_REMOVE_MILLIS      = 400;
 
-    private RelativeLayout mViewsLayout;
+    private static final int ACTION_GENERATE_PASSWORD    = 1;
+    private static final int ACTION_SHOW_LIST            = 2;
+    private static final int ACTION_VISIBLE_PASSWORD     = 3;
+
     private ImageView mIcon;
-    private RobotoTextView mHintTextView;
-    private FormattedEditText mEditText;
+    private View mDividerLine;
+    private RobotoEditText mEditText;
     private ImageView mAction1Button;
     private ImageView mAction2Button;
-    private View mDividerLine;
+    private RobotoTextView mHintTextView;
+    private RelativeLayout mViewsLayout;
     private FrameLayout.LayoutParams mLayoutParams;
 
     private final ArrayList<String> mListItems = new ArrayList<>();
     private boolean mVisiblePassword = false;
-    private int mFormatType;
+    private int mInputType;
     private int mAction1;
     private int mAction2;
+    private boolean mReadOnly;
+    private Field mField;
 
-    private final FieldCell THIS = this;
     private int mStartX;
     private int mDelta;
+    private boolean mSwipeEnabled;
 
     private OnFieldSwipeListener mSwipeListener;
 
@@ -114,7 +132,7 @@ public final class FieldCell extends FrameLayout {
         mViewsLayout = (RelativeLayout) findViewById(R.id.layout_views);
         mIcon = (ImageView) findViewById(R.id.icon);
         mHintTextView = (RobotoTextView) findViewById(R.id.text_hint);
-        mEditText = (FormattedEditText) findViewById(R.id.edittext);
+        mEditText = (RobotoEditText) findViewById(R.id.edit_value);
         mAction1Button = (ImageView) findViewById(R.id.button_action_1);
         mAction2Button = (ImageView) findViewById(R.id.button_action_2);
         mDividerLine = findViewById(R.id.divider_line);
@@ -165,8 +183,8 @@ public final class FieldCell extends FrameLayout {
                 if (mAction2 == ACTION_GENERATE_PASSWORD) {
                     Managers.getMixpanelManager().track(MixpanelManager.EVENT_GENERATE_PASSWORD);
 
-                    final boolean isPassword = mFormatType == FormattedEditText.FORMAT_PASSWORD;
-                    final boolean isNumberPassword = mFormatType == FormattedEditText.FORMAT_PASSWORD_NUMBER;
+                    final boolean isPassword = (mInputType == TYPE_PASSWORD || mInputType == TYPE_PASSWORD_VISIBLE);
+                    final boolean isNumberPassword = (mInputType == TYPE_PASSWORD_NUMBER || mInputType == TYPE_PASSWORD_NUMBER_VISIBLE);
 
                     mEditText.setText(new PasswordGenerator().generate(isPassword ? PasswordGenerator.PASSWORD_LENGTH_DEFAULT : PasswordGenerator.PASSWORD_LENGTH_NUMBER, isPassword || isNumberPassword, isPassword, isPassword));
                 }
@@ -177,63 +195,64 @@ public final class FieldCell extends FrameLayout {
     @Override
     @SuppressWarnings("NullableProblems")
     public boolean onTouchEvent(MotionEvent event) {
-        final float X = event.getX();
+        if (mSwipeEnabled) {
+            final float X = event.getX();
 
-        switch (event.getAction()) {
-            case MotionEvent.ACTION_DOWN:
-                mStartX = (int) X;
-                break;
+            switch (event.getAction()) {
+                case MotionEvent.ACTION_DOWN:
+                    mStartX = (int) X;
+                    break;
 
-            case MotionEvent.ACTION_MOVE:
-                mDelta = (int) (X - mStartX);
-                if (mDelta > 0) {
-                    moveViewToRight(mDelta);
-                    mSwipeListener.onSwipeStarted();
-                }
-                break;
+                case MotionEvent.ACTION_MOVE:
+                    mDelta = (int) (X - mStartX);
+                    if (mDelta > 0) {
+                        moveViewToRight(mDelta);
+                        mSwipeListener.onSwipeStarted();
+                    }
+                    break;
 
-            case MotionEvent.ACTION_OUTSIDE:
-            case MotionEvent.ACTION_UP:
-                if (mDelta > SWIPE_TO_REMOVE_X_THRESHOLD) {
-                    mStartX = 0;
-                    mDelta = 0;
+                case MotionEvent.ACTION_OUTSIDE:
+                case MotionEvent.ACTION_UP:
+                    if (mDelta > SWIPE_TO_REMOVE_X_THRESHOLD) {
+                        mStartX = 0;
+                        mDelta = 0;
 
-                    mViewsLayout.animate()
-                            .translationX(Utils.getDisplaySize(getContext()).x)
-                            .setDuration(SWIPE_TO_REMOVE_MILLIS)
-                            .setInterpolator(new DecelerateInterpolator())
-                            .setListener(new AnimatorListenerAdapter() {
-                                @Override
-                                public void onAnimationEnd(Animator animation) {
-                                    final ViewGroup parent = (ViewGroup) getParent();
-                                    THIS.setTag(parent.indexOfChild(THIS));
-                                    parent.removeView(THIS);
-                                    mSwipeListener.onSwiped(THIS);
-                                }
-                            });
-                }
-                else {
-                    mStartX = 0;
-                    mDelta = 0;
+                        mViewsLayout.animate()
+                                .translationX(Utils.getDisplaySize(getContext()).x)
+                                .setDuration(SWIPE_TO_REMOVE_MILLIS)
+                                .setInterpolator(new DecelerateInterpolator())
+                                .setListener(new AnimatorListenerAdapter() {
+                                    @Override
+                                    public void onAnimationEnd(Animator animation) {
+                                        removeItself();
+                                    }
+                                });
+                    }
+                    else {
+                        mStartX = 0;
+                        mDelta = 0;
 
-                    final ValueAnimator animator = ValueAnimator.ofInt(mLayoutParams.leftMargin, 0);
-                    animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-                        @Override
-                        public void onAnimationUpdate(ValueAnimator valueAnimator) {
-                            final int leftMargin = (Integer) valueAnimator.getAnimatedValue();
-                            moveViewToRight(leftMargin);
-                        }
-                    });
-                    animator.setDuration(mLayoutParams.leftMargin);
-                    animator.start();
-                    mSwipeListener.onSwipeCanceled();
-                }
-                break;
+                        final ValueAnimator animator = ValueAnimator.ofInt(mLayoutParams.leftMargin, 0);
+                        animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+                            @Override
+                            public void onAnimationUpdate(ValueAnimator valueAnimator) {
+                                final int leftMargin = (Integer) valueAnimator.getAnimatedValue();
+                                moveViewToRight(leftMargin);
+                            }
+                        });
+                        animator.setDuration(mLayoutParams.leftMargin);
+                        animator.start();
+                        mSwipeListener.onSwipeCanceled();
+                    }
+                    break;
 
 
+            }
+
+            return true;
         }
 
-        return true;
+        return false;
     }
 
     @Override
@@ -241,7 +260,7 @@ public final class FieldCell extends FrameLayout {
         if (!enabled) {
             mEditText.setKeyListener(null);
             mEditText.setFocusable(false);
-            showMenuOnLongClick();
+            setOnLongClickMenu();
             setDividerLineVisibility(View.INVISIBLE);
         }
     }
@@ -269,34 +288,15 @@ public final class FieldCell extends FrameLayout {
      * @param readonly True if field is readonly, false otherwise
      */
     public void setField(Field field, String value, boolean readonly) {
+        mReadOnly = readonly;
+        mField = field;
+
+        setEnabled(!readonly);
         setIcon(field.getIconName(), field.getName().charAt(0), getResources().getColor(R.color.grey_1));
         setText(value);
         setHint(field.getName());
-
-        if (readonly) {
-            setEnabled(false);
-        }
-        else {
-            setFormatType(field.getFormat());
-
-            if (field.getFormat() == Field.FORMAT_ENUM) {
-                FieldTypeValue.getValueByField(FieldCell.class, field, new FindCallback<FieldTypeValue>() {
-                    @Override
-                    public void done(List<FieldTypeValue> fieldTypeValues, ParseException e) {
-                        if (e == null) {
-                            final ArrayList<String> values = new ArrayList<>();
-                            for (FieldTypeValue value : fieldTypeValues) {
-                                values.add(value.getValue());
-                            }
-                            setListItems(values);
-                        }
-                        else {
-                            LogUtils.LogE(TAG, "Load field values failed");
-                        }
-                    }
-                });
-            }
-        }
+        setInputType(field.getType());
+        setActions();
     }
 
     /**
@@ -310,13 +310,28 @@ public final class FieldCell extends FrameLayout {
         setIcon(subCategory.getIconName(), null, BitmapUtils.getColor(subCategory.getCategory().getColor()));
     }
 
+    /**
+     * Set {@link OnFieldSwipeListener}
+     * @param listener The listener
+     */
     public void setOnSwipeListener(OnFieldSwipeListener listener) {
         mSwipeListener = listener;
     }
 
+    /**
+     * Reset view position
+     */
     public void resetPosition() {
         mViewsLayout.setX(mLayoutParams.leftMargin);
         moveViewToRight(0);
+    }
+
+    /**
+     * Enable/disable swipe to right
+     * @param enable True to enable
+     */
+    public void setSwipeEnabled(boolean enable) {
+        mSwipeEnabled = enable;
     }
 
     private void setText(String text) {
@@ -351,22 +366,166 @@ public final class FieldCell extends FrameLayout {
         }
     }
 
-    private void setFormatType(int formatType) {
-        mFormatType = formatType;
-
-        mEditText.setFormatType(formatType);
+    private void setActions() {
         setEyeAction();
-        setGeneratePasswordAction();
-        setListAction();
+
+        if (!mReadOnly) {
+            setGeneratePasswordAction();
+            setListAction();
+        }
     }
 
     private void setDividerLineVisibility(int visibility) {
         mDividerLine.setVisibility(visibility);
     }
 
-    private void setListItems(ArrayList<String> items) {
-        mListItems.clear();
-        mListItems.addAll(items);
+    private void setEyeAction() {
+        final boolean isPassword = mInputType == TYPE_PASSWORD || mInputType == TYPE_PASSWORD_NUMBER;
+        if (isPassword) {
+            final boolean isFocusable = mEditText.isFocusable();
+            final boolean isEmpty = TextUtils.isEmpty(mEditText.getText());
+            if (isFocusable || !isEmpty) {
+                mAction1 = ACTION_VISIBLE_PASSWORD;
+
+                mAction1Button.setImageResource(R.drawable.icon_eye_open);
+                mAction1Button.setVisibility(VISIBLE);
+            }
+        }
+    }
+
+    private void toggleEyeButton()  {
+        mAction1Button.setImageResource(mVisiblePassword ? R.drawable.icon_eye_open : R.drawable.icon_eye_closed);
+        mVisiblePassword = !mVisiblePassword;
+
+        final int lastSelection = mEditText.getSelectionStart();
+        setInputType(reverseInputTypeVisibility(mInputType));
+        mEditText.setSelection(lastSelection);
+    }
+
+    private void setGeneratePasswordAction() {
+        if ((mInputType == TYPE_PASSWORD ||
+                mInputType == TYPE_PASSWORD_NUMBER) && mEditText.isFocusable()) {
+            mAction2 = ACTION_GENERATE_PASSWORD;
+
+            mAction2Button.setImageResource(R.drawable.icon_generate_password);
+            mAction2Button.setVisibility(VISIBLE);
+        }
+    }
+
+    private void setListAction() {
+        if (mInputType == TYPE_ENUM) {
+            mAction1 = ACTION_SHOW_LIST;
+
+            FieldTypeValue.getValueByField(FieldCell.class, mField, new FindCallback<FieldTypeValue>() {
+                @Override
+                public void done(List<FieldTypeValue> fieldTypeValues, ParseException e) {
+                    if (e == null) {
+                        final ArrayList<String> items = new ArrayList<>();
+                        for (final FieldTypeValue value : fieldTypeValues) {
+                            items.add(value.getValue());
+                        }
+
+                        mListItems.clear();
+                        mListItems.addAll(items);
+
+                        mAction1Button.setImageResource(R.drawable.icon_list);
+                        mAction1Button.setVisibility(VISIBLE);
+                    }
+                    else {
+                        LogUtils.LogE(TAG, "Load field values failed");
+                        mAction1Button.setVisibility(INVISIBLE);
+                    }
+                }
+            });
+        }
+    }
+
+    private void setInputType(int inputType) {
+        mInputType = inputType;
+
+        final int defaultInputType = InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS;
+        switch (mInputType) {
+            case TYPE_STRING:
+                mEditText.setInputType(defaultInputType);
+                break;
+
+            case TYPE_STRING_MULTILINE:
+                mEditText.setInputType(defaultInputType | InputType.TYPE_TEXT_FLAG_MULTI_LINE);
+                break;
+
+            case TYPE_PASSWORD:
+                mEditText.setInputType(defaultInputType | InputType.TYPE_TEXT_VARIATION_PASSWORD);
+                break;
+
+            case TYPE_PASSWORD_VISIBLE:
+                mEditText.setInputType(defaultInputType | InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
+                break;
+
+            case TYPE_PASSWORD_NUMBER:
+                mEditText.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_VARIATION_PASSWORD);
+                break;
+
+            case TYPE_PASSWORD_NUMBER_VISIBLE:
+                mEditText.setInputType(InputType.TYPE_CLASS_NUMBER);
+                break;
+
+            case TYPE_URL:
+                mEditText.setInputType(defaultInputType);
+                if (!isFocusable()) {
+                    Linkify.addLinks(mEditText, Linkify.WEB_URLS);
+                }
+                break;
+
+            case TYPE_PHONE:
+                mEditText.setInputType(defaultInputType | InputType.TYPE_CLASS_PHONE);
+                break;
+
+            case TYPE_EMAIL:
+                mEditText.setInputType(defaultInputType | InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS);
+                break;
+
+            case TYPE_NUMBER:
+                mEditText.setInputType(InputType.TYPE_CLASS_NUMBER);
+                break;
+        }
+    }
+
+    private int reverseInputTypeVisibility(int inputType) {
+        int reverseInputType = inputType;
+
+        if (inputType == TYPE_PASSWORD) {
+            reverseInputType = TYPE_PASSWORD_VISIBLE;
+        }
+        else if (inputType == TYPE_PASSWORD_NUMBER) {
+            reverseInputType = TYPE_PASSWORD_NUMBER_VISIBLE;
+        }
+        else if (inputType == TYPE_PASSWORD_VISIBLE) {
+            reverseInputType = TYPE_PASSWORD;
+        }
+        else if (inputType == TYPE_PASSWORD_NUMBER_VISIBLE) {
+            reverseInputType = TYPE_PASSWORD_NUMBER;
+        }
+
+        return reverseInputType;
+    }
+
+    private void setOnLongClickMenu() {
+        mEditText.setOnLongClickListener(new OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                if (!mEditText.isFocusable() && !TextUtils.isEmpty(mEditText.getText())) {
+                    new AlertDialogWrapper.Builder(getContext()).setItems(R.array.array_field_actions, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            Utils.copyToClipboard(null, mEditText.getText().toString());
+                            Utils.showToast(R.string.toast_copy_to_clipboard);
+                        }
+                    }).show();
+                }
+                return true;
+            }
+        });
+
     }
 
     private void onFocusChanged(boolean hasFocus) {
@@ -385,77 +544,11 @@ public final class FieldCell extends FrameLayout {
         mViewsLayout.setLayoutParams(mLayoutParams);
     }
 
-    @SuppressWarnings("deprecation")
-    private void setEyeAction() {
-        final boolean isPassword = mFormatType == FormattedEditText.FORMAT_PASSWORD || mFormatType == FormattedEditText.FORMAT_PASSWORD_NUMBER;
-        if (isPassword) {
-            final boolean isFocusable = mEditText.isFocusable();
-            final boolean isEmpty = TextUtils.isEmpty(mEditText.getText());
-            if (isFocusable || !isEmpty) {
-                mAction1 = ACTION_VISIBLE_PASSWORD;
-
-                mAction1Button.setImageDrawable(getResources().getDrawable(R.drawable.icon_eye_open));
-                mAction1Button.setVisibility(VISIBLE);
-            }
-        }
-    }
-
-    @SuppressWarnings("deprecation")
-    private void toggleEyeButton()  {
-        if (mVisiblePassword) {
-            final int lastSelection = mEditText.getSelectionStart();
-            mEditText.setFormatType(mFormatType);
-            mAction1Button.setImageDrawable(getResources().getDrawable(R.drawable.icon_eye_open));
-            mEditText.setSelection(lastSelection);
-            mVisiblePassword = false;
-        }
-        else {
-            final int lastSelection = mEditText.getSelectionStart();
-            mEditText.setFormatType(mEditText.reverseFormatType(mFormatType));
-            mAction1Button.setImageDrawable(getResources().getDrawable(R.drawable.icon_eye_closed));
-            mEditText.setSelection(lastSelection);
-            mVisiblePassword = true;
-        }
-    }
-
-    @SuppressWarnings("deprecation")
-    private void setGeneratePasswordAction() {
-        if ((mFormatType == FormattedEditText.FORMAT_PASSWORD ||
-                mFormatType == FormattedEditText.FORMAT_PASSWORD_NUMBER) && mEditText.isFocusable()) {
-            mAction2 = ACTION_GENERATE_PASSWORD;
-
-            mAction2Button.setImageDrawable(getResources().getDrawable(R.drawable.icon_generate_password));
-            mAction2Button.setVisibility(VISIBLE);
-        }
-    }
-
-    @SuppressWarnings("deprecation")
-    private void setListAction() {
-        if (mFormatType == FormattedEditText.FORMAT_ENUM) {
-            mAction1 = ACTION_SHOW_LIST;
-
-            mAction1Button.setImageDrawable(getResources().getDrawable(R.drawable.icon_list));
-            mAction1Button.setVisibility(VISIBLE);
-        }
-    }
-
-    private void showMenuOnLongClick() {
-        mEditText.setOnLongClickListener(new OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View v) {
-                if (!mEditText.isFocusable() && !TextUtils.isEmpty(mEditText.getText())) {
-                    new AlertDialogWrapper.Builder(getContext()).setItems(R.array.array_field_actions, new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            Utils.copyToClipboard(null, mEditText.getText().toString());
-                            Utils.showToast(R.string.toast_copy_to_clipboard);
-                        }
-                    }).show();
-                }
-                return true;
-            }
-        });
-
+    private void removeItself() {
+        final ViewGroup parent = (ViewGroup) getParent();
+        setTag(parent.indexOfChild(this));
+        parent.removeView(this);
+        mSwipeListener.onSwiped(this);
     }
 
     @SuppressWarnings("UnusedDeclaration")

@@ -164,7 +164,7 @@ public final class NavigationFragment extends AbstractFragment {
         mDrawerLayout = drawerLayout;
 
         mDrawerLayout.setDrawerShadow(R.drawable.shadow_drawer, GravityCompat.START);
-        mDrawerLayout.setStatusBarBackgroundColor(getResources().getColor(R.color.navigation_statusbar_color));
+        mDrawerLayout.setStatusBarBackgroundColor(getResources().getColor(R.color.navigation_status_bar_color));
 
         mDrawerToggle = new ActionBarDrawerToggle(getActivity(), mDrawerLayout,
                 toolbar, R.string.hint_navigation_open, R.string.hint_navigation_close) {

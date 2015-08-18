@@ -118,8 +118,8 @@
     <string name="toast_account_delete_failed">Unable delete item</string>
     <string name="toast_account_load_failed">Unable load item</string>
     <string name="toast_account_save_failed">Unable save item</string>
-    <string name="toast_account_save_validation_no_field">No information for save, please try again</string>
-    <string name="toast_account_save_validation_title_empty">Title can not be empty</string>
+    <string name="toast_account_save_validation_no_field">Please insert information</string>
+    <string name="toast_account_save_validation_title_empty">Please insert title</string>
     <string name="toast_account_update_failed">Unable update item</string>
     <string name="toast_category_try_get_category">Try preparing creating items…</string>
     <string name="toast_category_create_account_unavailable">Please check network connection and try again</string>

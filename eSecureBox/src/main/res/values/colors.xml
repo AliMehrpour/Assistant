@@ -28,7 +28,7 @@
     <color name="grey_9">#424242</color>
 
     <color name="navigation_selector">#B6B6B6</color>
-    <color name="navigation_statusbar_color">#000000</color>
+    <color name="navigation_status_bar_color">#000000</color>
 
     <color name="red">#F44336</color>
     <color name="red_1">#FFF47D70</color>

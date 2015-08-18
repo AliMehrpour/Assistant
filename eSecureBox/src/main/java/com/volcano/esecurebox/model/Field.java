@@ -19,16 +19,16 @@ import java.util.List;
 public class Field extends ParseObject {
     private static final String TAG = LogUtils.makeLogTag(SubCategory.class);
 
-    public final static int FORMAT_STRING             = 1;
-    public final static int FORMAT_STRING_MULTILINE   = 2;
-    public final static int FORMAT_DATE               = 3;
-    public final static int FORMAT_PASSWORD_NUMBER    = 4;   // like Pin
-    public final static int FORMAT_PASSWORD           = 5;
-    public final static int FORMAT_URL                = 6;
-    public final static int FORMAT_PHONE              = 7;
-    public final static int FORMAT_ENUM               = 8;
-    public final static int FORMAT_EMAIL              = 9;
-    public final static int FORMAT_NUMBER             = 10;
+    public final static int TYPE_STRING             = 1;
+    public final static int TYPE_STRING_MULTILINE   = 2;
+    public final static int TYPE_DATE               = 3;
+    public final static int TYPE_PASSWORD_NUMBER    = 4;   // like Pin
+    public final static int TYPE_PASSWORD           = 5;
+    public final static int TYPE_URL                = 6;
+    public final static int TYPE_PHONE              = 7;
+    public final static int TYPE_ENUM               = 8;
+    public final static int TYPE_EMAIL              = 9;
+    public final static int TYPE_NUMBER             = 10;
 
     private final static String ICON_NAME   = "iconName";
     private final static String NAME        = "name";
@@ -79,7 +79,7 @@ public class Field extends ParseObject {
         return getString(NAME);
     }
 
-    public int getFormat() {
+    public int getType() {
         return getInt(TYPE);
     }
 

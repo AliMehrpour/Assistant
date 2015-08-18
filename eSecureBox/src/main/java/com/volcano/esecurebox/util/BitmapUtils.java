@@ -5,7 +5,10 @@ import android.content.Context;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
+import android.os.Build.VERSION;
+import android.os.Build.VERSION_CODES;
 
+import com.volcano.esecurebox.VlApplication;
 import com.volcano.esecurebox.model.Field;
 import com.volcano.esecurebox.widget.CircleDrawable;
 
@@ -50,6 +53,20 @@ public final class BitmapUtils {
      */
     public static int getColor(String color) {
         return Color.parseColor(String.format("#%s", color));
+    }
+
+    /**
+     * Return a drawable object associated with a particular resource ID
+     * @param id The desired resource identifier
+     */
+    public static Drawable getDrawable(int id) {
+        if (VERSION.SDK_INT >= VERSION_CODES.LOLLIPOP) {
+            return VlApplication.getInstance().getResources().getDrawable(id, null);
+        }
+        else {
+            //noinspection deprecation
+            return VlApplication.getInstance().getResources().getDrawable(id);
+        }
     }
 
     /**

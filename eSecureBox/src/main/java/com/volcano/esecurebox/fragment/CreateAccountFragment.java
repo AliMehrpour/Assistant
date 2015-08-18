@@ -55,13 +55,13 @@ import java.util.List;
  */
 public class CreateAccountFragment extends AbstractFragment {
 
-    private ContentSource mContentSource;
-    private Account mAccount;
-    private SubCategory mSelectedSubCategory;
     private final ArrayList<AccountFieldValue> mAccountFieldValues = new ArrayList<>();
     private final ArrayList<SubCategoryField> mFields = new ArrayList<>();
+    private Account mAccount;
+    private SubCategory mSelectedSubCategory;
     private Pair<Integer, FieldCell> mLastRemovedFieldCell;
     private String mSelectedSubCategoryId;
+    private ContentSource mContentSource;
     private int mSavedFieldCount = 0;
 
     private FragmentManager mFragmentManager;
@@ -96,7 +96,7 @@ public class CreateAccountFragment extends AbstractFragment {
                     });
 
             final View view = snackbar.getView();
-            TextView text = (TextView) view.findViewById(android.support.design.R.id.snackbar_text);
+            final TextView text = (TextView) view.findViewById(android.support.design.R.id.snackbar_text);
             text.setTextColor(Color.WHITE);
             snackbar.show();
         }
@@ -114,8 +114,11 @@ public class CreateAccountFragment extends AbstractFragment {
 
     private OnEnableActionsListener mListener;
 
+    /**
+     * Interface to containing activities have to implement to be notified of actions on account
+     */
     public interface OnEnableActionsListener {
-        public void OnEnableActions(boolean enable);
+        void OnEnableActions(boolean enable);
     }
 
     public enum ContentSource {
@@ -168,7 +171,7 @@ public class CreateAccountFragment extends AbstractFragment {
                 mSubCategoryListLayout.setVisibility(View.GONE);
                 mFieldsLayout.setVisibility(View.VISIBLE);
                 if (mSelectedSubCategory == null || mSelectedSubCategory != subCategory) {
-                    emptyFields();
+                    removeFields();
                     setSubCategory(subCategory);
                     mAccountTitle.requestFocus();
                     loadFieldsBySubCategory();
@@ -404,7 +407,7 @@ public class CreateAccountFragment extends AbstractFragment {
         if (subCategory.hasIcon()) {
             final int resourceId = BitmapUtils.getDrawableIdentifier(getActivity(), subCategory.getIconName());
             if (resourceId != 0) {
-                mSubCategoryImage.setImageDrawable(getResources().getDrawable(resourceId));
+                mSubCategoryImage.setImageDrawable(BitmapUtils.getDrawable(resourceId));
                 hasIcon = true;
             }
         }
@@ -484,12 +487,12 @@ public class CreateAccountFragment extends AbstractFragment {
                                     mFieldsLayout.addView(fieldCell);
                                 }
 
-                                mListener.OnEnableActions(true);
-                                mProgressLayout.setVisibility(View.GONE);
                                 mSubCategoryLayout.setVisibility(View.VISIBLE);
+                                mProgressLayout.setVisibility(View.GONE);
                                 mAccountTitle.setVisibility(View.VISIBLE);
                                 mFieldsLayout.setVisibility(View.VISIBLE);
                                 mAddFieldButton.setVisibility(View.VISIBLE);
+                                mListener.OnEnableActions(true);
                             }
                             else {
                                 setErrorState();
@@ -508,10 +511,11 @@ public class CreateAccountFragment extends AbstractFragment {
         final FieldCell fieldCell = new FieldCell(getActivity());
         fieldCell.setField(field.getField(), field.getDefaultValue());
         fieldCell.setOnSwipeListener(mSwipeListener);
+        fieldCell.setSwipeEnabled(true);
         mFieldsLayout.addView(fieldCell);
     }
 
-    private void emptyFields() {
+    private void removeFields() {
         mFieldsLayout.removeAllViews();
     }
 
