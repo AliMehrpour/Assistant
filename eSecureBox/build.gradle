@@ -48,4 +48,6 @@ dependencies {
     compile('com.crashlytics.sdk.android:crashlytics:2.5.1@aar') {
         transitive = true;
     }
+
+    compile 'com.wdullaer:materialdatetimepicker:1.4.2'
 }

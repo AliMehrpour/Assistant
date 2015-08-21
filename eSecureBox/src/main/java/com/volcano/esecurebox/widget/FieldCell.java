@@ -6,6 +6,7 @@ import android.animation.AnimatorListenerAdapter;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
+import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.res.TypedArray;
@@ -37,8 +38,11 @@ import com.volcano.esecurebox.security.PasswordGenerator;
 import com.volcano.esecurebox.util.BitmapUtils;
 import com.volcano.esecurebox.util.LogUtils;
 import com.volcano.esecurebox.util.Utils;
+import com.wdullaer.materialdatetimepicker.date.DatePickerDialog;
+import com.wdullaer.materialdatetimepicker.date.DatePickerDialog.OnDateSetListener;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 /**
@@ -49,7 +53,6 @@ public final class FieldCell extends FrameLayout {
 
     public final static int TYPE_STRING                  = 1;
     public final static int TYPE_STRING_MULTILINE        = 2;
-    @SuppressWarnings("unused")
     public final static int TYPE_DATE                    = 3;
     public final static int TYPE_PASSWORD_NUMBER         = 4;
     public final static int TYPE_PASSWORD                = 5;
@@ -67,6 +70,7 @@ public final class FieldCell extends FrameLayout {
     private static final int ACTION_GENERATE_PASSWORD    = 1;
     private static final int ACTION_SHOW_LIST            = 2;
     private static final int ACTION_VISIBLE_PASSWORD     = 3;
+    private static final int ACTION_PICK_DATE            = 4;
 
     private ImageView mIcon;
     private View mDividerLine;
@@ -125,7 +129,7 @@ public final class FieldCell extends FrameLayout {
         init(context, attrs);
     }
 
-    private void init(Context context, AttributeSet attrs) {
+    private void init(final Context context, AttributeSet attrs) {
         final LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         inflater.inflate(R.layout.widget_field_cell, this, true);
 
@@ -147,7 +151,7 @@ public final class FieldCell extends FrameLayout {
             mHintTextView.setPadding(getResources().getDimensionPixelSize(R.dimen.margin_16), 0, 0, 0);
         }
 
-        //mHintTextView.setAlpha(0);
+        mHintTextView.setAlpha(0);
         mEditText.setOnFocusChangeListener(new OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
@@ -173,6 +177,18 @@ public final class FieldCell extends FrameLayout {
                             mEditText.setText(mListItems.get(which));
                         }
                     }).show();
+                }
+                else if (mAction1 == ACTION_PICK_DATE) {
+                    final Calendar now = Utils.parseDate(mEditText.getText().toString());
+                    final DatePickerDialog datePickerDialog = DatePickerDialog.newInstance(new OnDateSetListener() {
+                                @Override
+                                public void onDateSet(DatePickerDialog view, int year, int monthOfYear, int dayOfMonth) {
+                                    mEditText.setText(Utils.getCompleteDate(year, monthOfYear, dayOfMonth));
+                                }
+                            }, now.get(Calendar.YEAR), now.get(Calendar.MONTH), now.get(Calendar.DAY_OF_MONTH));
+                    datePickerDialog.vibrate(true);
+                    datePickerDialog.setHighlightedDays(new Calendar[]{now});
+                    datePickerDialog.show(((Activity) context).getFragmentManager(), "DatePickerDialog");
                 }
             }
         });
@@ -372,6 +388,7 @@ public final class FieldCell extends FrameLayout {
         if (!mReadOnly) {
             setGeneratePasswordAction();
             setListAction();
+            setDateAction();
         }
     }
 
@@ -440,6 +457,15 @@ public final class FieldCell extends FrameLayout {
         }
     }
 
+    private void setDateAction() {
+        if (mInputType == TYPE_DATE) {
+            mAction1 = ACTION_PICK_DATE;
+
+            mAction1Button.setImageResource(R.drawable.icon_pick_date);
+            mAction1Button.setVisibility(VISIBLE);
+        }
+    }
+
     private void setInputType(int inputType) {
         mInputType = inputType;
 
@@ -471,7 +497,7 @@ public final class FieldCell extends FrameLayout {
 
             case TYPE_URL:
                 mEditText.setInputType(defaultInputType);
-                if (!isFocusable()) {
+                if (!mEditText.isFocusable()) {
                     Linkify.addLinks(mEditText, Linkify.WEB_URLS);
                 }
                 break;
