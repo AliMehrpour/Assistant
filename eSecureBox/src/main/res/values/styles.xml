@@ -44,8 +44,10 @@
         <item name="android:layout_height">@dimen/passcode_button_height</item>
         <item name="android:layout_width">0dp</item>
         <item name="android:layout_weight">1</item>
+        <item name="robotoTypeface">regular</item>
         <item name="android:textSize">@dimen/text_size_25</item>
         <item name="android:textColor">@color/grey_6</item>
+        <item name="android:background">@drawable/selector_button_passcode</item>
     </style>
 
     <style name="ButtonDialog" parent="@android:style/TextAppearance.Holo">
@@ -153,12 +155,6 @@
         <item name="robotoTypeface">regular</item>
     </style>
 
-    <style name="Text.RegularDark16" parent="@android:style/TextAppearance.Holo">
-        <item name="android:textSize">@dimen/text_size_16</item>
-        <item name="android:textColor">@color/grey_4</item>
-        <item name="robotoTypeface">regular</item>
-    </style>
-
     <style name="Text.RegularDarker16" parent="Text.RegularDark16">
         <item name="android:textColor">@color/grey_9</item>
     </style>
@@ -169,9 +165,9 @@
         <item name="robotoTypeface">regular</item>
     </style>
 
-    <style name="Text.RegularDark20" parent="@android:style/TextAppearance.Holo">
+    <style name="Text.RegularDark16" parent="@android:style/TextAppearance.Holo">
         <item name="android:textColor">@color/grey_6</item>
-        <item name="android:textSize">@dimen/text_size_20</item>
+        <item name="android:textSize">@dimen/text_size_16</item>
         <item name="robotoTypeface">regular</item>
     </style>
 
