@@ -57,9 +57,9 @@
     <dimen name="navigation_profile_image_height">164dp</dimen>
     <dimen name="navigation_width">-.5dp</dimen>
 
-    <dimen name="passcode_button_height">65dp</dimen>
+    <dimen name="passcode_button_height">75dp</dimen>
     <dimen name="passcode_edit_height">70dp</dimen>
-    <dimen name="passcode_edit_width">70dp</dimen>
+    <dimen name="passcode_edit_width">50dp</dimen>
 
     <dimen name="signup_horizontal_margin">40dp</dimen>
 
