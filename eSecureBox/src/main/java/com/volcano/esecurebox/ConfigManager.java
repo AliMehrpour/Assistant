@@ -119,7 +119,7 @@ public class ConfigManager {
      * @return The query time out of Parse Queries
      */
     public int getQueryTimeOut() {
-        return !mConnected || isNetworkFast() ? 5000 : 10000;
+        return !mConnected || isNetworkFast() ? 30 * 1000 : 60 * 1000;
     }
 
     private class ConnectivityReceiver extends BroadcastReceiver {

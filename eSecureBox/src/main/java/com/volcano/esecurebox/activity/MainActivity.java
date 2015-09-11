@@ -66,8 +66,12 @@ public class MainActivity extends AbstractActivity {
             @Override
             public void onCategorySelected(String categoryId, String title) {
                 setTitle(title);
-                loadAccounts(categoryId);
                 mCreateAccountMenu.collapse();
+
+                if (!mCategoryId.equals(categoryId)) {
+                    loadAccounts(categoryId);
+                }
+
             }
         });
 

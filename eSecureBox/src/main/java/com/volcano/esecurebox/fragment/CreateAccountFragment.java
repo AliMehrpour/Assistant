@@ -59,7 +59,7 @@ public class CreateAccountFragment extends AbstractFragment {
     private final ArrayList<SubCategoryField> mFields = new ArrayList<>();
     private Account mAccount;
     private SubCategory mSelectedSubCategory;
-    private Pair<Integer, FieldCell> mLastRemovedFieldCell;
+    private Pair<SubCategoryField, FieldCell> mLastRemovedFieldCell;
     private String mSelectedSubCategoryId;
     private ContentSource mContentSource;
     private int mSavedFieldCount = 0;
@@ -79,8 +79,10 @@ public class CreateAccountFragment extends AbstractFragment {
 
     private final OnFieldSwipeListener mSwipeListener = new OnFieldSwipeListener() {
         @Override
-        public void onSwiped(FieldCell fieldCell) {
-            mLastRemovedFieldCell = new Pair<>(Integer.parseInt(fieldCell.getTag().toString()), fieldCell);
+        public void onSwiped(final FieldCell fieldCell) {
+            final int index = Integer.parseInt(fieldCell.getTag().toString());
+            mLastRemovedFieldCell = new Pair<>(mFields.get(index), fieldCell);
+            mFields.remove(index);
             mFieldsScrollView.requestDisallowInterceptTouchEvent(false);
 
             final Snackbar snackbar = Snackbar.make(mSnackbarLayout, R.string.snackbar_text_field_deleted, Snackbar.LENGTH_LONG)
@@ -88,8 +90,11 @@ public class CreateAccountFragment extends AbstractFragment {
                     .setAction(R.string.snackbar_action_undo, new OnClickListener() {
                         @Override
                         public void onClick(View v) {
+                            final SubCategoryField removedSubCategoryField = mLastRemovedFieldCell.first;
                             final FieldCell removedCell = mLastRemovedFieldCell.second;
-                            mFieldsLayout.addView(mLastRemovedFieldCell.second, mLastRemovedFieldCell.first);
+                            final int index = Integer.parseInt(removedCell.getTag().toString());
+                            mFieldsLayout.addView(removedCell, index);
+                            mFields.add(index, removedSubCategoryField);
                             removedCell.resetPosition();
                             mLastRemovedFieldCell = null;
                         }
@@ -483,7 +488,6 @@ public class CreateAccountFragment extends AbstractFragment {
                                     final AccountFieldValue value = mAccountFieldValues.get(i);
                                     final FieldCell fieldCell = new FieldCell(getActivity());
                                     fieldCell.setField(value.getField(), value.getValue());
-                                    fieldCell.setOnSwipeListener(mSwipeListener);
                                     mFieldsLayout.addView(fieldCell);
                                 }
 
