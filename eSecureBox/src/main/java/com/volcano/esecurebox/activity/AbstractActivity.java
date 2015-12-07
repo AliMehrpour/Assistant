@@ -94,12 +94,14 @@ public class AbstractActivity extends AppCompatActivity {
         }
     }
 
+    @SuppressWarnings("ConstantConditions")
     protected void setActionbar(Toolbar toolbar) {
         toolbar.setTitleTextAppearance(this, R.style.Toolbar_Title);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
 
+    @SuppressWarnings("unused")
     protected void addCancellingRequest(ParseQuery query) {
         Managers.getParseManager().getRequestManager().addRequest(this, query);
     }

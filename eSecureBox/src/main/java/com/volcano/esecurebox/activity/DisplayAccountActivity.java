@@ -20,7 +20,7 @@ import com.volcano.esecurebox.widget.FloatingActionButton;
 /**
  * Display a account values
  */
-public class DisplayAccountActivity extends AbstractActivity {
+public final class DisplayAccountActivity extends AbstractActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

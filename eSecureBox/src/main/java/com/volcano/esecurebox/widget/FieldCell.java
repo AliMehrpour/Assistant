@@ -88,6 +88,8 @@ public final class FieldCell extends FrameLayout {
     private int mAction2;
     private boolean mReadOnly;
     private Field mField;
+    private String mOriginalValue = "";
+    private int mIndex;
 
     private int mStartX;
     private int mDelta;
@@ -171,12 +173,14 @@ public final class FieldCell extends FrameLayout {
                     toggleEyeButton();
                 }
                 else if (mAction1 == ACTION_SHOW_LIST && mListItems.size() > 0) {
-                    new AlertDialogWrapper.Builder(getContext()).setTitle(mHintTextView.getText()).setItems(mListItems.toArray(new CharSequence[mListItems.size()]), new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            mEditText.setText(mListItems.get(which));
-                        }
-                    }).show();
+                    new AlertDialogWrapper.Builder(getContext())
+                            .setTitle(mHintTextView.getText())
+                            .setItems(mListItems.toArray(new CharSequence[mListItems.size()]), new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    mEditText.setText(mListItems.get(which));
+                                }
+                            }).show();
                 }
                 else if (mAction1 == ACTION_PICK_DATE) {
                     final Calendar now = Utils.parseDate(mEditText.getText().toString());
@@ -289,12 +293,19 @@ public final class FieldCell extends FrameLayout {
     }
 
     /**
+     * @return True if orignial value has been changes, otherwise false
+     */
+    public boolean isValueChanged() {
+        return !mEditText.getText().toString().equals(mOriginalValue);
+    }
+
+    /**
      * Set the field
      * @param field The field
      * @param value The value
      */
-    public void setField(Field field, String value) {
-        setField(field, value, false);
+    public void setField(Field field, String value, int index) {
+        setField(field, value, index, false);
     }
 
     /**
@@ -303,9 +314,11 @@ public final class FieldCell extends FrameLayout {
      * @param value The value
      * @param readonly True if field is readonly, false otherwise
      */
-    public void setField(Field field, String value, boolean readonly) {
+    public void setField(Field field, String value, int index, boolean readonly) {
         mReadOnly = readonly;
         mField = field;
+        mOriginalValue = value;
+        mIndex = index;
 
         setEnabled(!readonly);
         setIcon(field.getIconName(), field.getName().charAt(0), getResources().getColor(R.color.grey_1));
@@ -572,7 +585,7 @@ public final class FieldCell extends FrameLayout {
 
     private void removeItself() {
         final ViewGroup parent = (ViewGroup) getParent();
-        setTag(parent.indexOfChild(this));
+        setTag(mIndex);
         parent.removeView(this);
         mSwipeListener.onSwiped(this);
     }

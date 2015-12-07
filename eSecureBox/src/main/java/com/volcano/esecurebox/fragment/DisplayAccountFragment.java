@@ -26,7 +26,7 @@ import java.util.List;
 /**
  * Edit account fragment
  */
-public class DisplayAccountFragment extends AbstractFragment {
+public final class DisplayAccountFragment extends AbstractFragment {
 
     private LinearLayout mFieldLayout;
     private FrameLayout mProgress;
@@ -79,7 +79,7 @@ public class DisplayAccountFragment extends AbstractFragment {
                                 for (int i = 0; i < size; i++) {
                                     final AccountFieldValue value = mFieldValues.get(i);
                                     final FieldCell fieldCell = new FieldCell(getActivity());
-                                    fieldCell.setField(value.getField(), value.getValue(), true);
+                                    fieldCell.setField(value.getField(), value.getValue(), i, true);
                                     mFieldLayout.addView(fieldCell);
                                 }
 

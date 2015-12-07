@@ -4,7 +4,6 @@ package com.volcano.esecurebox.fragment;
 import android.app.Activity;
 import android.app.DialogFragment;
 import android.app.FragmentManager;
-import android.content.DialogInterface;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.design.widget.CoordinatorLayout;
@@ -24,7 +23,6 @@ import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
-import com.afollestad.materialdialogs.AlertDialogWrapper;
 import com.parse.DeleteCallback;
 import com.parse.FindCallback;
 import com.parse.GetCallback;
@@ -55,13 +53,10 @@ import java.util.List;
  */
 public class CreateAccountFragment extends AbstractFragment {
 
-    private final ArrayList<AccountFieldValue> mAccountFieldValues = new ArrayList<>();
     private final ArrayList<SubCategoryField> mFields = new ArrayList<>();
-    private Account mAccount;
     private SubCategory mSelectedSubCategory;
-    private Pair<SubCategoryField, FieldCell> mLastRemovedFieldCell;
+    private Pair<Object, FieldCell> mLastRemovedFieldCell;
     private String mSelectedSubCategoryId;
-    private ContentSource mContentSource;
     private int mSavedFieldCount = 0;
 
     private FragmentManager mFragmentManager;
@@ -81,7 +76,7 @@ public class CreateAccountFragment extends AbstractFragment {
         @Override
         public void onSwiped(final FieldCell fieldCell) {
             final int index = Integer.parseInt(fieldCell.getTag().toString());
-            mLastRemovedFieldCell = new Pair<>(mFields.get(index), fieldCell);
+            mLastRemovedFieldCell = new Pair<Object, FieldCell>(mFields.get(index), fieldCell);
             mFields.remove(index);
             mFieldsScrollView.requestDisallowInterceptTouchEvent(false);
 
@@ -90,7 +85,7 @@ public class CreateAccountFragment extends AbstractFragment {
                     .setAction(R.string.snackbar_action_undo, new OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            final SubCategoryField removedSubCategoryField = mLastRemovedFieldCell.first;
+                            final SubCategoryField removedSubCategoryField = (SubCategoryField) mLastRemovedFieldCell.first;
                             final FieldCell removedCell = mLastRemovedFieldCell.second;
                             final int index = Integer.parseInt(removedCell.getTag().toString());
                             mFieldsLayout.addView(removedCell, index);
@@ -124,11 +119,6 @@ public class CreateAccountFragment extends AbstractFragment {
      */
     public interface OnEnableActionsListener {
         void OnEnableActions(boolean enable);
-    }
-
-    public enum ContentSource {
-        BY_CATEGORY,
-        BY_ACCOUNT
     }
 
     @Override
@@ -235,7 +225,6 @@ public class CreateAccountFragment extends AbstractFragment {
      * @param categoryColor The category color
      */
     public void setCategoryId(String categoryId, String categoryColor) {
-        mContentSource = ContentSource.BY_CATEGORY;
         mSubCategoryLayout.setVisibility(View.VISIBLE);
         mSubCategoryListLayout.setVisibility(View.VISIBLE);
         mSubCategoryListFragment.setCategoryId(categoryId);
@@ -243,162 +232,88 @@ public class CreateAccountFragment extends AbstractFragment {
     }
 
     /**
-     * Set accountId and load account
-     * @param accountId The accountId
-     */
-    public void setAccountId(String accountId) {
-        mContentSource = ContentSource.BY_ACCOUNT;
-        mSubCategoryListLayout.setVisibility(View.GONE);
-        loadFieldsByAccount(accountId);
-    }
-
-    /**
      * Save the account
      */
     public void save() {
         if (valid()) {
-            if (mContentSource == ContentSource.BY_CATEGORY) {
-                mProgressLayout.setVisibility(View.VISIBLE);
-                mListener.OnEnableActions(false);
+            mProgressLayout.setVisibility(View.VISIBLE);
+            mListener.OnEnableActions(false);
 
-                mAccount = new Account();
-                mAccount.setTitle(mAccountTitle.getText().toString());
-                mAccount.setSubCategory(mSelectedSubCategory);
-                mAccount.setUser(Managers.getAccountManager().getCurrentUser());
-                mAccount.save(new SaveCallback() {
-                    @Override
-                    public void done(ParseException e) {
-                        if (e == null) {
-                            LogUtils.LogI(TAG, "New account successfully saved");
+            final Account account = new Account();
+            account.setTitle(mAccountTitle.getText().toString());
+            account.setSubCategory(mSelectedSubCategory);
+            account.setUser(Managers.getAccountManager().getCurrentUser());
+            account.save(new SaveCallback() {
+                @Override
+                public void done(ParseException e) {
+                    if (e == null) {
+                        LogUtils.LogI(TAG, "New account successfully saved");
 
-                            mSavedFieldCount = 0;
-                            final int size = mFields.size();
-                            for (int i = 0; i < size; i++) {
-                                final FieldCell fieldCell = (FieldCell) mFieldsLayout.getChildAt(i);
+                        mSavedFieldCount = 0;
+                        final ArrayList<AccountFieldValue> accountFieldValues = new ArrayList<>();
+                        final int size = mFields.size();
+                        for (int i = 0; i < size; i++) {
+                            final FieldCell fieldCell = (FieldCell) mFieldsLayout.getChildAt(i);
 
-                                final AccountFieldValue value = new AccountFieldValue();
-                                final SubCategoryField field = mFields.get(i);
-                                value.setAccount(mAccount);
-                                value.setField(field.getField());
-                                value.setValue(fieldCell.getValue());
-                                value.setOrder(i + 1); // Set order based on user input
-                                value.save(new SaveCallback() {
-                                    @Override
-                                    public void done(ParseException e) {
-                                        if (e == null) {
-                                            mSavedFieldCount++;
-                                            checkDone();
-                                        }
-                                        else {
-                                            LogUtils.LogI(TAG, "Save account failed", e);
-                                            Utils.showToast(R.string.toast_account_save_failed);
-                                            delete();
-                                        }
-                                    }
-                                });
-                            }
-                        }
-                        else {
-                            LogUtils.LogI(TAG, "Save account failed", e);
-                            Utils.showToast(R.string.toast_account_save_failed);
-                            mProgressLayout.setVisibility(View.GONE);
-                            mListener.OnEnableActions(true);
-                        }
-                    }
-                });
-            }
-            else {
-                mProgressLayout.setVisibility(View.VISIBLE);
-                mListener.OnEnableActions(false);
-
-                mAccount.setTitle(mAccountTitle.getText().toString());
-                mAccount.save(new SaveCallback() {
-                    @Override
-                    public void done(ParseException e) {
-                        if (e == null) {
-                            LogUtils.LogI(TAG, "account updated successfully");
-
-                            mSavedFieldCount = 0;
-                            final int size = mAccountFieldValues.size();
-                            for (int i = 0; i < size; i++) {
-                                final FieldCell fieldCell = (FieldCell) mFieldsLayout.getChildAt(i);
-
-                                final AccountFieldValue value = mAccountFieldValues.get(i);
-                                value.setValue(fieldCell.getValue());
-                                value.save(new SaveCallback() {
-                                    @Override
-                                    public void done(ParseException e) {
-                                        if (e == null) {
-                                            mSavedFieldCount++;
-                                            checkDone();
-                                        }
-                                        else {
-                                            LogUtils.LogI(TAG, "Update account failed", e);
-                                            Utils.showToast(R.string.toast_account_update_failed);
-                                            mProgressLayout.setVisibility(View.GONE);
-                                            mListener.OnEnableActions(true);
-                                        }
-                                    }
-                                });
-                            }
-                        }
-                        else {
-                            LogUtils.LogI(TAG, "Update account failed", e);
-                            Utils.showToast(R.string.toast_account_update_failed);
-                            mProgressLayout.setVisibility(View.GONE);
-                            mListener.OnEnableActions(true);
-                        }
-                    }
-                });
-
-            }
-        }
-    }
-
-    /**
-     * Delete loaded account with related fields
-     */
-    public void delete() {
-        if (mAccount != null) {
-            new AlertDialogWrapper.Builder(getActivity())
-                    .setMessage(R.string.alert_delete_account)
-                    .setNegativeButton(android.R.string.cancel, null)
-                    .setPositiveButton(R.string.button_delete_uppercase, new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            mProgressLayout.setVisibility(View.VISIBLE);
-                            mAccount.remove(mAccountFieldValues, new DeleteCallback() {
+                            final AccountFieldValue value = new AccountFieldValue();
+                            final SubCategoryField field = mFields.get(i);
+                            value.setAccount(account);
+                            value.setField(field.getField());
+                            value.setValue(fieldCell.getValue());
+                            value.setOrder(i + 1); // Set order based on user input
+                            value.save(new SaveCallback() {
                                 @Override
                                 public void done(ParseException e) {
                                     if (e == null) {
-                                        Utils.showToast(R.string.toast_account_delete_successful);
-                                        mProgressLayout.setVisibility(View.GONE);
-                                        if (getActivity() != null) {
-                                            getActivity().finish();
-                                            startActivity(Intents.getMainIntent());
-                                        }
+                                        mSavedFieldCount++;
+                                        checkDone();
                                     }
                                     else {
-                                        LogUtils.LogE(TAG, "Delete account failed");
-                                        Utils.showToast(R.string.toast_account_delete_failed);
-                                        mProgressLayout.setVisibility(View.GONE);
-                                        mListener.OnEnableActions(true);
+                                        LogUtils.LogI(TAG, "Save account failed", e);
+                                        Utils.showToast(R.string.toast_account_save_failed);
+
+                                        account.remove(accountFieldValues, new DeleteCallback() {
+                                            @Override
+                                            public void done(ParseException e) {
+                                                if (e == null) {
+                                                    Utils.showToast(R.string.toast_account_delete_successful);
+                                                    mProgressLayout.setVisibility(View.GONE);
+                                                    if (getActivity() != null) {
+                                                        getActivity().finish();
+                                                        startActivity(Intents.getMainIntent());
+                                                    }
+                                                }
+                                                else {
+                                                    LogUtils.LogE(TAG, "Delete account failed");
+                                                    Utils.showToast(R.string.toast_account_delete_failed);
+                                                    mProgressLayout.setVisibility(View.GONE);
+                                                    mListener.OnEnableActions(true);
+                                                }
+                                            }
+                                        });
                                     }
                                 }
                             });
+                            accountFieldValues.add(value);
                         }
-                    })
-                    .show();
+                    }
+                    else {
+                        LogUtils.LogI(TAG, "Save account failed", e);
+                        Utils.showToast(R.string.toast_account_save_failed);
+                        mProgressLayout.setVisibility(View.GONE);
+                        mListener.OnEnableActions(true);
+                    }
+                }
+            });
         }
     }
 
     private void checkDone() {
-        if (mSavedFieldCount == (mContentSource == ContentSource.BY_CATEGORY ?
-                mFields.size() : mAccountFieldValues.size())) {
+        if (mSavedFieldCount == mFields.size()) {
             mProgressLayout.setVisibility(View.GONE);
             if (getActivity() != null) {
-                getActivity().finish();
                 startActivity(Intents.getMainIntent());
+                getActivity().finish();
             }
         }
     }
@@ -428,7 +343,7 @@ public class CreateAccountFragment extends AbstractFragment {
             valid = false;
             Utils.showToast(R.string.toast_account_save_validation_title_empty);
         }
-        else if ((mContentSource == ContentSource.BY_CATEGORY ? mFields.size() : mAccountFieldValues.size()) == 0) {
+        else if (mFields.size() == 0) {
             valid = false;
             Utils.showToast(R.string.toast_account_save_validation_no_field);
         }
@@ -439,70 +354,24 @@ public class CreateAccountFragment extends AbstractFragment {
     private void loadFieldsBySubCategory() {
         mProgressLayout.setVisibility(View.VISIBLE);
         mListener.OnEnableActions(false);
-        SubCategoryField.getFieldBySubCategory(this, mSelectedSubCategory,
-                new FindCallback<SubCategoryField>() {
-                    @Override
-                    public void done(List<SubCategoryField> subCategoryFields, ParseException e) {
-                        if (e == null) {
-                            // PopulateFields
-                            mFieldsLayout.setVisibility(View.INVISIBLE);
-                            mFields.clear();
-                            mFields.addAll(subCategoryFields);
-                            final int size = mFields.size();
-                            for (int i = 0; i < size; i++) {
-                                addToFieldsLayout(mFields.get(i));
-                            }
-
-                            mProgressLayout.setVisibility(View.GONE);
-                            mAccountTitle.setVisibility(View.VISIBLE);
-                            mFieldsLayout.setVisibility(View.VISIBLE);
-                            mAddFieldButton.setVisibility(View.VISIBLE);
-                            mListener.OnEnableActions(true);
-                        }
-                        else {
-                            setErrorState();
-                        }
-                    }
-                });
-    }
-
-    private void loadFieldsByAccount(String accountId) {
-        mProgressLayout.setVisibility(View.VISIBLE);
-        mListener.OnEnableActions(false);
-        Account.getFirstInBackground(this, accountId, new GetCallback<Account>() {
+        SubCategoryField.getFieldBySubCategory(this, mSelectedSubCategory, new FindCallback<SubCategoryField>() {
             @Override
-            public void done(Account account, ParseException e) {
+            public void done(List<SubCategoryField> subCategoryFields, ParseException e) {
                 if (e == null) {
-                    mAccount = account;
-                    setSubCategory(account.getSubCategory());
-                    mAccountTitle.setText(account.getTitle());
-                    AccountFieldValue.findInBackground(this, account, new FindCallback<AccountFieldValue>() {
-                        @Override
-                        public void done(List<AccountFieldValue> accountFieldValues, ParseException e) {
-                            if (e == null) {
-                                mAccountFieldValues.clear();
-                                mAccountFieldValues.addAll(accountFieldValues);
+                    // PopulateFields
+                    mFieldsLayout.setVisibility(View.INVISIBLE);
+                    mFields.clear();
+                    mFields.addAll(subCategoryFields);
+                    final int size = mFields.size();
+                    for (int i = 0; i < size; i++) {
+                        addToFieldsLayout(mFields.get(i), i);
+                    }
 
-                                final int size = mAccountFieldValues.size();
-                                for (int i = 0; i < size; i++) {
-                                    final AccountFieldValue value = mAccountFieldValues.get(i);
-                                    final FieldCell fieldCell = new FieldCell(getActivity());
-                                    fieldCell.setField(value.getField(), value.getValue());
-                                    mFieldsLayout.addView(fieldCell);
-                                }
-
-                                mSubCategoryLayout.setVisibility(View.VISIBLE);
-                                mProgressLayout.setVisibility(View.GONE);
-                                mAccountTitle.setVisibility(View.VISIBLE);
-                                mFieldsLayout.setVisibility(View.VISIBLE);
-                                mAddFieldButton.setVisibility(View.VISIBLE);
-                                mListener.OnEnableActions(true);
-                            }
-                            else {
-                                setErrorState();
-                            }
-                        }
-                    });
+                    mProgressLayout.setVisibility(View.GONE);
+                    mAccountTitle.setVisibility(View.VISIBLE);
+                    mFieldsLayout.setVisibility(View.VISIBLE);
+                    mAddFieldButton.setVisibility(View.VISIBLE);
+                    mListener.OnEnableActions(true);
                 }
                 else {
                     setErrorState();
@@ -511,9 +380,9 @@ public class CreateAccountFragment extends AbstractFragment {
         });
     }
 
-    private void addToFieldsLayout(SubCategoryField field) {
+    private void addToFieldsLayout(SubCategoryField field, int index) {
         final FieldCell fieldCell = new FieldCell(getActivity());
-        fieldCell.setField(field.getField(), field.getDefaultValue());
+        fieldCell.setField(field.getField(), field.getDefaultValue(), index);
         fieldCell.setOnSwipeListener(mSwipeListener);
         fieldCell.setSwipeEnabled(true);
         mFieldsLayout.addView(fieldCell);
@@ -527,8 +396,7 @@ public class CreateAccountFragment extends AbstractFragment {
         LogUtils.LogE(TAG, "Load account/fields failed");
         mProgressLayout.setVisibility(View.GONE);
         mFieldsLayout.setVisibility(View.GONE);
-        Utils.showToast(mContentSource == ContentSource.BY_ACCOUNT ?
-                R.string.toast_account_load_failed : R.string.toast_account_create_failed);
+        Utils.showToast(R.string.toast_account_create_failed);
 
         final Activity activity = getActivity();
         if (activity != null) {
@@ -539,22 +407,20 @@ public class CreateAccountFragment extends AbstractFragment {
     private void addMoreField(List<Field> fields) {
         for(final Field field : fields) {
             final SubCategoryField subCategoryField = new SubCategoryField(mSelectedSubCategory, field);
+            addToFieldsLayout(subCategoryField, mFields.size());
             mFields.add(subCategoryField);
-            addToFieldsLayout(subCategoryField);
         }
 
         scrollToDown();
     }
 
     private void scrollToDown() {
-        // TODO: Check why it doesn't work or use ListView instead!
-        /*new Thread(new Runnable() {
+        mFieldsScrollView.post(new Runnable() {
             @Override
             public void run() {
                 mFieldsScrollView.fullScroll(ScrollView.FOCUS_DOWN);
             }
-        }).start();*/
-    }
+        });    }
 
     public class AddFieldDialog extends DialogFragment {
 

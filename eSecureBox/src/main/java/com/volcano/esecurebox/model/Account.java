@@ -89,30 +89,25 @@ public class Account extends ParseObject {
      * @param objects The AccountFieldValue objects
      * @param callback The callback
      */
-    public void remove(List<AccountFieldValue> objects, final DeleteCallback callback) {
-        AccountFieldValue.remove(objects, new DeleteCallback() {
+    public void remove(final List<AccountFieldValue> values, final DeleteCallback callback) {
+        final DeleteCallback deleteCallback = new DeleteCallback() {
             @Override
             public void done(ParseException e) {
                 if (e == null) {
-                    final DeleteCallback deleteCallback = new DeleteCallback() {
-                        @Override
-                        public void done(ParseException e) {
-                            callback.done(e);
-                        }
-                    };
-
-                    if (ParseManager.isLocalDatabaseActive()) {
-                        unpinInBackground(deleteCallback);
-                    }
-                    else {
-                        deleteInBackground(deleteCallback);
-                    }
+                    AccountFieldValue.remove(values, callback);
                 }
                 else {
                     callback.done(e);
                 }
             }
-        });
+        };
+
+        if (ParseManager.isLocalDatabaseActive()) {
+            unpinAllInBackground(deleteCallback);
+        }
+        else {
+            deleteInBackground(deleteCallback);
+        }
     }
 
     public String getTitle() {

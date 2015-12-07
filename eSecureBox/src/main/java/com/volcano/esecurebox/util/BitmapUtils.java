@@ -1,12 +1,13 @@
 // Copyright (c) 2015 Volcano. All rights reserved.
 package com.volcano.esecurebox.util;
 
+import android.annotation.TargetApi;
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
-import android.os.Build.VERSION;
 import android.os.Build.VERSION_CODES;
+import android.view.View;
 
 import com.volcano.esecurebox.VlApplication;
 import com.volcano.esecurebox.model.Field;
@@ -59,13 +60,30 @@ public final class BitmapUtils {
      * Return a drawable object associated with a particular resource ID
      * @param id The desired resource identifier
      */
+    @TargetApi(VERSION_CODES.LOLLIPOP)
     public static Drawable getDrawable(int id) {
-        if (VERSION.SDK_INT >= VERSION_CODES.LOLLIPOP) {
+        if (Utils.hasLollipopApi()) {
             return VlApplication.getInstance().getResources().getDrawable(id, null);
         }
         else {
             //noinspection deprecation
             return VlApplication.getInstance().getResources().getDrawable(id);
+        }
+    }
+
+    /**
+     * Set a drawable as view background
+     * @param view The view
+     * @param drawable The {@link Drawable} object
+     */
+    @TargetApi(VERSION_CODES.JELLY_BEAN)
+    public static void setBackground(View view, Drawable drawable) {
+        if (Utils.hasJellyBeanApi()) {
+            view.setBackground(drawable);
+        }
+        else {
+            //noinspection deprecation
+            view.setBackgroundDrawable(drawable);
         }
     }
 

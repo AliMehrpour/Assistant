@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Copyright (c) 2015 Volcano. All rights reserved. -->
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:tools="http://schemas.android.com/tools"
+                android:id="@+id/root"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+    <include
+        android:id="@+id/toolbar"
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:layout_alignParentTop="true"
+        layout="@layout/toolbar" />
+
+    <com.volcano.esecurebox.widget.RobotoTextView
+        android:id="@+id/text_delete"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:text="@string/button_delete_uppercase"
+        style="@style/ButtonFullWidth" />
+
+    <fragment
+        android:id="@+id/fragment_edit_account"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/toolbar"
+        android:layout_above="@id/text_delete"
+        android:name="com.volcano.esecurebox.fragment.EditAccountFragment"
+        tools:layout="@layout/fragment_create_account"/>
+
+</RelativeLayout>
