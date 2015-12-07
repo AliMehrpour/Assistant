@@ -24,6 +24,14 @@ public class AccountFieldValue extends ParseObject {
     private static final String VALUE       = "value";
     private static final String ORDER       = "order";
 
+    private Status mStatus = Status.EXIST;
+
+    public enum Status {
+        EXIST,
+        ADDED,
+        REMOVED,
+    }
+
     public static ParseQuery findInBackground(Object tag, Account account, final FindCallback<AccountFieldValue> callback) {
         final ParseQuery<AccountFieldValue> query = getQuery();
         query.whereEqualTo(ACCOUNT, account);
@@ -64,6 +72,22 @@ public class AccountFieldValue extends ParseObject {
         }
     }
 
+    public void remove(final DeleteCallback callback) {
+        final DeleteCallback deleteCallback = new DeleteCallback() {
+            @Override
+            public void done(ParseException e) {
+                callback.done(e);
+            }
+        };
+
+        if (ParseManager.isLocalDatabaseActive()) {
+            unpinAllInBackground(deleteCallback);
+        }
+        else {
+            deleteInBackground(deleteCallback);
+        }
+    }
+
     public static void remove(List<AccountFieldValue> objects, final DeleteCallback callback) {
         final DeleteCallback deleteCallback = new DeleteCallback() {
             @Override
@@ -78,6 +102,15 @@ public class AccountFieldValue extends ParseObject {
         else {
             deleteAllInBackground(objects, deleteCallback);
         }
+    }
+
+    public AccountFieldValue() {
+    }
+
+    public AccountFieldValue(Account account, Field field, Status status) {
+        put(ACCOUNT, account);
+        put(FIELD, field);
+        mStatus = status;
     }
 
     public Account getAccount() {
@@ -106,5 +139,17 @@ public class AccountFieldValue extends ParseObject {
 
     public void setOrder(int order) {
         put(ORDER, order);
+    }
+
+    public int getOrder() {
+        return getInt(ORDER);
+    }
+
+    public Status getStatus() {
+        return mStatus;
+    }
+
+    public void setStatus(Status status) {
+        mStatus = status;
     }
 }

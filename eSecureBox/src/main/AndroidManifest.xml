@@ -4,7 +4,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.volcano.esecurebox"
     android:versionCode="1"
-    android:versionName="1.0.0">
+    android:versionName="1.2.0">
 
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.INTERNET" />
@@ -26,14 +26,23 @@
             </intent-filter>
         </activity>
 
-        <activity android:name="com.volcano.esecurebox.activity.CreateAccountActivity"
-              android:windowSoftInputMode="adjustResize"
-              android:screenOrientation="portrait" />
+        <activity
+            android:name="com.volcano.esecurebox.activity.CreateAccountActivity"
+            android:label="@string/label_new_account"
+            android:windowSoftInputMode="adjustResize"
+            android:screenOrientation="portrait" />
 
-        <activity android:name="com.volcano.esecurebox.activity.DisplayAccountActivity"
-              android:screenOrientation="portrait"/>
+        <activity
+            android:name="com.volcano.esecurebox.activity.DisplayAccountActivity"
+            android:screenOrientation="portrait"/>
 
-        <activity android:name="com.volcano.esecurebox.activity.SigninActivity"
+        <activity
+            android:name="com.volcano.esecurebox.activity.EditAccountActivity"
+            android:label="@string/label_edit_account"
+            android:screenOrientation="portrait"/>
+
+        <activity
+            android:name="com.volcano.esecurebox.activity.SigninActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateAlwaysHidden" />
 
@@ -57,6 +66,10 @@
             android:writePermission="com.volcano.assistant.permission.WRITE"
             android:label="@string/app_name"
             android:syncable="true" />
+
+        <meta-data
+            android:name="com.crashlytics.ApiKey"
+            android:value="1f2b7a3e08c00396c46dfba2caa0d8f04f322d07" />
 
     </application>
 

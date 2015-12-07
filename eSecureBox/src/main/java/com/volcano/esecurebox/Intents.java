@@ -5,6 +5,7 @@ import android.content.Intent;
 
 import com.volcano.esecurebox.activity.CreateAccountActivity;
 import com.volcano.esecurebox.activity.DisplayAccountActivity;
+import com.volcano.esecurebox.activity.EditAccountActivity;
 import com.volcano.esecurebox.activity.MainActivity;
 import com.volcano.esecurebox.activity.PasscodeActivity;
 import com.volcano.esecurebox.activity.SigninActivity;
@@ -53,7 +54,7 @@ public final class Intents {
     }
 
     public static Intent getEditAccountIntent(String accountId, String color) {
-        return new Intent(VlApplication.getInstance(), CreateAccountActivity.class)
+        return new Intent(VlApplication.getInstance(), EditAccountActivity.class)
                 .putExtra(EXTRA_ACCOUNT_ID, accountId)
                 .putExtra(EXTRA_CATEGORY_COLOR, color);
     }

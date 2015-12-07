@@ -16,10 +16,9 @@ import com.volcano.esecurebox.R;
 import com.volcano.esecurebox.model.Account;
 import com.volcano.esecurebox.model.AccountFieldValue;
 import com.volcano.esecurebox.model.SubCategory;
-import com.volcano.esecurebox.util.BitmapUtils;
 import com.volcano.esecurebox.util.LogUtils;
 import com.volcano.esecurebox.util.Utils;
-import com.volcano.esecurebox.widget.FloatingLabeledEditText;
+import com.volcano.esecurebox.widget.FieldCell;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,7 +26,7 @@ import java.util.List;
 /**
  * Edit account fragment
  */
-public class DisplayAccountFragment extends AbstractFragment {
+public final class DisplayAccountFragment extends AbstractFragment {
 
     private LinearLayout mFieldLayout;
     private FrameLayout mProgress;
@@ -36,7 +35,7 @@ public class DisplayAccountFragment extends AbstractFragment {
     private ArrayList<AccountFieldValue> mFieldValues = new ArrayList<>();
 
     public interface OnEnableEditListener {
-        public void onEnableEdit(boolean enable);
+        void onEnableEdit(boolean enable);
     }
 
     @Override
@@ -64,14 +63,10 @@ public class DisplayAccountFragment extends AbstractFragment {
             @Override
             public void done(Account account, ParseException e) {
                 if (e == null) {
-                    final FloatingLabeledEditText fle = new FloatingLabeledEditText(getActivity());
+                    final FieldCell subCategoryCell = new FieldCell(getActivity());
                     final SubCategory subCategory = account.getSubCategory();
-                    fle.setDividerLineVisibility(View.INVISIBLE);
-                    fle.setEnabled(false);
-                    fle.setHint(getResources().getString(R.string.label_category));
-                    fle.setText(subCategory.getName());
-                    fle.setIcon(subCategory.getIconName(), null, BitmapUtils.getColor(subCategory.getCategory().getColor()));
-                    mFieldLayout.addView(fle);
+                    subCategoryCell.setSubCategory(subCategory);
+                    mFieldLayout.addView(subCategoryCell);
 
                     AccountFieldValue.findInBackground(THIS, account, new FindCallback<AccountFieldValue>() {
                         @Override
@@ -83,14 +78,9 @@ public class DisplayAccountFragment extends AbstractFragment {
                                 final int size = mFieldValues.size();
                                 for (int i = 0; i < size; i++) {
                                     final AccountFieldValue value = mFieldValues.get(i);
-                                    final FloatingLabeledEditText fle = new FloatingLabeledEditText(getActivity());
-                                    fle.setEnabled(false);
-                                    fle.setHint(value.getField().getName());
-                                    fle.setText(value.getValue());
-                                    fle.setDividerLineVisibility(View.INVISIBLE);
-                                    fle.setFormatType(value.getField().getFormat());
-                                    fle.setIcon(value.getField().getIconName(), value.getField().getName().charAt(0), getResources().getColor(R.color.grey_1));
-                                    mFieldLayout.addView(fle);
+                                    final FieldCell fieldCell = new FieldCell(getActivity());
+                                    fieldCell.setField(value.getField(), value.getValue(), i, true);
+                                    mFieldLayout.addView(fieldCell);
                                 }
 
                                 mProgress.setVisibility(View.GONE);

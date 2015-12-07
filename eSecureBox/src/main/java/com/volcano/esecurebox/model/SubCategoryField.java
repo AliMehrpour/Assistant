@@ -74,6 +74,15 @@ public class SubCategoryField extends ParseObject {
         });
     }
 
+    public SubCategoryField() {
+
+    }
+
+    public SubCategoryField(SubCategory subCategory, Field field) {
+        put(SUB_CATEGORY, subCategory);
+        put(FIELD, field);
+    }
+
     public Field getField() {
         return (Field) getParseObject(FIELD);
     }

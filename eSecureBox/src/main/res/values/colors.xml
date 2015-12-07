@@ -3,8 +3,6 @@
 
 <resources>
 
-    <color name="background_default">#EDEDED</color>
-
     <color name="blue">#3F5799</color>
     <color name="blue_1">#596699</color>
     <color name="blue_2">#41C2FA</color>
@@ -28,9 +26,10 @@
     <color name="grey_7">#ECECEC</color>
     <color name="grey_8">#F2F2F2</color>
     <color name="grey_9">#424242</color>
+    <color name="grey_10">#F0F0F0</color>
 
     <color name="navigation_selector">#B6B6B6</color>
-    <color name="navigation_statusbar_color">#000000</color>
+    <color name="navigation_status_bar_color">#000000</color>
 
     <color name="red">#F44336</color>
     <color name="red_1">#FFF47D70</color>

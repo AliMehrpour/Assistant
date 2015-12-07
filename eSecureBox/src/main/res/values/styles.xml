@@ -3,9 +3,7 @@
 
 <resources>
 
-    <style name="FrameworkRoot.Theme" parent="Theme.AppCompat.Light" />
-
-    <style name="FrameworkRoot.Widget" parent="Theme.AppCompat" />
+    <style name="FrameworkRoot.Theme" parent="Theme.AppCompat.Light.NoActionBar" />
 
     <style name="Theme.Assistant" parent="Theme.Assistant.Base" />
 
@@ -25,15 +23,14 @@
         <item name="toolbarStyle">@style/Theme.Assistant.Toolbar</item>
 
         <item name="windowActionBar">false</item>
-        <item name="android:windowNoTitle">true</item>
+        <item name="windowNoTitle">true</item>
+        <item name="android:windowBackground">@android:color/white</item>
 
     </style>
 
     <style name="Theme.Assistant.Toolbar" parent="Widget.AppCompat.Toolbar">
         <item name="contentInsetStart">0dp</item>
     </style>
-
-
 
     <style name="ButtonFullWidth" parent="@android:style/TextAppearance.Holo">
         <item name="android:padding">@dimen/margin_16</item>
@@ -43,12 +40,28 @@
         <item name="android:gravity">center_horizontal|center_vertical</item>
     </style>
 
-    <style name="ButtonPasscode" parent="@android:style/TextAppearance">
+    <style name="ButtonPassCode" parent="@android:style/TextAppearance">
         <item name="android:layout_height">@dimen/passcode_button_height</item>
         <item name="android:layout_width">0dp</item>
         <item name="android:layout_weight">1</item>
+        <item name="robotoTypeface">regular</item>
         <item name="android:textSize">@dimen/text_size_25</item>
         <item name="android:textColor">@color/grey_6</item>
+        <item name="android:background">@drawable/selector_button_passcode</item>
+    </style>
+
+    <style name="ButtonDialog" parent="@android:style/TextAppearance.Holo">
+        <item name="android:textAllCaps">true</item>
+        <item name="android:textSize">@dimen/button_dialog_textsize</item>
+        <item name="android:textColor">@color/theme_primary</item>
+        <item name="android:singleLine">true</item>
+        <item name="android:layout_gravity">center_vertical</item>
+        <item name="android:gravity">center</item>
+        <item name="android:background">@drawable/selector_button_dialog</item>
+        <item name="android:minWidth">@dimen/button_dialog_min_width</item>
+        <item name="android:paddingLeft">@dimen/margin_8</item>
+        <item name="android:paddingRight">@dimen/margin_8</item>
+        <item name="android:duplicateParentState">true</item>
     </style>
 
     <style name="Divider">
@@ -61,7 +74,7 @@
         <item name="android:textSize">@dimen/text_size_16</item>
         <item name="android:textColor">@android:color/white</item>
         <item name="robotoTypeface">regular</item>
-        <item name="android:background">@drawable/fab_label_background</item>
+        <item name="android:background">@drawable/shape_fab_label_background</item>
     </style>
 
     <style name="NavigationItem" parent="@android:style/TextAppearance.Holo">
@@ -86,12 +99,6 @@
         <item name="android:inputType">textCapWords|textFilter</item>
         <item name="robotoTypeface">medium</item>
         <item name="android:background">@drawable/edittext_full_width</item>
-    </style>
-
-    <style name="Text.Grey12" parent="@android:style/TextAppearance.Holo">
-        <item name="android:textColor">@color/grey_1</item>
-        <item name="android:textSize">@dimen/text_size_12</item>
-        <item name="robotoTypeface">regular</item>
     </style>
 
     <style name="Text.MediumGrey14" parent="@android:style/TextAppearance.Holo">
@@ -148,12 +155,6 @@
         <item name="robotoTypeface">regular</item>
     </style>
 
-    <style name="Text.RegularDark16" parent="@android:style/TextAppearance.Holo">
-        <item name="android:textSize">@dimen/text_size_16</item>
-        <item name="android:textColor">@color/grey_4</item>
-        <item name="robotoTypeface">regular</item>
-    </style>
-
     <style name="Text.RegularDarker16" parent="Text.RegularDark16">
         <item name="android:textColor">@color/grey_9</item>
     </style>
@@ -164,9 +165,9 @@
         <item name="robotoTypeface">regular</item>
     </style>
 
-    <style name="Text.RegularDark20" parent="@android:style/TextAppearance.Holo">
+    <style name="Text.RegularDark16" parent="@android:style/TextAppearance.Holo">
         <item name="android:textColor">@color/grey_6</item>
-        <item name="android:textSize">@dimen/text_size_20</item>
+        <item name="android:textSize">@dimen/text_size_16</item>
         <item name="robotoTypeface">regular</item>
     </style>
 

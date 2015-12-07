@@ -8,7 +8,14 @@
 
     <dimen name="button_bar_height_lollipop">48dp</dimen>
 
+    <dimen name="button_dialog_height">48dp</dimen>
+    <dimen name="button_dialog_min_width">42dp</dimen>
+    <dimen name="button_dialog_textsize">14sp</dimen>
+    <dimen name="button_dialog_inset_vertical">6dp</dimen>
+    <dimen name="button_dialog_inset_horizontal">4dp</dimen>
+
     <dimen name="circle_drawable_size">24dp</dimen>
+    <dimen name="circle_drawable_stroke_size">4dp</dimen>
 
     <dimen name="divider">1dp</dimen>
 
@@ -38,7 +45,9 @@
     <dimen name="margin_25">25dp</dimen>
     <dimen name="margin_30">30dp</dimen>
     <dimen name="margin_40">40dp</dimen>
+    <dimen name="margin_48">48dp</dimen>
     <dimen name="margin_56">56dp</dimen>
+    <dimen name="margin_71">71dp</dimen>
     <dimen name="margin_60">60dp</dimen>
     <dimen name="margin_80">80dp</dimen>
 
@@ -48,9 +57,9 @@
     <dimen name="navigation_profile_image_height">164dp</dimen>
     <dimen name="navigation_width">-.5dp</dimen>
 
-    <dimen name="passcode_button_height">65dp</dimen>
-    <dimen name="passcode_edit_height">40dp</dimen>
-    <dimen name="passcode_edit_width">70dp</dimen>
+    <dimen name="passcode_button_height">75dp</dimen>
+    <dimen name="passcode_edit_height">70dp</dimen>
+    <dimen name="passcode_edit_width">50dp</dimen>
 
     <dimen name="signup_horizontal_margin">40dp</dimen>
 
@@ -69,7 +78,7 @@
 
     <dimen name="text_view_height">64dp</dimen>
     
-    <dimen name="toolbar_extended_height">128dp</dimen>
-    <dimen name="toolbar_extended_button_margin_top">100dp</dimen>
+    <dimen name="toolbar_extended_height">192dp</dimen>
+    <dimen name="toolbar_extended_button_margin_top">164dp</dimen>
 
 </resources>

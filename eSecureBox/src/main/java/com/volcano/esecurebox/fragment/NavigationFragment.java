@@ -11,6 +11,7 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -163,7 +164,7 @@ public final class NavigationFragment extends AbstractFragment {
         mDrawerLayout = drawerLayout;
 
         mDrawerLayout.setDrawerShadow(R.drawable.shadow_drawer, GravityCompat.START);
-        mDrawerLayout.setStatusBarBackgroundColor(getResources().getColor(R.color.navigation_statusbar_color));
+        mDrawerLayout.setStatusBarBackgroundColor(getResources().getColor(R.color.navigation_status_bar_color));
 
         mDrawerToggle = new ActionBarDrawerToggle(getActivity(), mDrawerLayout,
                 toolbar, R.string.hint_navigation_open, R.string.hint_navigation_close) {
@@ -224,7 +225,7 @@ public final class NavigationFragment extends AbstractFragment {
             for (int i = 0; i < size; i++) {
                 final Category category = categories.get(i);
 
-                if (i == 0 && PrefUtils.getPref(PrefUtils.PREF_NAVIGATOR_LAST_CATEGORY, "").equals("")) {
+                if (i == 0 && TextUtils.isEmpty(PrefUtils.getPref(PrefUtils.PREF_NAVIGATOR_LAST_CATEGORY, ""))) {
                     PrefUtils.setPref(PrefUtils.PREF_NAVIGATOR_LAST_CATEGORY, category.getObjectId());
                     mListener.onCategorySelected(category.getObjectId(), category.getName());
                 }

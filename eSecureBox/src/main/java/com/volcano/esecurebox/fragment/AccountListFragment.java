@@ -66,7 +66,7 @@ public class AccountListFragment extends AbstractFragment {
         mRecyclerView.setHasFixedSize(true);
         mRecyclerView.setEmptyView(mEmptyLayout);
         mRecyclerView.setAdapter(mAdapter);
-        mRecyclerView.addItemDecoration(new DividerItemDecoration(getResources().getDrawable(R.drawable.divider_line)));
+        mRecyclerView.addItemDecoration(new DividerItemDecoration(getResources().getDrawable(R.drawable.shape_divider_line)));
 
         final ItemClickSupport itemClick = ItemClickSupport.addTo(mRecyclerView);
         itemClick.setOnItemClickListener(new ItemClickSupport.OnItemClickListener() {

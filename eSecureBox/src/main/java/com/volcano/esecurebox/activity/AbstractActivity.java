@@ -3,8 +3,9 @@ package com.volcano.esecurebox.activity;
 
 import android.annotation.SuppressLint;
 import android.graphics.Color;
+import android.os.Bundle;
 import android.support.v7.app.ActionBar;
-import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.KeyEvent;
 import android.view.MenuItem;
@@ -19,8 +20,19 @@ import com.volcano.esecurebox.util.Utils;
 /**
  * Each activity should extends this class
  */
-public class AbstractActivity extends ActionBarActivity {
+public class AbstractActivity extends AppCompatActivity {
     protected final String TAG = LogUtils.makeLogTag(getClass().getName());
+
+    protected boolean mFinishIfNotLoggedIn = true;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        if (mFinishIfNotLoggedIn && !Managers.getAccountManager().isLoggedIn()) {
+            finish();
+        }
+    }
 
     @Override
     public void onResume() {
@@ -55,16 +67,19 @@ public class AbstractActivity extends ActionBarActivity {
         }
     }
 
+    protected void setToolbarColor(String color) {
+        setToolbarColor(Color.parseColor(String.format("#%s", color)));
+    }
+
     @SuppressLint("NewApi")
-    public void setToolbarColor(String color) {
+    protected void setToolbarColor(int color) {
         final Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        final int realColor = Color.parseColor(String.format("#%s", color));
         if (toolbar != null) {
-            toolbar.setBackgroundColor(realColor);
+            toolbar.setBackgroundColor(color);
         }
 
         if (Utils.hasLollipopApi()) {
-            getWindow().setStatusBarColor(BitmapUtils.getDarkenColor(realColor, 0.8f));
+            getWindow().setStatusBarColor(BitmapUtils.getDarkenColor(color, 0.8f));
         }
     }
 
@@ -79,12 +94,14 @@ public class AbstractActivity extends ActionBarActivity {
         }
     }
 
+    @SuppressWarnings("ConstantConditions")
     protected void setActionbar(Toolbar toolbar) {
         toolbar.setTitleTextAppearance(this, R.style.Toolbar_Title);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
 
+    @SuppressWarnings("unused")
     protected void addCancellingRequest(ParseQuery query) {
         Managers.getParseManager().getRequestManager().addRequest(this, query);
     }

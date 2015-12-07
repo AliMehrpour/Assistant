@@ -43,6 +43,7 @@ public class SignupActivity extends AbstractActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        mFinishIfNotLoggedIn = false;
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_up);
 
@@ -253,7 +254,7 @@ public class SignupActivity extends AbstractActivity {
     private void InitializeData() {
         ParseManager.InitializeData(new ParseManager.OnDataInitializationListener() {
             @Override
-            public void onInitilize(boolean successful) {
+            public void onInitialize(boolean successful) {
                 if (successful) {
                     setResult(RESULT_OK);
                     finish();

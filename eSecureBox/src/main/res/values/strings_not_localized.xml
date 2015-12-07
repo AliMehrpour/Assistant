@@ -3,7 +3,7 @@
 
 <resources>
 
-    <string name="email_address_feedback">feedback@eSecureBox.net</string>
+    <string name="email_address_feedback">support@eSecureBox.net</string>
 
     <string name="link_website"><a href="www.eSecureBox.net" target="_top">www.eSecureBox.net</a></string>
     <string name="link_email"><a href="support@eSecureBox.net" target="_top">support@eSecureBox.net</a></string>

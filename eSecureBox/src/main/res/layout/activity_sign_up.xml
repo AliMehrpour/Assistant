@@ -11,17 +11,17 @@
         android:layout_height="wrap_content"
         android:paddingLeft="@dimen/signup_horizontal_margin"
         android:paddingRight="@dimen/signup_horizontal_margin"
-        android:animateLayoutChanges="true"
-        android:background="@color/background_default">
+        android:paddingTop="@dimen/margin_40"
+        android:paddingBottom="@dimen/margin_20"
+        android:animateLayoutChanges="true">
 
         <com.volcano.esecurebox.widget.RobotoTextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/margin_30"
             android:paddingTop="@dimen/margin_4"
             android:gravity="center_horizontal"
             android:text="@string/app_name"
-            android:drawableTop="@drawable/icon_launcher"
+            android:drawableTop="@drawable/icon_esecurebox"
             style="@style/Text.RegularDark18" />
 
         <com.volcano.esecurebox.widget.RobotoEditText
@@ -113,7 +113,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/margin_40"
             android:gravity="center_horizontal|center_vertical"
-            android:background="@drawable/button_full_width_red"
+            android:background="@drawable/selector_button_full_width_red"
             style="@style/ButtonFullWidth" />
 
         <LinearLayout

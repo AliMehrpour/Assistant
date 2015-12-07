@@ -9,8 +9,11 @@ import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Point;
 import android.net.Uri;
 import android.os.Build;
+import android.text.TextUtils;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -18,14 +21,26 @@ import com.volcano.esecurebox.R;
 import com.volcano.esecurebox.VlApplication;
 
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
 /**
  * Application-wide utilities
  */
-public class Utils {
+public final class Utils {
     private static final String TAG = LogUtils.makeLogTag(Utils.class);
+
+    /**
+     * Copy a text to clipboard
+     * @param label The label
+     * @param text The text
+     */
+    public static void copyToClipboard(String label, String text) {
+        final ClipboardManager clipboard = (ClipboardManager) VlApplication.getInstance().getSystemService(Context.CLIPBOARD_SERVICE);
+        final ClipData clip = ClipData.newPlainText(label, text);
+        clipboard.setPrimaryClip(clip);
+    }
 
     /**
      * @return Application version name
@@ -39,6 +54,42 @@ public class Utils {
             LogUtils.LogE(TAG, "Can't get package info");
             throw new RuntimeException(e);
         }
+    }
+
+    /**
+     * @param year The year
+     * @param month The month
+     * @param day The day
+     * @return An string represents date from given info
+     */
+    public static String getCompleteDate(int year, int month, int day) {
+        return getCompleteNumber(day) + "/" + getCompleteNumber(month) + "/" + year;
+    }
+
+    /**
+     * Append a zero to first of number, if it is less than 10, otherwise return the number
+     * @param number The number
+     */
+    public static String getCompleteNumber(int number) {
+        String completeNumber;
+        if (number < 9) {
+            completeNumber = "0" + number;
+        }
+        else {
+            completeNumber = Integer.toString(number);
+        }
+
+        return completeNumber;
+    }
+
+    /**
+     * Get display size
+     * @param context The context
+     * @return The {@link Point} object contains width and height of device screen
+     */
+    public static Point getDisplaySize(Context context) {
+        final DisplayMetrics metrics = context.getResources().getDisplayMetrics();
+        return new Point(metrics.widthPixels, metrics.heightPixels);
     }
 
     /**
@@ -69,21 +120,10 @@ public class Utils {
     }
 
     /**
-     * Copy a text to clipboard
-     * @param label The label
-     * @param text The text
-     */
-    public static void copyToClipboard(String label, String text) {
-        final ClipboardManager clipboard = (ClipboardManager) VlApplication.getInstance().getSystemService(Context.CLIPBOARD_SERVICE);
-        final ClipData clip = ClipData.newPlainText(label, text);
-        clipboard.setPrimaryClip(clip);
-    }
-
-    /**
      * @return True if SDK is greater than JellyBean
      */
     public static boolean hasJellyBeanApi() {
-        return Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1;
+        return Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN;
     }
 
     /**
@@ -178,6 +218,45 @@ public class Utils {
      */
     public static void showToast(int id) {
         showToast(VlApplication.getInstance().getString(id));
+    }
+
+    /**
+     * Parse given string to {@link Calendar} object. date format should be like "25/07/2017" or "07/2017"
+     * @param string The date string
+     */
+    public static Calendar parseDate(String string) {
+        final Calendar date = Calendar.getInstance();
+
+        if (TextUtils.isEmpty(string)) {
+            return date;
+        }
+
+        int year;
+        int month;
+        int day;
+
+        final String[] dateParts = string.split("/");
+        final int length = dateParts.length;
+        if (length == 3) {
+            day = Integer.parseInt(dateParts[0]);
+            month = Integer.parseInt(dateParts[1]);
+            year = Integer.parseInt(dateParts[2]);
+            date.set(year < 1900 ? date.get(Calendar.YEAR) - 1900 : year,
+                    month < 1 || month > 12 ? date.get(Calendar.MONTH) : month,
+                    day < 1 || day > 31 ? date.get(Calendar.DAY_OF_MONTH) : day);
+        }
+        else if (length == 2) {
+            month = Integer.parseInt(dateParts[0]);
+            year = Integer.parseInt(dateParts[1]);
+            date.set(year < 1900 ? date.get(Calendar.YEAR) - 1900 : year,
+                    month < 1 || month > 12 ? date.get(Calendar.MONTH) : month, 1);
+        }
+        else if (length == 1) {
+            year = Integer.parseInt(dateParts[0]);
+            date.set(year < 1900 ? date.get(Calendar.YEAR) - 1900 : year, 0, 1);
+        }
+
+        return date;
     }
 
     /**

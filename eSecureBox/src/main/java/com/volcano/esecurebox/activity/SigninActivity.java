@@ -3,7 +3,10 @@ package com.volcano.esecurebox.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.Spannable;
+import android.text.SpannableStringBuilder;
 import android.text.TextUtils;
+import android.text.style.ForegroundColorSpan;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.FrameLayout;
@@ -34,6 +37,7 @@ public class SigninActivity extends AbstractActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        mFinishIfNotLoggedIn = false;
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_in);
 
@@ -95,12 +99,17 @@ public class SigninActivity extends AbstractActivity {
             }
         });
 
+        final String signup = getResources().getString(R.string.label_signup);
+        final SpannableStringBuilder ssb = new SpannableStringBuilder(signup);
+        ssb.setSpan(new ForegroundColorSpan(getResources().getColor(R.color.red)), signup.indexOf("?") + 1, signup.length(), Spannable.SPAN_INCLUSIVE_INCLUSIVE);
+        mSignupText.setText(ssb);
         mSignupText.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 startActivityForResult(Intents.getSignupIntent(SignupActivity.MODE_CREATE), Intents.REQUEST_CODE_SIGNUP);
             }
         });
+
 
         final String lastUsername = PrefUtils.getPref(PrefUtils.PREF_LAST_USERNAME, null);
         if (lastUsername != null) {
@@ -110,7 +119,6 @@ public class SigninActivity extends AbstractActivity {
         else {
             mUsernameEdit.requestFocus();
         }
-
     }
 
     @Override

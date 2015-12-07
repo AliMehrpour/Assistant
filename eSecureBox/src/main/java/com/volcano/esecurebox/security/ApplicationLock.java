@@ -9,6 +9,7 @@ import com.volcano.esecurebox.Intents;
 import com.volcano.esecurebox.Managers;
 import com.volcano.esecurebox.R;
 import com.volcano.esecurebox.activity.PasscodeActivity;
+import com.volcano.esecurebox.activity.SigninActivity;
 import com.volcano.esecurebox.fragment.PasscodeFragment.Mode;
 import com.volcano.esecurebox.util.PrefUtils;
 
@@ -135,17 +136,15 @@ public class ApplicationLock implements Application.ActivityLifecycleCallbacks {
 
     @Override
     public void onActivityCreated(Activity activity, Bundle savedInstanceState) {
-
     }
 
     @Override
     public void onActivityStarted(Activity activity) {
-
     }
 
     @Override
     public void onActivityResumed(Activity activity) {
-        if (activity.getClass() == PasscodeActivity.class) {
+        if (activity.getClass() == PasscodeActivity.class || activity.getClass() == SigninActivity.class) {
             return;
         }
 
@@ -166,17 +165,14 @@ public class ApplicationLock implements Application.ActivityLifecycleCallbacks {
 
     @Override
     public void onActivityStopped(Activity activity) {
-
     }
 
     @Override
     public void onActivitySaveInstanceState(Activity activity, Bundle outState) {
-
     }
 
     @Override
     public void onActivityDestroyed(Activity activity) {
-
     }
 
 }
