@@ -204,7 +204,6 @@ public final class EditAccountFragment extends AbstractFragment {
                 public void done(ParseException e) {
                     if (e == null) {
                         LogUtils.LogI(TAG, "account updated successfully");
-                        dumpFieldValues();
                         int j = 0; // View Counters
                         mProcessedFieldCount = 0;
                         final int size = mAccountFieldValues.size();

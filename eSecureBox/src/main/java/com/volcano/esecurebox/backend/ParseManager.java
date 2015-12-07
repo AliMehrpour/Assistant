@@ -27,7 +27,7 @@ import java.util.List;
 public final class ParseManager {
     private static final String TAG = LogUtils.makeLogTag(ParseManager.class);
 
-    private static int INITIALIZE_DATA_TIME_OUT_MILLIS  = 20 * 1000; // 20 seconds
+    private static int INITIALIZE_DATA_TIME_OUT_MILLIS  = 60 * 1000; // 60 seconds
 
     private static boolean isCategoriesPinned = false;
     private static boolean isSubCategoriesPinned = false;
@@ -38,7 +38,7 @@ public final class ParseManager {
     private ParseRequestManager mRequestManager;
 
     public interface OnDataInitializationListener {
-        public void onInitilize(boolean successful);
+        void onInitialize(boolean successful);
     }
 
     private static final String APPLICATION_ID = "pBtCshXLPqwVBXhlNq6zLBTXUdMI8nNqblfASxNT";
@@ -119,12 +119,12 @@ public final class ParseManager {
                             final float elapsedSeconds = elapsedMillis / 1000;
                             if (result) {
                                 LogUtils.LogI(TAG, "Initialization finished in " + elapsedSeconds + " seconds");
-                                listener.onInitilize(true);
+                                listener.onInitialize(true);
                                 break;
                             }
                             else {
                                 LogUtils.LogI(TAG, "Initialization failed after " + elapsedSeconds + " seconds");
-                                listener.onInitilize(false);
+                                listener.onInitialize(false);
                                 break;
                             }
                         }
@@ -136,7 +136,7 @@ public final class ParseManager {
             new Thread(runnable).start();
         }
         else {
-            listener.onInitilize(true);
+            listener.onInitialize(true);
         }
     }
 
