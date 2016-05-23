@@ -2,16 +2,14 @@
 package com.volcano.esecurebox.fragment;
 
 import android.app.Activity;
-import android.app.DialogFragment;
 import android.app.FragmentManager;
+import android.app.FragmentTransaction;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
 import android.support.v4.util.Pair;
-import android.text.Editable;
 import android.text.TextUtils;
-import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -51,15 +49,15 @@ import java.util.List;
 /**
  * Create account fragment
  */
-public class CreateAccountFragment extends AbstractFragment {
+public final class CreateAccountFragment extends AbstractFragment {
 
-    private final ArrayList<SubCategoryField> mFields = new ArrayList<>();
     private SubCategory mSelectedSubCategory;
+    private final ArrayList<SubCategoryField> mFields = new ArrayList<>();
     private Pair<Object, FieldCell> mLastRemovedFieldCell;
-    private String mSelectedSubCategoryId;
-    private int mSavedFieldCount = 0;
 
-    private FragmentManager mFragmentManager;
+    private int mSavedFieldCount = 0;
+    private String mSelectedSubCategoryId;
+
     private RobotoEditText mAccountTitle;
     private RelativeLayout mSubCategoryLayout;
     private TextView mSubCategoryText;
@@ -132,11 +130,11 @@ public class CreateAccountFragment extends AbstractFragment {
         mSubCategoryImage = (ImageView) view.findViewById(R.id.image_sub_category);
         mSubCategoryListLayout = (FrameLayout) view.findViewById(R.id.layout_sub_category_list);
         mProgressLayout = (FrameLayout) view.findViewById(R.id.layout_progress);
-        mFragmentManager = getFragmentManager();
-        mSubCategoryListFragment = (SubCategoryListFragment) mFragmentManager.findFragmentById(R.id.fragment_sub_category_list);
+        final FragmentManager fragmentManager = getFragmentManager();
+        mSubCategoryListFragment = (SubCategoryListFragment) fragmentManager.findFragmentById(R.id.fragment_sub_category_list);
         if (mSubCategoryListFragment == null && Utils.hasJellyBeanApi()) {
             mSubCategoryListFragment = new SubCategoryListFragment();
-            mFragmentManager.beginTransaction().add(R.id.layout_sub_category_list, mSubCategoryListFragment).commit();
+            fragmentManager.beginTransaction().add(R.id.layout_sub_category_list, mSubCategoryListFragment).commit();
         }
         mAddFieldButton = (RobotoTextView) view.findViewById(R.id.button_add_field);
         mFieldsScrollView = (ScrollView) view.findViewById(R.id.scroll_view_fields);
@@ -150,29 +148,30 @@ public class CreateAccountFragment extends AbstractFragment {
         super.onActivityCreated(savedInstanceState);
 
         mSubCategoryListFragment.setDefaultColorStyle(CircleDrawable.FILL);
-        mSubCategoryListFragment.setSubCategoryListener(new SubCategoryListFragment.OnSubCategoryListener() {
-            @Override
-            public void onSubCategoriesLoadFailed() {
-                setErrorState();
-            }
+        mSubCategoryListFragment.setSubCategoryListener(
+                new SubCategoryListFragment.OnSubCategoryListener() {
+                    @Override
+                    public void onSubCategoriesLoadFailed() {
+                        setErrorState();
+                    }
 
-            @Override
-            public void onSubCategoriesEmpty() {
-                setErrorState();
-            }
+                    @Override
+                    public void onSubCategoriesEmpty() {
+                        setErrorState();
+                    }
 
-            @Override
-            public void onSubCategorySelected(SubCategory subCategory) {
-                mSubCategoryListLayout.setVisibility(View.GONE);
-                mFieldsLayout.setVisibility(View.VISIBLE);
-                if (mSelectedSubCategory == null || mSelectedSubCategory != subCategory) {
-                    removeFields();
-                    setSubCategory(subCategory);
-                    mAccountTitle.requestFocus();
-                    loadFieldsBySubCategory();
-                }
-            }
-        });
+                    @Override
+                    public void onSubCategorySelected(SubCategory subCategory) {
+                        mSubCategoryListLayout.setVisibility(View.GONE);
+                        mFieldsLayout.setVisibility(View.VISIBLE);
+                        if (mSelectedSubCategory == null || mSelectedSubCategory != subCategory) {
+                            removeFields();
+                            setSubCategory(subCategory);
+                            mAccountTitle.requestFocus();
+                            loadFieldsBySubCategory();
+                        }
+                    }
+                });
 
         if (savedInstanceState != null) {
             mSelectedSubCategoryId = savedInstanceState.getString(Intents.KEY_SUB_CATEGORY_ID);
@@ -198,8 +197,7 @@ public class CreateAccountFragment extends AbstractFragment {
         mAddFieldButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                final AddFieldDialog addFieldDialog = new AddFieldDialog();
-                addFieldDialog.show(mFragmentManager, "fragment_add_field");
+                showAddMoreFieldDialog();
             }
         });
     }
@@ -276,7 +274,8 @@ public class CreateAccountFragment extends AbstractFragment {
                                             @Override
                                             public void done(ParseException e) {
                                                 if (e == null) {
-                                                    Utils.showToast(R.string.toast_account_delete_successful);
+                                                    Utils.showToast(
+                                                            R.string.toast_account_delete_successful);
                                                     mProgressLayout.setVisibility(View.GONE);
                                                     if (getActivity() != null) {
                                                         getActivity().finish();
@@ -285,7 +284,8 @@ public class CreateAccountFragment extends AbstractFragment {
                                                 }
                                                 else {
                                                     LogUtils.LogE(TAG, "Delete account failed");
-                                                    Utils.showToast(R.string.toast_account_delete_failed);
+                                                    Utils.showToast(
+                                                            R.string.toast_account_delete_failed);
                                                     mProgressLayout.setVisibility(View.GONE);
                                                     mListener.OnEnableActions(true);
                                                 }
@@ -332,7 +332,8 @@ public class CreateAccountFragment extends AbstractFragment {
             }
         }
         if (!hasIcon) {
-            mSubCategoryImage.setImageDrawable(new CircleDrawable(subCategory.getCategory().getColor(), CircleDrawable.FILL));
+            mSubCategoryImage.setImageDrawable(
+                    new CircleDrawable(subCategory.getCategory().getColor(), CircleDrawable.FILL));
         }
     }
 
@@ -354,42 +355,31 @@ public class CreateAccountFragment extends AbstractFragment {
     private void loadFieldsBySubCategory() {
         mProgressLayout.setVisibility(View.VISIBLE);
         mListener.OnEnableActions(false);
-        SubCategoryField.getFieldBySubCategory(this, mSelectedSubCategory, new FindCallback<SubCategoryField>() {
-            @Override
-            public void done(List<SubCategoryField> subCategoryFields, ParseException e) {
-                if (e == null) {
-                    // PopulateFields
-                    mFieldsLayout.setVisibility(View.INVISIBLE);
-                    mFields.clear();
-                    mFields.addAll(subCategoryFields);
-                    final int size = mFields.size();
-                    for (int i = 0; i < size; i++) {
-                        addToFieldsLayout(mFields.get(i), i);
+        SubCategoryField.getFieldBySubCategory(this, mSelectedSubCategory,
+                new FindCallback<SubCategoryField>() {
+                    @Override
+                    public void done(List<SubCategoryField> subCategoryFields, ParseException e) {
+                        if (e == null) {
+                            // PopulateFields
+                            mFieldsLayout.setVisibility(View.INVISIBLE);
+                            mFields.clear();
+                            mFields.addAll(subCategoryFields);
+                            final int size = mFields.size();
+                            for (int i = 0; i < size; i++) {
+                                addToFieldsLayout(mFields.get(i), i);
+                            }
+
+                            mProgressLayout.setVisibility(View.GONE);
+                            mAccountTitle.setVisibility(View.VISIBLE);
+                            mFieldsLayout.setVisibility(View.VISIBLE);
+                            mAddFieldButton.setVisibility(View.VISIBLE);
+                            mListener.OnEnableActions(true);
+                        }
+                        else {
+                            setErrorState();
+                        }
                     }
-
-                    mProgressLayout.setVisibility(View.GONE);
-                    mAccountTitle.setVisibility(View.VISIBLE);
-                    mFieldsLayout.setVisibility(View.VISIBLE);
-                    mAddFieldButton.setVisibility(View.VISIBLE);
-                    mListener.OnEnableActions(true);
-                }
-                else {
-                    setErrorState();
-                }
-            }
-        });
-    }
-
-    private void addToFieldsLayout(SubCategoryField field, int index) {
-        final FieldCell fieldCell = new FieldCell(getActivity());
-        fieldCell.setField(field.getField(), field.getDefaultValue(), index);
-        fieldCell.setOnSwipeListener(mSwipeListener);
-        fieldCell.setSwipeEnabled(true);
-        mFieldsLayout.addView(fieldCell);
-    }
-
-    private void removeFields() {
-        mFieldsLayout.removeAllViews();
+                });
     }
 
     private void setErrorState() {
@@ -402,6 +392,18 @@ public class CreateAccountFragment extends AbstractFragment {
         if (activity != null) {
             getActivity().finish();
         }
+    }
+
+    private void addToFieldsLayout(SubCategoryField field, int index) {
+        final FieldCell fieldCell = new FieldCell(getActivity());
+        fieldCell.setField(field.getField(), field.getDefaultValue(), index);
+        fieldCell.setOnSwipeListener(mSwipeListener);
+        fieldCell.setSwipeEnabled(true);
+        mFieldsLayout.addView(fieldCell);
+    }
+
+    private void removeFields() {
+        mFieldsLayout.removeAllViews();
     }
 
     private void addMoreField(List<Field> fields) {
@@ -420,73 +422,24 @@ public class CreateAccountFragment extends AbstractFragment {
             public void run() {
                 mFieldsScrollView.fullScroll(ScrollView.FOCUS_DOWN);
             }
-        });    }
+        });
+    }
 
-    public class AddFieldDialog extends DialogFragment {
-
-        private RobotoTextView mCancelButton;
-        private RobotoTextView mChooseButton;
-        private RobotoEditText mSearchEdit;
-        private FieldListFragment mFragment;
-
-        @Override
-        public void onCreate(Bundle savedInstanceState) {
-            super.onCreate(savedInstanceState);
-            setStyle(DialogFragment.STYLE_NO_TITLE, R.style.Theme_Assistant);
-        }
-
-        @Override
-        public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-            final View view = inflater.inflate(R.layout.dialog_field_list, container);
-
-            mCancelButton = (RobotoTextView) view.findViewById(R.id.button_cancel);
-            mChooseButton = (RobotoTextView) view.findViewById(R.id.button_choose);
-            mSearchEdit = (RobotoEditText) view.findViewById(R.id.edit_search);
-            mFragment = (FieldListFragment) getFragmentManager().findFragmentById(R.id.fragment_field_list);
-
-            return view;
-        }
-
-        @Override
-        public void onActivityCreated(Bundle savedInstanceState) {
-            super.onActivityCreated(savedInstanceState);
-
-            mSearchEdit.addTextChangedListener(new TextWatcher() {
-                @Override
-                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+    private void showAddMoreFieldDialog() {
+        final FragmentTransaction transaction = getFragmentManager().beginTransaction();
+        final AddFieldDialogFragment fragment = new AddFieldDialogFragment();
+        fragment.setOnFieldSelectedListener(new AddFieldDialogFragment.OnFieldSelectedListener() {
+            @Override
+            public void onFieldSelected(List<Field> fields) {
+                if (fields != null) {
+                    addMoreField(fields);
                 }
 
-                @Override
-                public void onTextChanged(CharSequence s, int start, int before, int count) {
-                }
-
-                @Override
-                public void afterTextChanged(Editable s) {
-                    mFragment.loadFields(s.toString());
-                }
-            });
-
-            mCancelButton.setOnClickListener(new OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    dismiss();
-                }
-            });
-
-            mChooseButton.setOnClickListener(new OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    dismiss();
-                    addMoreField(mFragment.getSelectedFields());
-                }
-            });
-        }
-
-        @Override
-        public void onDestroyView() {
-            super.onDestroyView();
-            if (mFragment != null)
-                getFragmentManager().beginTransaction().remove(mFragment).commit();
-        }
+                fragment.dismiss();
+                final FragmentTransaction transaction = getFragmentManager().beginTransaction();
+                transaction.remove(fragment).commit();
+            }
+        });
+        fragment.show(transaction, fragment.getClass().getSimpleName());
     }
 }

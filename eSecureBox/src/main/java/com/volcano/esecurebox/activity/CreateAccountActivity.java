@@ -69,20 +69,18 @@ public final class CreateAccountActivity extends AbstractActivity {
 
     @Override
     protected boolean askToFinish() {
-        if (mFragment.allowBackPressed()) {
-            new AlertDialogWrapper.Builder(this)
-                    .setMessage(R.string.alert_cancel_create_account)
-                    .setNegativeButton(
-                    R.string.button_discard_uppercase, new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            finish();
-                        }
-                    })
-                    .setPositiveButton(R.string.button_keep_editing_uppercase, null)
-                    .show();
-        }
+        new AlertDialogWrapper.Builder(this)
+                .setMessage(R.string.alert_cancel_create_account)
+                .setNegativeButton(
+                R.string.button_discard_uppercase, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        finish();
+                    }
+                })
+                .setPositiveButton(R.string.button_keep_editing_uppercase, null)
+                .show();
+
         return false;
     }
-
 }

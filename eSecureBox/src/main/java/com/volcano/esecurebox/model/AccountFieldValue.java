@@ -29,7 +29,8 @@ public class AccountFieldValue extends ParseObject {
     public enum Status {
         EXIST,
         ADDED,
-        REMOVED,
+        EXIST_REMOVED, // An existed object is removed
+        ADDED_REMOVED // An new added object is removed
     }
 
     public static ParseQuery findInBackground(Object tag, Account account, final FindCallback<AccountFieldValue> callback) {

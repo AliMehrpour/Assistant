@@ -52,7 +52,7 @@
 
     <style name="ButtonDialog" parent="@android:style/TextAppearance.Holo">
         <item name="android:textAllCaps">true</item>
-        <item name="android:textSize">@dimen/button_dialog_textsize</item>
+        <item name="android:textSize">@dimen/button_dialog_text_size</item>
         <item name="android:textColor">@color/theme_primary</item>
         <item name="android:singleLine">true</item>
         <item name="android:layout_gravity">center_vertical</item>

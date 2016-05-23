@@ -20,7 +20,7 @@ import java.util.List;
 @SuppressWarnings("UnusedDeclaration")
 public class SoftKeyboardUtils implements ViewTreeObserver.OnGlobalLayoutListener {
 
-    private float mMaxHeigthDiff;
+    private float mMaxHeightDiff;
     private final List<OnSoftKeyboardStateListener> listeners = new LinkedList<>();
     private final View mActivityRootView;
     private int mLastSoftKeyboardHeight;
@@ -35,12 +35,12 @@ public class SoftKeyboardUtils implements ViewTreeObserver.OnGlobalLayoutListene
          * Called when soft keyboard has opened
          * @param keyboardHeight The soft keyboard height
          */
-        public void onSoftKeyboardOpened(int keyboardHeight);
+        void onSoftKeyboardOpened(int keyboardHeight);
 
         /**
          * Called when soft keyboard has closed
          */
-        public void onSoftKeyboardClosed();
+        void onSoftKeyboardClosed();
     }
 
     public SoftKeyboardUtils(View activityRootView) {
@@ -54,10 +54,10 @@ public class SoftKeyboardUtils implements ViewTreeObserver.OnGlobalLayoutListene
 
         final Resources res = VlApplication.getInstance().getResources();
         // For confidence use 150% of status bar
-        mMaxHeigthDiff = 1.5f * res.getDimensionPixelSize(R.dimen.status_bar_height);
+        mMaxHeightDiff = 1.5f * res.getDimensionPixelSize(R.dimen.status_bar_height);
         if (Utils.hasLollipopApi()) {
             final float buttonBarHeight = res.getDimensionPixelSize(R.dimen.button_bar_height_lollipop);
-            mMaxHeigthDiff += buttonBarHeight;
+            mMaxHeightDiff += buttonBarHeight;
         }
     }
 
@@ -79,7 +79,7 @@ public class SoftKeyboardUtils implements ViewTreeObserver.OnGlobalLayoutListene
      * Default value is zero (0)
      * @return last saved keyboard height in px
      */
-    public int getmLastSoftKeyboardHeight() {
+    public int getLastSoftKeyboardHeight() {
         return mLastSoftKeyboardHeight;
     }
 
@@ -106,11 +106,11 @@ public class SoftKeyboardUtils implements ViewTreeObserver.OnGlobalLayoutListene
         mActivityRootView.getWindowVisibleDisplayFrame(r);
 
         final int heightDiff = mActivityRootView.getRootView().getHeight() - (r.bottom - r.top);
-        if (!mIsSoftKeyboardOpened && heightDiff > mMaxHeigthDiff) {
+        if (!mIsSoftKeyboardOpened && heightDiff > mMaxHeightDiff) {
             mIsSoftKeyboardOpened = true;
             notifyOnSoftKeyboardOpened(heightDiff);
         }
-        else if (mIsSoftKeyboardOpened && heightDiff < mMaxHeigthDiff) {
+        else if (mIsSoftKeyboardOpened && heightDiff < mMaxHeightDiff) {
             mIsSoftKeyboardOpened = false;
             notifyOnSoftKeyboardClosed();
         }
