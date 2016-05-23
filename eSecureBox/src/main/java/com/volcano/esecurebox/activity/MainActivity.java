@@ -52,7 +52,7 @@ public class MainActivity extends AbstractActivity {
         setContentView(R.layout.activity_main);
 
         final Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setActionbar(toolbar);
+        setActionBar(toolbar);
         setTitle(R.string.app_name);
         toolbar.setNavigationIcon(R.drawable.icon_drawer);
 

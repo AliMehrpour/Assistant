@@ -27,7 +27,7 @@ public final class DisplayAccountActivity extends AbstractActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_display_account);
 
-        setActionbar((Toolbar) findViewById(R.id.toolbar));
+        setActionBar((Toolbar) findViewById(R.id.toolbar));
 
         final Intent intent = getIntent();
         final String accountId = intent.getStringExtra(Intents.EXTRA_ACCOUNT_ID);

@@ -22,8 +22,9 @@ import com.volcano.esecurebox.util.Utils;
  */
 public class AbstractActivity extends AppCompatActivity {
     protected final String TAG = LogUtils.makeLogTag(getClass().getName());
-
     protected boolean mFinishIfNotLoggedIn = true;
+
+    private Toolbar mToolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -83,8 +84,19 @@ public class AbstractActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Set the activity title
+     * @param resId The resource id
+     */
     public void setTitle(int resId) {
         setTitle(getString(resId));
+    }
+
+    /**
+     * @return The toolbar object
+     */
+    public Toolbar getToolbar() {
+        return mToolbar;
     }
 
     protected void setTitle(String title) {
@@ -94,10 +106,11 @@ public class AbstractActivity extends AppCompatActivity {
         }
     }
 
-    @SuppressWarnings("ConstantConditions")
-    protected void setActionbar(Toolbar toolbar) {
+    protected void setActionBar(Toolbar toolbar) {
+        mToolbar = toolbar;
         toolbar.setTitleTextAppearance(this, R.style.Toolbar_Title);
         setSupportActionBar(toolbar);
+        //noinspection ConstantConditions
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
 

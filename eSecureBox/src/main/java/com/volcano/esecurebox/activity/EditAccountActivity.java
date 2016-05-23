@@ -15,6 +15,7 @@ import com.afollestad.materialdialogs.AlertDialogWrapper;
 import com.volcano.esecurebox.Intents;
 import com.volcano.esecurebox.R;
 import com.volcano.esecurebox.fragment.EditAccountFragment;
+import com.volcano.esecurebox.fragment.EditAccountFragment.OnActionsListener;
 import com.volcano.esecurebox.util.BitmapUtils;
 import com.volcano.esecurebox.util.SoftKeyboardUtils;
 import com.volcano.esecurebox.widget.RobotoTextView;
@@ -40,13 +41,18 @@ public final class EditAccountActivity extends AbstractActivity {
             }
         });
         mFragment = (EditAccountFragment) getFragmentManager().findFragmentById(R.id.fragment_edit_account);
-        mFragment.setOnEnableActionsListener(new EditAccountFragment.OnEnableActionsListener() {
+        mFragment.setOnEnableActionsListener(new OnActionsListener() {
             @Override
             public void OnEnableActions(boolean enable) {
                 if (mSaveMenu != null) {
                     mSaveMenu.setEnabled(enable);
                 }
                 deleteText.setEnabled(enable);
+            }
+
+            @Override
+            public void onVisibilityActions(int visibility) {
+                deleteText.setVisibility(visibility);
             }
         });
 
@@ -55,7 +61,7 @@ public final class EditAccountActivity extends AbstractActivity {
         final String categoryColor = intent.getStringExtra(Intents.EXTRA_CATEGORY_COLOR);
 
         final Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setActionbar(toolbar);
+        setActionBar(toolbar);
         setToolbarColor(categoryColor);
 
         mFragment.setAccountId(accountId);
@@ -103,16 +109,18 @@ public final class EditAccountActivity extends AbstractActivity {
 
     @Override
     protected boolean askToFinish() {
-        new AlertDialogWrapper.Builder(this)
-                .setMessage(R.string.alert_cancel_edit_account)
-                .setNegativeButton(R.string.button_discard_uppercase, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        finish();
-                    }
-                })
-                .setPositiveButton(R.string.button_keep_editing_uppercase, null)
-                .show();
+        if (mFragment.allowBackPressed()) {
+            new AlertDialogWrapper.Builder(this)
+                    .setMessage(R.string.alert_cancel_edit_account)
+                    .setNegativeButton(R.string.button_discard_uppercase, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            finish();
+                        }
+                    })
+                    .setPositiveButton(R.string.button_keep_editing_uppercase, null)
+                    .show();
+        }
 
         return false;
     }
