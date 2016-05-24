@@ -2,17 +2,14 @@
 package com.volcano.esecurebox.fragment;
 
 import android.app.Activity;
-import android.app.DialogFragment;
+import android.app.FragmentTransaction;
 import android.content.DialogInterface;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
 import android.support.v4.util.Pair;
-import android.text.Editable;
 import android.text.TextUtils;
-import android.text.TextWatcher;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -77,11 +74,12 @@ public final class EditAccountFragment extends AbstractFragment {
             final AccountFieldValue fieldValue = mAccountFieldValues.get(index);
 
             if (fieldValue.getStatus() == Status.EXIST) {
-                fieldValue.setStatus(Status.REMOVED);
-                mAccountFieldValues.get(index).setStatus(Status.REMOVED);
+                fieldValue.setStatus(Status.EXIST_REMOVED);
+                mAccountFieldValues.get(index).setStatus(Status.EXIST_REMOVED);
             }
             else {
-                mAccountFieldValues.remove(index);
+                fieldValue.setStatus(Status.ADDED_REMOVED);
+                mAccountFieldValues.get(index).setStatus(Status.ADDED_REMOVED);
             }
 
             mLastRemovedFieldCell = new Pair<>(fieldValue, fieldCell);
@@ -99,13 +97,14 @@ public final class EditAccountFragment extends AbstractFragment {
 
                             int adjustedIndex = index;
                             for (int i = 0; i < index; i++) {
-                                if (mAccountFieldValues.get(i).getStatus() == Status.REMOVED) {
+                                final Status status = mAccountFieldValues.get(i).getStatus();
+                                if (status == Status.EXIST_REMOVED || status == Status.ADDED_REMOVED) {
                                     adjustedIndex--;
                                 }
                             }
                             mFieldsLayout.addView(removedCell, adjustedIndex);
 
-                            if (removedAccountFieldValue.getStatus() == Status.REMOVED) {
+                            if (removedAccountFieldValue.getStatus() == Status.EXIST_REMOVED) {
                                 removedAccountFieldValue.setStatus(Status.EXIST);
                                 mAccountFieldValues.set(index, removedAccountFieldValue);
                             }
@@ -135,13 +134,14 @@ public final class EditAccountFragment extends AbstractFragment {
         }
     };
 
-    private OnEnableActionsListener mListener;
+    private OnActionsListener mListener;
 
     /**
      * Interface to containing activities have to implement to be notified of actions on account
      */
-    public interface OnEnableActionsListener {
+    public interface OnActionsListener {
         void OnEnableActions(boolean enable);
+        void onVisibilityActions(int visibility);
     }
 
     @Override
@@ -168,17 +168,16 @@ public final class EditAccountFragment extends AbstractFragment {
         mAddFieldButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                final AddFieldDialog addFieldDialog = new AddFieldDialog();
-                addFieldDialog.show(getFragmentManager(), "fragment_add_field");
+                showAddMoreFieldDialog();
             }
         });
     }
 
     /**
-     * Set {@link OnEnableActionsListener}
+     * Set {@link OnActionsListener}
      * @param listener The listener
      */
-    public void setOnEnableActionsListener(OnEnableActionsListener listener) {
+    public void setOnEnableActionsListener(OnActionsListener listener) {
         mListener = listener;
     }
 
@@ -240,7 +239,7 @@ public final class EditAccountFragment extends AbstractFragment {
                                     checkDone();
                                 }
                             }
-                            else {
+                            else if (fieldValueStatus == Status.EXIST_REMOVED) {
                                 fieldValue.remove(new DeleteCallback() {
                                     @Override
                                     public void done(ParseException e) {
@@ -256,6 +255,10 @@ public final class EditAccountFragment extends AbstractFragment {
                                         }
                                     }
                                 });
+                            }
+                            else {
+                                mProcessedFieldCount++;
+                                checkDone();
                             }
                         }
                     }
@@ -346,7 +349,8 @@ public final class EditAccountFragment extends AbstractFragment {
             }
         }
         if (!hasIcon) {
-            mSubCategoryImage.setImageDrawable(new CircleDrawable(subCategory.getCategory().getColor(), CircleDrawable.FILL));
+            mSubCategoryImage.setImageDrawable(
+                    new CircleDrawable(subCategory.getCategory().getColor(), CircleDrawable.FILL));
         }
     }
 
@@ -398,6 +402,18 @@ public final class EditAccountFragment extends AbstractFragment {
         });
     }
 
+    private void setErrorState() {
+        LogUtils.LogE(TAG, "Load account/fields failed");
+        mProgressLayout.setVisibility(View.GONE);
+        mFieldsLayout.setVisibility(View.GONE);
+        Utils.showToast(R.string.toast_account_load_failed);
+
+        final Activity activity = getActivity();
+        if (activity != null) {
+            getActivity().finish();
+        }
+    }
+
     private void addToFieldsLayout(AccountFieldValue fieldValue, int index) {
         final FieldCell fieldCell = new FieldCell(getActivity());
         fieldCell.setField(fieldValue.getField(), fieldValue.getValue(), index);
@@ -413,6 +429,7 @@ public final class EditAccountFragment extends AbstractFragment {
             addToFieldsLayout(accountFieldValue, index);
             mAccountFieldValues.add(accountFieldValue);
         }
+
         scrollToDown();
     }
 
@@ -425,83 +442,21 @@ public final class EditAccountFragment extends AbstractFragment {
         });
     }
 
-    private void setErrorState() {
-        LogUtils.LogE(TAG, "Load account/fields failed");
-        mProgressLayout.setVisibility(View.GONE);
-        mFieldsLayout.setVisibility(View.GONE);
-        Utils.showToast(R.string.toast_account_load_failed);
-
-        final Activity activity = getActivity();
-        if (activity != null) {
-            getActivity().finish();
-        }
-    }
-
-    public class AddFieldDialog extends DialogFragment {
-
-        private RobotoTextView mCancelButton;
-        private RobotoTextView mChooseButton;
-        private RobotoEditText mSearchEdit;
-        private FieldListFragment mFragment;
-
-        @Override
-        public void onCreate(Bundle savedInstanceState) {
-            super.onCreate(savedInstanceState);
-            setStyle(DialogFragment.STYLE_NO_TITLE, R.style.Theme_Assistant);
-        }
-
-        @Override
-        public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-            final View view = inflater.inflate(R.layout.dialog_field_list, container);
-
-            mCancelButton = (RobotoTextView) view.findViewById(R.id.button_cancel);
-            mChooseButton = (RobotoTextView) view.findViewById(R.id.button_choose);
-            mSearchEdit = (RobotoEditText) view.findViewById(R.id.edit_search);
-            mFragment = (FieldListFragment) getFragmentManager().findFragmentById(R.id.fragment_field_list);
-
-            return view;
-        }
-
-        @Override
-        public void onActivityCreated(Bundle savedInstanceState) {
-            super.onActivityCreated(savedInstanceState);
-
-            mSearchEdit.addTextChangedListener(new TextWatcher() {
-                @Override
-                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+    private void showAddMoreFieldDialog() {
+        final FragmentTransaction transaction = getFragmentManager().beginTransaction();
+        final AddFieldDialogFragment fragment = new AddFieldDialogFragment();
+        fragment.setOnFieldSelectedListener(new AddFieldDialogFragment.OnFieldSelectedListener() {
+            @Override
+            public void onFieldSelected(List<Field> fields) {
+                if (fields != null) {
+                    addMoreField(fields);
                 }
 
-                @Override
-                public void onTextChanged(CharSequence s, int start, int before, int count) {
-                }
-
-                @Override
-                public void afterTextChanged(Editable s) {
-                    mFragment.loadFields(s.toString());
-                }
-            });
-
-            mCancelButton.setOnClickListener(new OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    dismiss();
-                }
-            });
-
-            mChooseButton.setOnClickListener(new OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    dismiss();
-                    addMoreField(mFragment.getSelectedFields());
-                }
-            });
-        }
-
-        @Override
-        public void onDestroyView() {
-            super.onDestroyView();
-            if (mFragment != null)
-                getFragmentManager().beginTransaction().remove(mFragment).commit();
-        }
+                fragment.dismiss();
+                final FragmentTransaction transaction = getFragmentManager().beginTransaction();
+                transaction.remove(fragment).commit();
+            }
+        });
+        fragment.show(transaction, fragment.getClass().getSimpleName());
     }
 }

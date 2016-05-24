@@ -17,7 +17,7 @@ public class SettingsActivity extends AbstractActivity {
         setContentView(R.layout.activity_settings);
 
         final Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setActionbar(toolbar);
+        setActionBar(toolbar);
     }
 
 }

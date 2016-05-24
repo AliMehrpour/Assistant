@@ -6,7 +6,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:focusable="true"
-    android:focusableInTouchMode="true">
+    android:focusableInTouchMode="true"
+    android:background="@android:color/white">
 
     <com.volcano.esecurebox.widget.RobotoEditText
         android:id="@+id/edit_search"
@@ -30,6 +31,7 @@
             android:layout_alignParentRight="true"
             android:layout_alignParentEnd="true"
             android:text="@string/button_choose_uppercase"
+            android:background="@drawable/ripple_effect"
             style="@style/ButtonDialog" />
 
         <com.volcano.esecurebox.widget.RobotoTextView
@@ -40,12 +42,14 @@
             android:layout_marginEnd="@dimen/margin_12"
             android:layout_toLeftOf="@id/button_choose"
             android:layout_toStartOf="@id/button_choose"
+            android:background="@drawable/ripple_effect"
             android:text="@string/button_cancel_uppercase"
             style="@style/ButtonDialog" />
 
     </RelativeLayout>
 
     <FrameLayout
+        android:id="@+id/layout_field_list"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@id/edit_search"

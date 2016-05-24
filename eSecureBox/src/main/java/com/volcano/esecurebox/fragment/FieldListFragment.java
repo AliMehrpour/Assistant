@@ -18,6 +18,7 @@ import com.parse.ParseException;
 import com.volcano.esecurebox.R;
 import com.volcano.esecurebox.model.Field;
 import com.volcano.esecurebox.util.BitmapUtils;
+import com.volcano.esecurebox.util.CompatUtils;
 import com.volcano.esecurebox.widget.RobotoTextView;
 
 import java.util.ArrayList;
@@ -30,17 +31,15 @@ public final class FieldListFragment extends AbstractFragment {
 
     private ListView mListView;
 
-    private final ArrayList<Field> mOriginalFields = new ArrayList<>();
+    private final static ArrayList<Field> mOriginalFields = new ArrayList<>();
     private final ArrayList<Field> mFields = new ArrayList<>();
     private final FieldListAdapter mAdapter = new FieldListAdapter();
     private final ArrayList<Field> mSelectedFields = new ArrayList<>();
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        final View view = inflater.inflate(R.layout.fragment_field_list, container);
-
+        final View view = inflater.inflate(R.layout.fragment_field_list, container, false);
         mListView = (ListView) view.findViewById(R.id.list_field);
-
         return view;
     }
 
@@ -67,8 +66,6 @@ public final class FieldListFragment extends AbstractFragment {
                 ((FieldListItem) view).setField(field, selected);
             }
         });
-
-        loadFields(null);
     }
 
     /**
@@ -77,28 +74,37 @@ public final class FieldListFragment extends AbstractFragment {
      */
     public void loadFields(String query) {
         if (TextUtils.isEmpty(query)) {
-            Field.findInBackground(this, new FindCallback<Field>() {
-                @Override
-                public void done(List<Field> fields, ParseException e) {
-                    if (e == null) {
-                        if (fields.size() > 0) {
-                            mFields.clear();
-                            mFields.addAll(fields);
-                            mAdapter.notifyDataSetChanged();
+            clearSelected();
 
-                            // Used for search
-                            mOriginalFields.clear();
-                            mOriginalFields.addAll(fields);
+            if (mOriginalFields.isEmpty()) {
+                Field.findInBackground(this, new FindCallback<Field>() {
+                    @Override
+                    public void done(List<Field> fields, ParseException e) {
+                        if (e == null) {
+                            if (fields.size() > 0) {
+                                mFields.clear();
+                                mFields.addAll(fields);
+                                mAdapter.notifyDataSetChanged();
+
+                                // Used for search
+                                mOriginalFields.clear();
+                                mOriginalFields.addAll(fields);
+                            }
+                            else {
+                                setErrorState();
+                            }
                         }
                         else {
                             setErrorState();
                         }
                     }
-                    else {
-                        setErrorState();
-                    }
-                }
-            });
+                });
+            }
+            else {
+                mFields.clear();
+                mFields.addAll(mOriginalFields);
+                mAdapter.notifyDataSetChanged();
+            }
         }
         else {
             mFields.clear();
@@ -114,11 +120,18 @@ public final class FieldListFragment extends AbstractFragment {
     }
 
     /**
-     * Return selected fields
-     * @return
+     * @return selected fields
      */
     public ArrayList<Field> getSelectedFields() {
         return mSelectedFields;
+    }
+
+    /**
+     * Clear selected list
+     */
+    public void clearSelected() {
+        mSelectedFields.clear();
+        mAdapter.notifyDataSetChanged();
     }
 
     private void setErrorState() {
@@ -176,7 +189,7 @@ public final class FieldListFragment extends AbstractFragment {
         }
 
         private void setField(Field field, boolean selected) {
-            mIcon.setImageDrawable(BitmapUtils.getFieldDrawable(getContext(), field.getIconName(), field.getName().charAt(0), getResources().getColor(R.color.grey_1)));
+            mIcon.setImageDrawable(BitmapUtils.getFieldDrawable(getContext(), field.getIconName(), field.getName().charAt(0), CompatUtils.getColor(R.color.grey_1)));
             mNameText.setText(field.getName());
             mCheckMarkImage.setVisibility(selected ? VISIBLE : INVISIBLE);
         }

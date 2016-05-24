@@ -15,6 +15,7 @@ import com.volcano.esecurebox.Managers;
 import com.volcano.esecurebox.R;
 import com.volcano.esecurebox.analytics.MixpanelManager;
 import com.volcano.esecurebox.fragment.DisplayAccountFragment;
+import com.volcano.esecurebox.util.CompatUtils;
 import com.volcano.esecurebox.widget.FloatingActionButton;
 
 /**
@@ -27,7 +28,7 @@ public final class DisplayAccountActivity extends AbstractActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_display_account);
 
-        setActionbar((Toolbar) findViewById(R.id.toolbar));
+        setActionBar((Toolbar) findViewById(R.id.toolbar));
 
         final Intent intent = getIntent();
         final String accountId = intent.getStringExtra(Intents.EXTRA_ACCOUNT_ID);
@@ -39,7 +40,7 @@ public final class DisplayAccountActivity extends AbstractActivity {
         collapsingToolbar.setTitle(intent.getStringExtra(Intents.EXTRA_ACCOUNT_TITLE));
         collapsingToolbar.setContentScrimColor(colorId);
         collapsingToolbar.setStatusBarScrimColor(colorId);
-        collapsingToolbar.setExpandedTitleColor(getResources().getColor(android.R.color.transparent));
+        collapsingToolbar.setExpandedTitleColor(CompatUtils.getColor(android.R.color.transparent));
         collapsingToolbar.setExpandedTitleTextAppearance(R.style.Text_RegularWhite30);
 
         final AppBarLayout appBarLayout = (AppBarLayout) findViewById(R.id.appbar);

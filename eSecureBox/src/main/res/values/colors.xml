@@ -7,6 +7,9 @@
     <color name="blue_1">#596699</color>
     <color name="blue_2">#41C2FA</color>
 
+    <color name="button_normal_ripple">#79999999</color>
+    <color name="button_normal_background">#FFFFFF</color>
+
     <color name="divider">#CECECE</color>
 
     <color name="fab_disable">#AAAAAA</color>
