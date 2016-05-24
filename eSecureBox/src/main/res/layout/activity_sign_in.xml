@@ -60,7 +60,6 @@
                 android:inputType="textPassword"
                 android:imeOptions="actionDone"
                 android:hint="@string/hint_password"
-                android:text="123456"
                 style="@style/Text.RegularDark16" />
 
             <com.volcano.esecurebox.widget.RobotoTextView
