@@ -77,8 +77,9 @@
     <dimen name="text_size_36">36sp</dimen>
 
     <dimen name="text_view_height">64dp</dimen>
-    
-    <dimen name="toolbar_extended_height">192dp</dimen>
-    <dimen name="toolbar_extended_button_margin_top">164dp</dimen>
+
+    <dimen name="toolbar_collapse_height">56dp</dimen>
+    <dimen name="toolbar_extended_height">208dp</dimen>
+    <dimen name="toolbar_extended_button_margin_top">156dp</dimen>
 
 </resources>
