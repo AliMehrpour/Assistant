@@ -16,14 +16,15 @@ import java.util.List;
  */
 @ParseClassName("FieldTypeValue")
 public class FieldTypeValue extends ParseObject {
-
     private final static String FIELD   = "field";
     private final static String VALUE   = "value";
     private final static String ORDER   = "order";
 
     public static ParseQuery getValueByField(Object tag, Field field, final FindCallback<FieldTypeValue> callback) {
-        final ParseQuery<FieldTypeValue> query = getQuery().whereEqualTo(FIELD, field)
+        final ParseQuery<FieldTypeValue> query = getQuery()
+                .whereEqualTo(FIELD, field)
                 .orderByAscending(ORDER);
+
         new TimeoutQuery<>(query).findInBackground(tag, new FindCallback<FieldTypeValue>() {
             @Override
             public void done(List<FieldTypeValue> fieldTypeValues, ParseException e) {
@@ -35,7 +36,9 @@ public class FieldTypeValue extends ParseObject {
     }
 
     private static ParseQuery<FieldTypeValue> getQuery() {
-        final ParseQuery<FieldTypeValue> query = ParseQuery.getQuery(FieldTypeValue.class);
+        final ParseQuery<FieldTypeValue> query = ParseQuery.getQuery(FieldTypeValue.class)
+                .include(FIELD);
+
         if (ParseManager.isLocalDatabaseActive()) {
             query.fromLocalDatastore();
         }

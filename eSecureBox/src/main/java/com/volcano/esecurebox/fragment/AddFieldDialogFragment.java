@@ -116,7 +116,9 @@ public final class AddFieldDialogFragment extends android.app.DialogFragment {
         super.onDestroyView();
 
         try {
-            getFragmentManager().beginTransaction().remove(mFieldListFragment).commit();
+            getFragmentManager().beginTransaction()
+                    .remove(mFieldListFragment)
+                    .commitAllowingStateLoss();
         }
         catch (Exception ignored) {
         }

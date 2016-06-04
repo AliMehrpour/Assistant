@@ -14,11 +14,8 @@ import com.volcano.esecurebox.security.SecurityUtils;
 
 import java.util.List;
 
-/**
- * AcountFieldValue that contain one account object, one field object and value
- */
 @ParseClassName("AccountFieldValue")
-public class AccountFieldValue extends ParseObject {
+public final class AccountFieldValue extends ParseObject {
     private static final String ACCOUNT     = "account";
     private static final String FIELD       = "field";
     private static final String VALUE       = "value";
@@ -38,6 +35,7 @@ public class AccountFieldValue extends ParseObject {
                 .whereEqualTo(ACCOUNT, account)
                 .include(FIELD)
                 .orderByAscending(ORDER);
+
         new TimeoutQuery<>(query).findInBackground(tag, new FindCallback<AccountFieldValue>() {
             @Override
             public void done(List<AccountFieldValue> accountFieldValues, ParseException e) {
@@ -49,7 +47,9 @@ public class AccountFieldValue extends ParseObject {
     }
 
     public static ParseQuery<AccountFieldValue> getQuery() {
-        final ParseQuery<AccountFieldValue> query = ParseQuery.getQuery(AccountFieldValue.class);
+        final ParseQuery<AccountFieldValue> query = ParseQuery.getQuery(AccountFieldValue.class)
+                .include(ACCOUNT);
+
         if (ParseManager.isLocalDatabaseActive()) {
             query.fromLocalDatastore();
         }
@@ -105,8 +105,7 @@ public class AccountFieldValue extends ParseObject {
         }
     }
 
-    public AccountFieldValue() {
-    }
+    public AccountFieldValue() {}
 
     public AccountFieldValue(Account account, Field field, Status status) {
         put(ACCOUNT, account);

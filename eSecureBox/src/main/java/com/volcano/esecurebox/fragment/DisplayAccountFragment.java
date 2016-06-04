@@ -68,7 +68,7 @@ public final class DisplayAccountFragment extends AbstractFragment {
                     subCategoryCell.setSubCategory(subCategory);
                     mFieldLayout.addView(subCategoryCell);
 
-                    AccountFieldValue.findInBackground(THIS, account, new FindCallback<AccountFieldValue>() {
+                    AccountFieldValue.findInBackground(DisplayAccountFragment.this, account, new FindCallback<AccountFieldValue>() {
                         @Override
                         public void done(List<AccountFieldValue> accountFieldValues, ParseException e) {
                             if (e == null) {

@@ -76,6 +76,7 @@ public class AccountManager {
         });
     }
 
+    @SuppressWarnings("unused")
     public void changePassword(String oldPassword, final String newPassword, final SaveCallback callback) {
         final User user = getCurrentUser();
         Managers.getAccountManager().signin(user.getUsername(),

@@ -11,10 +11,9 @@ import com.volcano.esecurebox.backend.TimeoutQuery;
 import com.volcano.esecurebox.util.LogUtils;
 
 import java.util.List;
+import java.util.Locale;
 
-/**
- * A Field in a {@link Category}
- */
+@SuppressWarnings("unused")
 @ParseClassName("Field")
 public class Field extends ParseObject {
     private static final String TAG = LogUtils.makeLogTag(SubCategory.class);
@@ -22,7 +21,7 @@ public class Field extends ParseObject {
     public final static int TYPE_STRING             = 1;
     public final static int TYPE_STRING_MULTILINE   = 2;
     public final static int TYPE_DATE               = 3;
-    public final static int TYPE_PASSWORD_NUMBER    = 4;   // like Pin
+    public final static int TYPE_PASSWORD_NUMBER    = 4;   // such as pin code
     public final static int TYPE_PASSWORD           = 5;
     public final static int TYPE_URL                = 6;
     public final static int TYPE_PHONE              = 7;
@@ -34,10 +33,10 @@ public class Field extends ParseObject {
     private final static String NAME        = "name";
     private final static String TYPE        = "type";
 
-
     public static void findInBackground(Object tag, final FindCallback<Field> callback) {
         final ParseQuery<Field> query = getQuery()
                 .orderByAscending(NAME);
+
         new TimeoutQuery<>(query).findInBackground(tag, callback);
     }
 
@@ -55,10 +54,11 @@ public class Field extends ParseObject {
                     if (e == null) {
                         // Save in local database
                         ParseObject.pinAll(fields);
-                        LogUtils.LogI(TAG, String.format("pinned %d fields on local database", fields.size()));
+                        LogUtils.LogI(TAG, String.format(Locale.getDefault(), "pinned %d fields on local database", fields.size()));
                     }
                     callback.done(fields, e);
-                } catch (ParseException e1) {
+                }
+                catch (ParseException e1) {
                     LogUtils.LogE(TAG, "pinning fields failed", e1);
                     callback.done(fields, e1);
                 }
@@ -68,6 +68,7 @@ public class Field extends ParseObject {
 
     public static ParseQuery<Field> getQuery() {
         final ParseQuery<Field> query = ParseQuery.getQuery(Field.class);
+
         if (ParseManager.isLocalDatabaseActive()) {
             query.fromLocalDatastore();
         }

@@ -36,6 +36,7 @@ import com.volcano.esecurebox.model.FieldTypeValue;
 import com.volcano.esecurebox.model.SubCategory;
 import com.volcano.esecurebox.security.PasswordGenerator;
 import com.volcano.esecurebox.util.BitmapUtils;
+import com.volcano.esecurebox.util.CompatUtils;
 import com.volcano.esecurebox.util.LogUtils;
 import com.volcano.esecurebox.util.Utils;
 import com.wdullaer.materialdatetimepicker.date.DatePickerDialog;
@@ -265,8 +266,6 @@ public final class FieldCell extends FrameLayout {
                         mSwipeListener.onSwipeCanceled();
                     }
                     break;
-
-
             }
 
             return true;
@@ -321,7 +320,7 @@ public final class FieldCell extends FrameLayout {
         mIndex = index;
 
         setEnabled(!readonly);
-        setIcon(field.getIconName(), field.getName().charAt(0), getResources().getColor(R.color.grey_1));
+        setIcon(field.getIconName(), field.getName().charAt(0), CompatUtils.getColor(R.color.grey_1));
         setText(value);
         setHint(field.getName());
         setInputType(field.getType());

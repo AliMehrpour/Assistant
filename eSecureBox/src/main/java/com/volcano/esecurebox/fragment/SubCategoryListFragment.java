@@ -106,7 +106,7 @@ public class SubCategoryListFragment extends AbstractFragment {
             @Override
             public void done(Category category, ParseException e) {
                 if (e == null) {
-                    SubCategory.findInBackground(THIS, category, new FindCallback<SubCategory>() {
+                    SubCategory.findInBackground(SubCategoryListFragment.this, category, new FindCallback<SubCategory>() {
                         @Override
                         public void done(List<SubCategory> subCategories, ParseException e) {
                             if (e == null) {

@@ -16,21 +16,19 @@ import com.volcano.esecurebox.util.LogUtils;
 import java.util.List;
 import java.util.Locale;
 
-/**
- * A Sub Category
- */
 @ParseClassName("SubCategory")
 public class SubCategory extends ParseObject {
     private static final String TAG = LogUtils.makeLogTag(SubCategory.class);
 
+    public static final String CATEGORY     = "category";
     private static final String NAME        = "name";
     private static final String ORDER       = "order";
     private static final String ICON_NAME   = "iconName";
-    public static final String CATEGORY     = "category";
 
     public static ParseQuery findInBackground(Object tag, Category category, final FindCallback<SubCategory> callback) {
-        final ParseQuery<SubCategory> query = getQuery();
-        query.whereEqualTo(CATEGORY, category);
+        final ParseQuery<SubCategory> query = getQuery()
+                .whereEqualTo(CATEGORY, category);
+
         new TimeoutQuery<>(query).findInBackground(tag, new FindCallback<SubCategory>() {
             @Override
             public void done(List<SubCategory> categories, ParseException e) {
@@ -42,9 +40,9 @@ public class SubCategory extends ParseObject {
     }
 
     public static ParseQuery getInBackground(Object tag, String subCategoryId, final GetCallback<SubCategory> callback) {
-        final ParseQuery<SubCategory> query = getQuery();
-        query.whereEqualTo("objectId", subCategoryId);
-        query.include(CATEGORY);
+        final ParseQuery<SubCategory> query = getQuery()
+                .whereEqualTo("objectId", subCategoryId);
+
         new TimeoutQuery<>(query).getInBackground(tag, new GetCallback<SubCategory>() {
             @Override
             public void done(SubCategory subCategory, ParseException e) {
@@ -57,6 +55,7 @@ public class SubCategory extends ParseObject {
 
     public static ParseQuery<SubCategory> getQuery() {
         final ParseQuery<SubCategory> query = ParseQuery.getQuery(SubCategory.class)
+                .include(CATEGORY)
                 .orderByAscending(ORDER);
 
         if (ParseManager.isLocalDatabaseActive()) {
@@ -83,7 +82,8 @@ public class SubCategory extends ParseObject {
                         LogUtils.LogI(TAG, String.format(Locale.getDefault(), "pinned %d sub categories on local database", subCategories.size()));
                     }
                     callback.done(subCategories, e);
-                } catch (ParseException e1) {
+                }
+                catch (ParseException e1) {
                     LogUtils.LogE(TAG, "pinning sub categories failed", e1);
                     callback.done(subCategories, e1);
                 }

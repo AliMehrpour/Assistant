@@ -15,6 +15,7 @@ import com.volcano.esecurebox.util.LogUtils;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 /**
  * A timed out {@link com.parse.ParseQuery}.<p>
@@ -103,7 +104,7 @@ public final class TimeoutQuery<T extends ParseObject> {
                 final long diff = (System.currentTimeMillis() - mStartTime.getTime());
                 Managers.getMixpanelManager().trackFailContactServerEvent(Managers.getConfigManager().isConnected(), mQuery.getClassName(),
                         diff, Managers.getConfigManager().getNetworkInfo());
-                LogUtils.LogD(TAG, String.format("Query timeout: %d ms [X] %s", diff, mQuery.getClassName() + "@" + mQuery.hashCode()));
+                LogUtils.LogD(TAG, String.format(Locale.getDefault(), "Query timeout: %d ms [X] %s", diff, mQuery.getClassName() + "@" + mQuery.hashCode()));
                 Managers.getParseManager().getRequestManager().remove(mQuery);
 
                 mQuery.cancel();
@@ -123,7 +124,7 @@ public final class TimeoutQuery<T extends ParseObject> {
 
     private void finishQuery(boolean error) {
         if (mQuery != null) {
-            LogUtils.LogD(TAG, String.format("Query finish" + (error ? " with error" : "") + ": %d ms [X] %s", (System.currentTimeMillis() - mStartTime.getTime()), mQuery.getClassName() + "@" + mQuery.hashCode()));
+            LogUtils.LogD(TAG, String.format(Locale.getDefault(), "Query finish" + (error ? " with error" : "") + ": %d ms [X] %s", (System.currentTimeMillis() - mStartTime.getTime()), mQuery.getClassName() + "@" + mQuery.hashCode()));
             Managers.getParseManager().getRequestManager().remove(mQuery);
             mQuery = null;
             mThread.interrupt();

@@ -6,6 +6,7 @@ import com.volcano.esecurebox.util.LogUtils;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
+import java.util.Locale;
 
 /**
  * Manage Parse requests
@@ -21,7 +22,7 @@ public final class ParseRequestManager {
      * @param query Tah query
      */
     public void addRequest(Object tag, ParseQuery query) {
-        LogUtils.LogD(TAG, String.format("Add query: %d [X] %s", mRequestQueue.size(), query.getClassName() + "@" + query.hashCode()));
+        LogUtils.LogD(TAG, String.format(Locale.getDefault(), "Add query: %d [X] %s", mRequestQueue.size(), query.getClassName() + "@" + query.hashCode()));
         mRequestQueue.add(new CancelableQuery(query, tag));
     }
 
@@ -37,7 +38,7 @@ public final class ParseRequestManager {
             final CancelableQuery cancelableQuery = mRequestQueue.get(i);
             if (cancelableQuery.tag.equals(tag)) {
                 deleteCandidates.add(cancelableQuery);
-                LogUtils.LogD(TAG, String.format("Cancel query: %d [X] %s", i, cancelableQuery.query.getClassName() + "@" + cancelableQuery.query.hashCode()));
+                LogUtils.LogD(TAG, String.format(Locale.getDefault(), "Cancel query: %d [X] %s", i, cancelableQuery.query.getClassName() + "@" + cancelableQuery.query.hashCode()));
             }
         }
 
@@ -74,7 +75,7 @@ public final class ParseRequestManager {
 
         if (candidateQuery != null) {
             mRequestQueue.remove(candidateQuery);
-            LogUtils.LogD(TAG, String.format("Remove query: %d [X] %s", candidateIndex, candidateQuery.query.getClassName() + "@" + candidateQuery.query.hashCode()));
+            LogUtils.LogD(TAG, String.format(Locale.getDefault(), "Remove query: %d [X] %s", candidateIndex, candidateQuery.query.getClassName() + "@" + candidateQuery.query.hashCode()));
 
         }
     }
