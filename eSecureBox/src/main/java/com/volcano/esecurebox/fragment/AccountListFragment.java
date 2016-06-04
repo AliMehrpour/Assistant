@@ -18,11 +18,11 @@ import com.volcano.esecurebox.R;
 import com.volcano.esecurebox.model.Account;
 import com.volcano.esecurebox.model.Category;
 import com.volcano.esecurebox.util.BitmapUtils;
+import com.volcano.esecurebox.util.CompatUtils;
 import com.volcano.esecurebox.util.Utils;
 import com.volcano.esecurebox.widget.CircleDrawable;
 import com.volcano.esecurebox.widget.RobotoTextView;
 import com.volcano.esecurebox.widget.recyclerview.DividerItemDecoration;
-import com.volcano.esecurebox.widget.recyclerview.ItemClickSupport;
 import com.volcano.esecurebox.widget.recyclerview.RefreshingRecyclerView;
 
 import java.util.ArrayList;
@@ -66,17 +66,7 @@ public class AccountListFragment extends AbstractFragment {
         mRecyclerView.setHasFixedSize(true);
         mRecyclerView.setEmptyView(mEmptyLayout);
         mRecyclerView.setAdapter(mAdapter);
-        mRecyclerView.addItemDecoration(new DividerItemDecoration(getResources().getDrawable(R.drawable.shape_divider_line)));
-
-        final ItemClickSupport itemClick = ItemClickSupport.addTo(mRecyclerView);
-        itemClick.setOnItemClickListener(new ItemClickSupport.OnItemClickListener() {
-            @Override
-            public void onItemClick(RecyclerView parent, View view, int position, long id) {
-                final Account account = mAccounts.get(position);
-                startActivity(Intents.getDisplayAccountIntent(account.getObjectId(),
-                        account.getSubCategory().getCategory().getColor(), account.getTitle()));
-            }
-        });
+        mRecyclerView.addItemDecoration(new DividerItemDecoration(CompatUtils.getDrawable(R.drawable.shape_divider_line)));
 
         mEmptyLayout.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -86,13 +76,6 @@ public class AccountListFragment extends AbstractFragment {
                 }
             }
         });
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-
-        ItemClickSupport.removeFrom(mRecyclerView);
     }
 
     /**
@@ -109,7 +92,7 @@ public class AccountListFragment extends AbstractFragment {
             @Override
             public void done(Category category, ParseException e) {
                 if (e == null) {
-                    Account.findInBackground(THIS, category, new FindCallback<Account>() {
+                    Account.findInBackground(AccountListFragment.this, category, new FindCallback<Account>() {
                         @Override
                         public void done(List<Account> accounts, ParseException e) {
                             if (e == null) {
@@ -159,12 +142,19 @@ public class AccountListFragment extends AbstractFragment {
             holder.mTitleText.setText(account.getTitle());
             holder.mDateText.setText(Utils.getTimeSpan(account.getCreatedAt()));
             if (account.getSubCategory().hasIcon()) {
-                holder.mIconImage.setImageDrawable(getResources().getDrawable(BitmapUtils.getDrawableIdentifier(getActivity(), account.getSubCategory().getIconName())));
+                holder.mIconImage.setImageDrawable(CompatUtils.getDrawable(BitmapUtils.getDrawableIdentifier(getActivity(), account.getSubCategory().getIconName())));
             }
             else {
                 final String text = account.getTitle().substring(0, 1);
                 holder.mIconImage.setImageDrawable(new CircleDrawable(account.getSubCategory().getCategory().getColor(), CircleDrawable.FILL, text));
             }
+
+            holder.itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    startActivity(Intents.getDisplayAccountIntent(account.getObjectId(), account.getSubCategory().getCategory().getColor(), account.getTitle()));
+                }
+            });
         }
 
         @Override

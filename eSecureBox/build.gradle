@@ -39,9 +39,8 @@ dependencies {
     compile 'com.android.support:recyclerview-v7:23.1.1'
     compile 'com.android.support:design:23.1.1'
 
-    compile 'com.parse.bolts:bolts-android:1.1.4'
-    compile fileTree(dir: 'libs', include: 'Parse-*.jar')
-    compile fileTree(dir: 'libs', include: 'ParseCrashReporting-*.jar')
+    compile 'com.parse.bolts:bolts-android:1.4.0'
+    compile fileTree(dir: 'libs', include: 'Parse-1.13.0.jar')
 
     compile "com.mixpanel.android:mixpanel-android:4.5.3"
     compile('com.crashlytics.sdk.android:crashlytics:2.5.1@aar') {

@@ -14,6 +14,7 @@ import com.volcano.esecurebox.backend.TimeoutQuery;
 import com.volcano.esecurebox.util.LogUtils;
 
 import java.util.List;
+import java.util.Locale;
 
 /**
  * A Sub Category
@@ -55,8 +56,9 @@ public class SubCategory extends ParseObject {
     }
 
     public static ParseQuery<SubCategory> getQuery() {
-        final ParseQuery<SubCategory> query = ParseQuery.getQuery(SubCategory.class);
-        query.orderByAscending(ORDER);
+        final ParseQuery<SubCategory> query = ParseQuery.getQuery(SubCategory.class)
+                .orderByAscending(ORDER);
+
         if (ParseManager.isLocalDatabaseActive()) {
             query.fromLocalDatastore();
         }
@@ -78,7 +80,7 @@ public class SubCategory extends ParseObject {
                     if (e == null) {
                         // Save in local database
                         ParseObject.pinAll(subCategories);
-                        LogUtils.LogI(TAG, String.format("pinned %d sub categories on local database", subCategories.size()));
+                        LogUtils.LogI(TAG, String.format(Locale.getDefault(), "pinned %d sub categories on local database", subCategories.size()));
                     }
                     callback.done(subCategories, e);
                 } catch (ParseException e1) {

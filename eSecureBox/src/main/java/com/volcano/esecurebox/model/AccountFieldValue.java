@@ -34,10 +34,10 @@ public class AccountFieldValue extends ParseObject {
     }
 
     public static ParseQuery findInBackground(Object tag, Account account, final FindCallback<AccountFieldValue> callback) {
-        final ParseQuery<AccountFieldValue> query = getQuery();
-        query.whereEqualTo(ACCOUNT, account);
-        query.include(FIELD);
-        query.orderByAscending(ORDER);
+        final ParseQuery<AccountFieldValue> query = getQuery()
+                .whereEqualTo(ACCOUNT, account)
+                .include(FIELD)
+                .orderByAscending(ORDER);
         new TimeoutQuery<>(query).findInBackground(tag, new FindCallback<AccountFieldValue>() {
             @Override
             public void done(List<AccountFieldValue> accountFieldValues, ParseException e) {
