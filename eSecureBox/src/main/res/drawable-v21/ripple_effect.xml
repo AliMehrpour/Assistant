@@ -6,6 +6,6 @@
     android:color="@color/button_normal_ripple">
 
     <item android:id="@android:id/mask"
-        android:drawable="@android:color/white" />
+        android:drawable="@color/button_normal_background" />
 
 </ripple>

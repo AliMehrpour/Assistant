@@ -40,6 +40,11 @@ public final class ParseManager {
         void onInitialize(boolean successful);
     }
 
+    // Product Server
+    //private static final String APPLICATION_ID = "pBtCshXLPqwVBXhlNq6zLBTXUdMI8nNqblfASxNT";
+    //private static final String CLIENT_KEY     = "EtvsJB26jRBPGnkZalvIbevtQZUTcEFknZuiesvq";
+
+    // Dev Server
     private static final String APPLICATION_ID = "MKjZjeplDQxCSO5a3NMsl6DFDWRNjOZzUxtqMsyd";
     private static final String CLIENT_KEY     = "F10x1Y6LE2s80Y2Mdrs28swlcbMiPmpAiCQjgigY";
     private static final String SERVER         = "https://parseapi.back4app.com";

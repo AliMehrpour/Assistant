@@ -38,9 +38,8 @@ public final class FieldListFragment extends AbstractFragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        final View view = inflater.inflate(R.layout.fragment_field_list, container, false);
-        mListView = (ListView) view.findViewById(R.id.list_field);
-        return view;
+        mListView = (ListView)inflater.inflate(R.layout.fragment_field_list, container, false);
+        return mListView;
     }
 
     @Override
@@ -134,6 +133,15 @@ public final class FieldListFragment extends AbstractFragment {
         mAdapter.notifyDataSetChanged();
     }
 
+    public void addNewField(Field field) {
+        mOriginalFields.add(0, field);
+        mFields.add(0, field);
+        mSelectedFields.add(0, field);
+        mAdapter.notifyDataSetChanged();
+
+        mListView.smoothScrollToPosition(0);
+
+    }
     private void setErrorState() {
         // TODO: handle error state
     }

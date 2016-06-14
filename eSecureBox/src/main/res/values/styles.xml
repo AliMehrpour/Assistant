@@ -57,11 +57,9 @@
         <item name="android:singleLine">true</item>
         <item name="android:layout_gravity">center_vertical</item>
         <item name="android:gravity">center</item>
-        <item name="android:background">@drawable/selector_button_dialog</item>
+        <item name="android:background">@drawable/ripple_effect</item>
         <item name="android:minWidth">@dimen/button_dialog_min_width</item>
-        <item name="android:paddingLeft">@dimen/margin_8</item>
-        <item name="android:paddingRight">@dimen/margin_8</item>
-        <item name="android:duplicateParentState">true</item>
+        <item name="android:padding">@dimen/margin_8</item>
     </style>
 
     <style name="Divider">

@@ -7,6 +7,18 @@
         <item>Copy</item>
     </string-array>
 
+    <string-array name="array_field_types">
+        <item>String</item>
+        <item>String (Multiline)</item>
+        <item>Date</item>
+        <item>Password (Number)</item>
+        <item>Password</item>
+        <item>Url</item>
+        <item>Phone</item>
+        <item>Email</item>
+        <item>Number</item>
+    </string-array>
+
     <string name="app_name">eSecureBox</string>
     <string name="app_url_store">https://play.google.com/store/apps/details?id=</string>
 
@@ -33,6 +45,8 @@
     <string name="button_cancel_uppercase">CANCEL</string>
     <string name="button_choose_uppercase">CHOOSE</string>
     <string name="button_close_uppercase">CLOSE</string>
+    <string name="button_create_new_uppercase">CREATE NEW</string>
+    <string name="button_create_uppercase">CREATE</string>
     <string name="button_del_uppercase">DEL</string>
     <string name="button_delete_uppercase">DELETE</string>
     <string name="button_discard_uppercase">DISCARD</string>
@@ -80,6 +94,7 @@
     <string name="label_enter_old_passcode">Enter your old passcode</string>
     <string name="label_initialize_data">Initializing for first time\n Be patient! It takes less than a minute…</string>
     <string name="label_new_account">New Item</string>
+    <string name="label_new_item">New Item</string>
     <string name="label_ninety_nine_plus">99+</string>
     <string name="label_re_enter_passcode">Re-enter your passcode</string>
     <string name="label_re_enter_new_passcode">Re-enter your new passcode</string>
@@ -131,6 +146,8 @@
     <string name="toast_edit_profile_failed">Unable update profile</string>
     <string name="toast_initialize_failed">Initialization failed</string>
     <string name="toast_invalid_username_or_password">Invalid username or password</string>
+    <string name="toast_new_item_name_should_filled">Please insert name</string>
+    <string name="toast_new_item_save_failed">Unable to save</string>
     <string name="toast_load_category_failed">Unable load category</string>
     <string name="toast_load_email_client_failed">Not found any email app on your device</string>
     <string name="toast_load_share_client_failed">Not found any share app on your device</string>
