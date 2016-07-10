@@ -26,3 +26,11 @@
 -keepclasseswithmembernames class * {
     native <methods>;
 }
+
+-keepattributes Annotation,SourceFile,LineNumberTable
+-keepattributes Signature
+
+-keep interface com.parse.** { *; }
+-keep class com.parse.** { *; }
+-keep class com.squareup.** { *; }
+-keep interface com.squareup.** { *; }
