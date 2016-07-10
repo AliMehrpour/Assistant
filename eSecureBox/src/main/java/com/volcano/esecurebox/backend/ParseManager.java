@@ -41,12 +41,12 @@ public final class ParseManager {
     }
 
     // Product Server
-    //private static final String APPLICATION_ID = "pBtCshXLPqwVBXhlNq6zLBTXUdMI8nNqblfASxNT";
-    //private static final String CLIENT_KEY     = "EtvsJB26jRBPGnkZalvIbevtQZUTcEFknZuiesvq";
+    private static final String APPLICATION_ID = "pBtCshXLPqwVBXhlNq6zLBTXUdMI8nNqblfASxNT";
+    private static final String CLIENT_KEY     = "EtvsJB26jRBPGnkZalvIbevtQZUTcEFknZuiesvq";
 
     // Dev Server
-    private static final String APPLICATION_ID = "MKjZjeplDQxCSO5a3NMsl6DFDWRNjOZzUxtqMsyd";
-    private static final String CLIENT_KEY     = "F10x1Y6LE2s80Y2Mdrs28swlcbMiPmpAiCQjgigY";
+    //private static final String APPLICATION_ID = "MKjZjeplDQxCSO5a3NMsl6DFDWRNjOZzUxtqMsyd";
+    //private static final String CLIENT_KEY     = "F10x1Y6LE2s80Y2Mdrs28swlcbMiPmpAiCQjgigY";
     private static final String SERVER         = "https://parseapi.back4app.com";
 
     public ParseManager() {
@@ -154,6 +154,7 @@ public final class ParseManager {
      * @return True if local database is active, otherwise false
      */
     public static boolean isLocalDatabaseActive() {
+        // TODO don't persist data on the device for now
         return false;
     }
 
