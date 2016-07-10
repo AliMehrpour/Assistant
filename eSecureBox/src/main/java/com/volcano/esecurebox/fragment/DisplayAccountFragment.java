@@ -62,8 +62,9 @@ public final class DisplayAccountFragment extends AbstractFragment {
         Account.getFirstInBackground(this, accountId, new GetCallback<Account>() {
             @Override
             public void done(Account account, ParseException e) {
-                if (e == null) {
-                    final FieldCell subCategoryCell = new FieldCell(getActivity());
+                final Activity activity = getActivity();
+                if (e == null && account != null) {
+                    final FieldCell subCategoryCell = new FieldCell(activity);
                     final SubCategory subCategory = account.getSubCategory();
                     subCategoryCell.setSubCategory(subCategory);
                     mFieldLayout.addView(subCategoryCell);
@@ -78,7 +79,7 @@ public final class DisplayAccountFragment extends AbstractFragment {
                                 final int size = mFieldValues.size();
                                 for (int i = 0; i < size; i++) {
                                     final AccountFieldValue value = mFieldValues.get(i);
-                                    final FieldCell fieldCell = new FieldCell(getActivity());
+                                    final FieldCell fieldCell = new FieldCell(activity);
                                     fieldCell.setField(value.getField(), value.getValue(), i, true);
                                     mFieldLayout.addView(fieldCell);
                                 }
