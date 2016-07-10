@@ -51,7 +51,7 @@
     <string name="button_delete_uppercase">DELETE</string>
     <string name="button_discard_uppercase">DISCARD</string>
     <string name="button_edit_profile_uppercase">UPDATE</string>
-    <string name="button_keep_editing_uppercase">KEEP EDITTING</string>
+    <string name="button_keep_editing_uppercase">KEEP EDITING</string>
     <string name="button_submit_uppercase">SUBMIT</string>
     <string name="button_signin_uppercase">SIGN IN</string>
     <string name="button_signout_uppercase">SIGN OUT</string>
