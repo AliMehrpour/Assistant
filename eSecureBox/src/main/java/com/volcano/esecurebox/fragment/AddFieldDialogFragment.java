@@ -1,21 +1,33 @@
 package com.volcano.esecurebox.fragment;
 
+import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.support.v7.widget.AppCompatSpinner;
 import android.text.Editable;
+import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.view.Window;
+import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.Toast;
 
+import com.parse.ParseException;
+import com.parse.SaveCallback;
+import com.volcano.esecurebox.Managers;
 import com.volcano.esecurebox.R;
+import com.volcano.esecurebox.VlApplication;
 import com.volcano.esecurebox.model.Field;
 import com.volcano.esecurebox.util.Utils;
 import com.volcano.esecurebox.widget.RobotoEditText;
@@ -29,6 +41,7 @@ import java.util.List;
 public final class AddFieldDialogFragment extends android.app.DialogFragment {
     private RobotoTextView mCancelButton;
     private RobotoTextView mChooseButton;
+    private RobotoTextView mCreateNewButton;
     private RobotoEditText mSearchEdit;
     private FieldListFragment mFieldListFragment;
 
@@ -44,6 +57,7 @@ public final class AddFieldDialogFragment extends android.app.DialogFragment {
 
         mCancelButton = (RobotoTextView) view.findViewById(R.id.button_cancel);
         mChooseButton = (RobotoTextView) view.findViewById(R.id.button_choose);
+        mCreateNewButton = (RobotoTextView) view.findViewById(R.id.button_create_new_field);
         mSearchEdit = (RobotoEditText) view.findViewById(R.id.edit_search);
         mFieldListFragment = (FieldListFragment) getFragmentManager().findFragmentById(R.id.fragment_field_list);
 
@@ -92,6 +106,13 @@ public final class AddFieldDialogFragment extends android.app.DialogFragment {
             }
         });
 
+        mCreateNewButton.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showNewFieldDialog();
+            }
+        });
+
         mSearchEdit.setText(null);
     }
 
@@ -116,7 +137,9 @@ public final class AddFieldDialogFragment extends android.app.DialogFragment {
         super.onDestroyView();
 
         try {
-            getFragmentManager().beginTransaction().remove(mFieldListFragment).commit();
+            getFragmentManager().beginTransaction()
+                    .remove(mFieldListFragment)
+                    .commitAllowingStateLoss();
         }
         catch (Exception ignored) {
         }
@@ -124,6 +147,53 @@ public final class AddFieldDialogFragment extends android.app.DialogFragment {
 
     public void setOnFieldSelectedListener(OnFieldSelectedListener listener) {
         mFieldSelectedListener = listener;
+    }
+
+    private void showNewFieldDialog() {
+        final LinearLayout layout = (LinearLayout) View.inflate(getActivity(), R.layout.view_create_new_field, null);
+        final EditText nameEdit = (RobotoEditText) layout.findViewById(R.id.edit_name);
+        final AppCompatSpinner typeSpinner = (AppCompatSpinner) layout.findViewById(R.id.spinner_field_type);
+        final AlertDialog dialog = new AlertDialog.Builder(getActivity())
+                .setTitle(getString(R.string.label_new_item))
+                .setView(layout)
+                .setPositiveButton(R.string.button_create_uppercase, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(final DialogInterface dialog, int which) {
+                        final String name = nameEdit.getText().toString();
+                        if (!TextUtils.isEmpty(name)) {
+                            final Field field = new Field();
+                            field.setName(nameEdit.getText().toString());
+                            field.setType(typeSpinner.getSelectedItemPosition() + 1);
+                            field.setUser(Managers.getAccountManager().getCurrentUser());
+                            field.save(new SaveCallback() {
+                                @Override
+                                public void done(ParseException e) {
+                                    if (e == null) {
+                                        mFieldListFragment.addNewField(field);
+                                        dialog.dismiss();
+                                    }
+                                    else {
+                                        Toast.makeText(VlApplication.getInstance(), R.string.toast_new_item_save_failed, Toast.LENGTH_SHORT).show();
+                                    }
+                                }
+                            });
+                        }
+                        else {
+                            Toast.makeText(VlApplication.getInstance(), R.string.toast_new_item_name_should_filled, Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                })
+                .setNegativeButton(R.string.button_cancel_uppercase, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        dialog.dismiss();
+                    }
+                })
+                .create();
+
+        dialog.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        dialog.getWindow().setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.MATCH_PARENT);
+
+        dialog.show();
     }
 
     private void hideKeyboard() {

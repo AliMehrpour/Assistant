@@ -21,7 +21,7 @@ import java.util.Date;
 public class ApplicationLock implements Application.ActivityLifecycleCallbacks {
     private static final int DEFAULT_TIMEOUT    = 2 * 1000; // 2 Seconds
     private static final int EXTENDED_TIMEOUT   = 60 * 1000; // 60 Seconds
-    private static final String SALT = "eScureBoxPasswordSalt";  // TODO: define in BuildConfig
+    private static final String SALT = "eSecureBoxPasswordSalt";  // TODO: define in BuildConfig
 
     private Application mApplication;
     private Date mLostFocusDate;

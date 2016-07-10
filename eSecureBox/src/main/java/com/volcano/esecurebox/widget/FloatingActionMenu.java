@@ -23,6 +23,7 @@ import android.view.animation.Interpolator;
 import android.view.animation.OvershootInterpolator;
 
 import com.volcano.esecurebox.R;
+import com.volcano.esecurebox.util.CompatUtils;
 
 /**
  * A floating action menu
@@ -128,6 +129,7 @@ public final class FloatingActionMenu extends ViewGroup {
      * Remove menu item
      * @param menuItem The menu item
      */
+    @SuppressWarnings("unused")
     public void removeMenuItem(FloatingActionButton menuItem) {
         removeView(menuItem.getLabelView());
         removeView(menuItem);
@@ -184,7 +186,7 @@ public final class FloatingActionMenu extends ViewGroup {
     }
 
     private int getColor(@ColorRes int id) {
-        return getResources().getColor(id);
+        return CompatUtils.getColor(id);
     }
 
     private int getDimension(@DimenRes int id) {
@@ -337,7 +339,7 @@ public final class FloatingActionMenu extends ViewGroup {
 
             @Override
             Drawable getIconDrawable() {
-                final RotatingDrawable rotatingDrawable = new RotatingDrawable(getResources().getDrawable(R.drawable.icon_action_add));
+                final RotatingDrawable rotatingDrawable = new RotatingDrawable(CompatUtils.getDrawable(R.drawable.icon_action_add));
                 mRotatingDrawable = rotatingDrawable;
 
                 final OvershootInterpolator interpolator = new OvershootInterpolator();

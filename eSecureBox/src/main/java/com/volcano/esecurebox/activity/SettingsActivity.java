@@ -19,5 +19,4 @@ public class SettingsActivity extends AbstractActivity {
         final Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setActionBar(toolbar);
     }
-
 }

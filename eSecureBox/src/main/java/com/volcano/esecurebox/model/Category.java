@@ -12,10 +12,8 @@ import com.volcano.esecurebox.backend.TimeoutQuery;
 import com.volcano.esecurebox.util.LogUtils;
 
 import java.util.List;
+import java.util.Locale;
 
-/**
- * A Category
- */
 @ParseClassName("Category")
 public class Category extends ParseObject {
     private static final String TAG = LogUtils.makeLogTag(Category.class);
@@ -39,8 +37,9 @@ public class Category extends ParseObject {
     }
 
     public static ParseQuery getInBackground(Object tag, String categoryId, final GetCallback<Category> callback) {
-        final ParseQuery<Category> query = getQuery();
-        query.whereEqualTo("objectId", categoryId);
+        final ParseQuery<Category> query = getQuery()
+                .whereEqualTo("objectId", categoryId);
+
         new TimeoutQuery<>(query).getInBackground(tag, new GetCallback<Category>() {
             @Override
             public void done(Category category, ParseException e) {
@@ -52,8 +51,9 @@ public class Category extends ParseObject {
     }
 
     public static ParseQuery<Category> getQuery() {
-        final ParseQuery<Category> query = ParseQuery.getQuery(Category.class);
-        query.orderByAscending(ORDER);
+        final ParseQuery<Category> query = ParseQuery.getQuery(Category.class)
+                .orderByAscending(ORDER);
+
         if (ParseManager.isLocalDatabaseActive()) {
             query.fromLocalDatastore();
         }
@@ -75,10 +75,11 @@ public class Category extends ParseObject {
                     if (e == null) {
                         // Save in local database
                         ParseObject.pinAll(categories);
-                        LogUtils.LogI(TAG, String.format("pinned %d categories on local database", categories.size()));
+                        LogUtils.LogI(TAG, String.format(Locale.getDefault(), "pinned %d categories on local database", categories.size()));
                     }
                     callback.done(categories, e);
-                } catch (ParseException e1) {
+                }
+                catch (ParseException e1) {
                     LogUtils.LogE(TAG, "pinning categories failed", e1);
                     callback.done(categories, e1);
                 }

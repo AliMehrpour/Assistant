@@ -11,11 +11,11 @@
     <dimen name="button_dialog_height">48dp</dimen>
     <dimen name="button_dialog_min_width">42dp</dimen>
     <dimen name="button_dialog_text_size">14sp</dimen>
-    <dimen name="button_dialog_inset_vertical">6dp</dimen>
-    <dimen name="button_dialog_inset_horizontal">4dp</dimen>
 
     <dimen name="circle_drawable_size">24dp</dimen>
     <dimen name="circle_drawable_stroke_size">4dp</dimen>
+
+    <dimen name="create_new_field_horizontal_padding">16dp</dimen>
 
     <dimen name="divider">1dp</dimen>
 

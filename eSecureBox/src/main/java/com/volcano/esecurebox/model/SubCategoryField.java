@@ -11,10 +11,8 @@ import com.volcano.esecurebox.backend.TimeoutQuery;
 import com.volcano.esecurebox.util.LogUtils;
 
 import java.util.List;
+import java.util.Locale;
 
-/**
- * A sub category field
- */
 @ParseClassName("SubCategoryField")
 public class SubCategoryField extends ParseObject {
     private static final String TAG = LogUtils.makeLogTag(SubCategory.class);
@@ -27,7 +25,6 @@ public class SubCategoryField extends ParseObject {
     public static ParseQuery<SubCategoryField> getFieldBySubCategory(Object tag, SubCategory subCategory, final FindCallback<SubCategoryField> callback) {
         final ParseQuery<SubCategoryField> query = getQuery()
                 .whereEqualTo(SUB_CATEGORY, subCategory);
-        query.include(FIELD);
 
         new TimeoutQuery<>(query).findInBackground(tag, new FindCallback<SubCategoryField>() {
             @Override
@@ -40,8 +37,11 @@ public class SubCategoryField extends ParseObject {
     }
 
     public static ParseQuery<SubCategoryField> getQuery() {
-        final ParseQuery<SubCategoryField> query = ParseQuery.getQuery(SubCategoryField.class);
-        query.orderByAscending(ORDER);
+        final ParseQuery<SubCategoryField> query = ParseQuery.getQuery(SubCategoryField.class)
+                .include(SUB_CATEGORY)
+                .include(FIELD)
+                .orderByAscending(ORDER);
+
         if (ParseManager.isLocalDatabaseActive()) {
             query.fromLocalDatastore();
         }
@@ -63,10 +63,11 @@ public class SubCategoryField extends ParseObject {
                     if (e == null) {
                         // Save in local database
                         ParseObject.pinAll(subCategoryFields);
-                        LogUtils.LogI(TAG, String.format("pinned %d sub category fields on local database", subCategoryFields.size()));
+                        LogUtils.LogI(TAG, String.format(Locale.getDefault(), "pinned %d sub category fields on local database", subCategoryFields.size()));
                     }
                     callback.done(subCategoryFields, e);
-                } catch (ParseException e1) {
+                }
+                catch (ParseException e1) {
                     LogUtils.LogE(TAG, "pinning sub category fields failed", e1);
                     callback.done(subCategoryFields, e1);
                 }
@@ -74,9 +75,7 @@ public class SubCategoryField extends ParseObject {
         });
     }
 
-    public SubCategoryField() {
-
-    }
+    public SubCategoryField() {}
 
     public SubCategoryField(SubCategory subCategory, Field field) {
         put(SUB_CATEGORY, subCategory);

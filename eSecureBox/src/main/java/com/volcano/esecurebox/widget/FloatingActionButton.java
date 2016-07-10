@@ -25,6 +25,7 @@ import android.widget.ImageButton;
 
 import com.volcano.esecurebox.R;
 import com.volcano.esecurebox.util.BitmapUtils;
+import com.volcano.esecurebox.util.CompatUtils;
 import com.volcano.esecurebox.util.Utils;
 
 /**
@@ -133,6 +134,7 @@ public class FloatingActionButton extends ImageButton {
      * Set the drawable as button drawable
      * @param iconDrawable The drawablr
      */
+    @SuppressWarnings("unused")
     public void setIconDrawable(@NonNull Drawable iconDrawable) {
         if (mIconDrawable != iconDrawable) {
             mIconDrawable = iconDrawable;
@@ -161,11 +163,6 @@ public class FloatingActionButton extends ImageButton {
         return mTitle;
     }
 
-    /**
-     *
-     * @param colorNormal
-     * @param lighten
-     */
     public void setColorNormal(String colorNormal, boolean lighten) {
         if (lighten) {
             mColorNormal = lightenColor(BitmapUtils.getColor(colorNormal));
@@ -197,7 +194,7 @@ public class FloatingActionButton extends ImageButton {
 
         final LayerDrawable layerDrawable = new LayerDrawable(
                 new Drawable[] {
-                   getResources().getDrawable(mType == TYPE_NORMAL ? R.drawable.shadow_fab_normal : R.drawable.shadow_fab_mini),
+                   CompatUtils.getDrawable(mType == TYPE_NORMAL ? R.drawable.shadow_fab_normal : R.drawable.shadow_fab_mini),
                    createFillDrawable(strokeWidth),
                    createOuterStrokeDrawable(strokeWidth),
                    getIconDrawable()
@@ -308,7 +305,7 @@ public class FloatingActionButton extends ImageButton {
             return mIconDrawable;
         }
         else if (mIcon != 0) {
-            return getResources().getDrawable(mIcon);
+            return CompatUtils.getDrawable(mIcon);
         }
         else {
             return new ColorDrawable(Color.TRANSPARENT);
@@ -326,7 +323,7 @@ public class FloatingActionButton extends ImageButton {
     }
 
     int getColor(@ColorRes int id) {
-        return getResources().getColor(id);
+        return CompatUtils.getColor(id);
     }
 
     int getDimension(@DimenRes int id) {

@@ -11,10 +11,8 @@ import com.volcano.esecurebox.backend.ParseManager;
 import com.volcano.esecurebox.util.LogUtils;
 
 import java.util.List;
+import java.util.Locale;
 
-/**
- * Represent a user object
- */
 public final class User extends ParseUser {
     private static final String TAG = LogUtils.makeLogTag(SubCategory.class);
 
@@ -36,10 +34,11 @@ public final class User extends ParseUser {
                     if (e == null) {
                         // Save in local database
                         ParseObject.pinAll(users);
-                        LogUtils.LogI(TAG, String.format("pinned %d user on local database", users.size()));
+                        LogUtils.LogI(TAG, String.format(Locale.getDefault(), "pinned %d user on local database", users.size()));
                     }
                     callback.done(users, e);
-                } catch (ParseException e1) {
+                }
+                catch (ParseException e1) {
                     LogUtils.LogE(TAG, "pinning user failed", e1);
                     callback.done(users, e1);
                 }

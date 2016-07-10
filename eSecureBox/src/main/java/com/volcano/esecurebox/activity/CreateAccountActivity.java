@@ -18,7 +18,6 @@ import com.volcano.esecurebox.fragment.CreateAccountFragment;
  * Create account activity
  */
 public final class CreateAccountActivity extends AbstractActivity {
-
     private CreateAccountFragment mFragment;
     private MenuItem mSaveMenu;
 
@@ -45,12 +44,11 @@ public final class CreateAccountActivity extends AbstractActivity {
                 }
             }
         });
-
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater inflater = getMenuInflater();
+        final MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.menu_create_account, menu);
         mSaveMenu = menu.findItem(R.id.action_save);
         return super.onCreateOptionsMenu(menu);
@@ -62,6 +60,7 @@ public final class CreateAccountActivity extends AbstractActivity {
             case R.id.action_save:
                 mFragment.save();
                 return true;
+
             default:
                 return super.onOptionsItemSelected(item);
         }

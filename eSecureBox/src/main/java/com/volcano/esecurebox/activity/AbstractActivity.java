@@ -1,7 +1,6 @@
 // Copyright (c) 2015 Volcano. All rights reserved.
 package com.volcano.esecurebox.activity;
 
-import android.annotation.SuppressLint;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
@@ -63,25 +62,16 @@ public class AbstractActivity extends AppCompatActivity {
                     finish();
                 }
                 return true;
+
             default:
                 return super.onOptionsItemSelected(item);
         }
     }
 
-    protected void setToolbarColor(String color) {
-        setToolbarColor(Color.parseColor(String.format("#%s", color)));
-    }
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        return !(keyCode == KeyEvent.KEYCODE_BACK && askToFinish()) || super.onKeyDown(keyCode, event);
 
-    @SuppressLint("NewApi")
-    protected void setToolbarColor(int color) {
-        final Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        if (toolbar != null) {
-            toolbar.setBackgroundColor(color);
-        }
-
-        if (Utils.hasLollipopApi()) {
-            getWindow().setStatusBarColor(BitmapUtils.getDarkenColor(color, 0.8f));
-        }
     }
 
     /**
@@ -97,6 +87,21 @@ public class AbstractActivity extends AppCompatActivity {
      */
     public Toolbar getToolbar() {
         return mToolbar;
+    }
+
+    protected void setToolbarColor(int color) {
+        final Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        if (toolbar != null) {
+            toolbar.setBackgroundColor(color);
+        }
+
+        if (Utils.hasLollipopApi()) {
+            getWindow().setStatusBarColor(BitmapUtils.getDarkenColor(color, 0.8f));
+        }
+    }
+
+    protected void setToolbarColor(String color) {
+        setToolbarColor(Color.parseColor(String.format("#%s", color)));
     }
 
     protected void setTitle(String title) {
@@ -124,11 +129,5 @@ public class AbstractActivity extends AppCompatActivity {
      */
     protected boolean askToFinish() {
         return true;
-    }
-
-    @Override
-    public boolean onKeyDown(int keyCode, KeyEvent event) {
-        return !(keyCode == KeyEvent.KEYCODE_BACK && askToFinish()) || super.onKeyDown(keyCode, event);
-
     }
 }

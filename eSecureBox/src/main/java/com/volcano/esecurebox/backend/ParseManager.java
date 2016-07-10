@@ -3,7 +3,6 @@ package com.volcano.esecurebox.backend;
 
 import com.parse.FindCallback;
 import com.parse.Parse;
-import com.parse.ParseCrashReporting;
 import com.parse.ParseException;
 import com.parse.ParseInstallation;
 import com.parse.ParseObject;
@@ -41,8 +40,14 @@ public final class ParseManager {
         void onInitialize(boolean successful);
     }
 
+    // Product Server
     private static final String APPLICATION_ID = "pBtCshXLPqwVBXhlNq6zLBTXUdMI8nNqblfASxNT";
     private static final String CLIENT_KEY     = "EtvsJB26jRBPGnkZalvIbevtQZUTcEFknZuiesvq";
+
+    // Dev Server
+    //private static final String APPLICATION_ID = "MKjZjeplDQxCSO5a3NMsl6DFDWRNjOZzUxtqMsyd";
+    //private static final String CLIENT_KEY     = "F10x1Y6LE2s80Y2Mdrs28swlcbMiPmpAiCQjgigY";
+    private static final String SERVER         = "https://parseapi.back4app.com";
 
     public ParseManager() {
         ParseObject.registerSubclass(User.class);
@@ -53,9 +58,14 @@ public final class ParseManager {
         ParseObject.registerSubclass(FieldTypeValue.class);
         ParseObject.registerSubclass(Account.class);
         ParseObject.registerSubclass(AccountFieldValue.class);
-        ParseCrashReporting.enable(VlApplication.getInstance());
+
         Parse.enableLocalDatastore(VlApplication.getInstance());
-        Parse.initialize(VlApplication.getInstance(), APPLICATION_ID, CLIENT_KEY);
+        Parse.initialize(new Parse.Configuration.Builder(VlApplication.getInstance())
+                .applicationId(APPLICATION_ID)
+                .clientKey(CLIENT_KEY)
+                .server(SERVER)
+                .build());
+
         ParseInstallation.getCurrentInstallation().saveInBackground();
 
         mRequestManager = new ParseRequestManager();
@@ -144,6 +154,7 @@ public final class ParseManager {
      * @return True if local database is active, otherwise false
      */
     public static boolean isLocalDatabaseActive() {
+        // TODO don't persist data on the device for now
         return false;
     }
 

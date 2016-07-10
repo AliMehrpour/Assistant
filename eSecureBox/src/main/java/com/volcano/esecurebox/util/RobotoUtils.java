@@ -16,8 +16,8 @@ import com.volcano.esecurebox.VlApplication;
  */
 public final class RobotoUtils {
 
-    public final static int ROBOTO_REGULAR = 0;
-    public final static int ROBOTO_MEDIUM = 1;
+    public final static int ROBOTO_REGULAR      = 0;
+    public final static int ROBOTO_MEDIUM       = 1;
     public final static int ROBOTO_BLACK_ITALIC = 2;
 
     private final static Typeface[] mTypefaces = new Typeface[3];
@@ -54,7 +54,7 @@ public final class RobotoUtils {
 
     /**
      * Obtain {@link Typeface}
-     * @param typefaceValue The value of "robotoTypefaceValue" attribute
+     * @param robotoTypefaceValue The value of "robotoTypefaceValue" attribute
      * @return specify {@link Typeface}
      * @throws IllegalArgumentException if unknown "robotoTypefaceValue" attribute value.
      */

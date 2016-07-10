@@ -6,15 +6,17 @@ import com.parse.ParseClassName;
 import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
+import com.parse.SaveCallback;
+import com.volcano.esecurebox.Managers;
 import com.volcano.esecurebox.backend.ParseManager;
 import com.volcano.esecurebox.backend.TimeoutQuery;
 import com.volcano.esecurebox.util.LogUtils;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
-/**
- * A Field in a {@link Category}
- */
+@SuppressWarnings("unused")
 @ParseClassName("Field")
 public class Field extends ParseObject {
     private static final String TAG = LogUtils.makeLogTag(SubCategory.class);
@@ -22,7 +24,7 @@ public class Field extends ParseObject {
     public final static int TYPE_STRING             = 1;
     public final static int TYPE_STRING_MULTILINE   = 2;
     public final static int TYPE_DATE               = 3;
-    public final static int TYPE_PASSWORD_NUMBER    = 4;   // like Pin
+    public final static int TYPE_PASSWORD_NUMBER    = 4;   // such as pin code
     public final static int TYPE_PASSWORD           = 5;
     public final static int TYPE_URL                = 6;
     public final static int TYPE_PHONE              = 7;
@@ -33,11 +35,14 @@ public class Field extends ParseObject {
     private final static String ICON_NAME   = "iconName";
     private final static String NAME        = "name";
     private final static String TYPE        = "type";
-
+    private final static String USER        = "user";
 
     public static void findInBackground(Object tag, final FindCallback<Field> callback) {
+        final ArrayList<User> users = new ArrayList<User>(2) { {add(null);  add(Managers.getAccountManager().getCurrentUser()); }};
         final ParseQuery<Field> query = getQuery()
+                .whereContainedIn(USER, users)
                 .orderByAscending(NAME);
+
         new TimeoutQuery<>(query).findInBackground(tag, callback);
     }
 
@@ -55,10 +60,11 @@ public class Field extends ParseObject {
                     if (e == null) {
                         // Save in local database
                         ParseObject.pinAll(fields);
-                        LogUtils.LogI(TAG, String.format("pinned %d fields on local database", fields.size()));
+                        LogUtils.LogI(TAG, String.format(Locale.getDefault(), "pinned %d fields on local database", fields.size()));
                     }
                     callback.done(fields, e);
-                } catch (ParseException e1) {
+                }
+                catch (ParseException e1) {
                     LogUtils.LogE(TAG, "pinning fields failed", e1);
                     callback.done(fields, e1);
                 }
@@ -68,6 +74,7 @@ public class Field extends ParseObject {
 
     public static ParseQuery<Field> getQuery() {
         final ParseQuery<Field> query = ParseQuery.getQuery(Field.class);
+
         if (ParseManager.isLocalDatabaseActive()) {
             query.fromLocalDatastore();
         }
@@ -75,8 +82,32 @@ public class Field extends ParseObject {
         return query;
     }
 
+    public void save(final SaveCallback callback) {
+        final SaveCallback saveCallback = new SaveCallback() {
+            @Override
+            public void done(ParseException e) {
+                callback.done(e);
+            }
+        };
+
+        if (ParseManager.isLocalDatabaseActive()) {
+            pinInBackground(saveCallback);
+        }
+        else {
+            saveInBackground(saveCallback);
+        }
+    }
+
+    public void setName(String name) {
+        put(NAME, name);
+    }
+
     public String getName() {
         return getString(NAME);
+    }
+
+    public void setType(int type) {
+        put(TYPE, type);
     }
 
     public int getType() {
@@ -85,6 +116,14 @@ public class Field extends ParseObject {
 
     public String getIconName() {
         return getString(ICON_NAME);
+    }
+
+    public void setUser(User user) {
+        put(USER, user);
+    }
+
+    public User getUser() {
+        return (User) getParseObject(USER);
     }
 
     @Override
