@@ -1,3 +1,4 @@
+// Copyright (c) 2015 Volcano. All rights reserved.
 package com.volcano.esecurebox.widget;
 
 import android.content.Context;
@@ -16,7 +17,7 @@ import com.volcano.esecurebox.VlApplication;
  */
 @SuppressWarnings("unused")
 public final class FloatingActionButtonAppBarBehavior extends Behavior<FloatingActionButton> {
-    final int sCollapsedToolbarHeight = VlApplication.getInstance().getResources().getDimensionPixelSize(R.dimen.toolbar_collapse_height);
+    private static final int sCollapsedToolbarHeight = VlApplication.getInstance().getResources().getDimensionPixelSize(R.dimen.toolbar_collapse_height);
 
     public FloatingActionButtonAppBarBehavior(Context context, AttributeSet attrs) {
     }
@@ -34,7 +35,7 @@ public final class FloatingActionButtonAppBarBehavior extends Behavior<FloatingA
         child.setTranslationY(dependency.getTop());
 
         if (rect.height() < sCollapsedToolbarHeight * 2) {
-            child.setTranslationX(-500); // Just goes out of screen
+            child.setTranslationX(-1 * 500); // Just goes out of screen
         }
         else {
             child.setTranslationX(0);
