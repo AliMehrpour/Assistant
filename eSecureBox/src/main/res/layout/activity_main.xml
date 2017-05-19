@@ -23,7 +23,7 @@
         <!-- As the main content view, the view below consumes the entire
          space available using match_parent in both dimensions. -->
         <FrameLayout
-            android:id="@+id/layout_acount_list"
+            android:id="@+id/layout_account_list"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_below="@id/toolbar">
@@ -32,7 +32,21 @@
                 android:id="@+id/fragment_account_list"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_below="@id/toolbar"
+                android:name="com.volcano.esecurebox.fragment.AccountListFragment" />
+
+        </FrameLayout>
+
+        <FrameLayout
+            android:id="@+id/layout_account_list_search"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@id/toolbar"
+            android:visibility="gone">
+
+            <fragment
+                android:id="@+id/fragment_account_list_search"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
                 android:name="com.volcano.esecurebox.fragment.AccountListFragment" />
 
         </FrameLayout>

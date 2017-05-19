@@ -38,7 +38,7 @@ public class AccountListFragment extends AbstractFragment {
     private RobotoTextView mEmptyText;
     private FrameLayout mProgressLayout;
 
-    private boolean mInitialized;
+    private boolean mInitialized = false;
     private ArrayList<Account> mAccounts = new ArrayList<>();
     private AccountAdapter mAdapter = new AccountAdapter();
     private String mCategoryId;
@@ -118,6 +118,18 @@ public class AccountListFragment extends AbstractFragment {
                 }
             }
         });
+    }
+
+    public void search(final String query) {
+
+    }
+
+    public void clear() {
+        // TODO what if cancel while loading is in progress?
+        mInitialized = false;
+        mAccounts.clear();
+        mAdapter = null;
+        mCategoryId = null;
     }
 
     private void setErrorState() {

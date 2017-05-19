@@ -6,14 +6,23 @@
       xmlns:tools="http://schemas.android.com/tools"
       tools:context=".MainActivity">
 
-    <item android:id="@+id/action_signout"
-          android:title="@string/menu_signout"
-          android:orderInCategory="100"
-          app:showAsAction="never"/>
+    <item
+        android:id="@+id/menu_search"
+        android:title="@string/menu_search"
+        android:icon="@drawable/icon_menu_search"
+        app:showAsAction="collapseActionView|ifRoom"
+        app:actionViewClass="com.volcano.esecurebox.widget.VlSearchView"/>
 
-    <item android:id="@+id/action_setting"
+    <item
+        android:id="@+id/menu_setting"
         android:title="@string/menu_settings"
         android:orderInCategory="100"
+        app:showAsAction="never"/>
+
+    <item
+        android:id="@+id/menu_sign_out"
+        android:title="@string/menu_sign_out"
+        android:orderInCategory="101"
         app:showAsAction="never"/>
 
 </menu>
